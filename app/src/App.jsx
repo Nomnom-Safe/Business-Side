@@ -5,16 +5,12 @@ import MenuDashboard from './components/menu/MenuDashboard';
 import EditBusinessInfo from './components/restaurant/EditBusinessInfo';
 import EditLoginInfo from './components/auth/EditLoginInfo';
 // import FilterPanel from './components/menu/FilterPanel';
-import AddMenuItem from './components/menuitems/AddMenuItem.jsx';
-import MenuItemsPage from './components/menuitems/MenuItemsPage.jsx';
-import MenuItemPicklist from './components/menuitems/MenuItemSwap.jsx';
+import AddMenuItem from './components/menu-items/AddMenuItem.jsx';
+import MenuItemsPage from './components/menu-items/MenuItemsPage.jsx';
+import MenuItemPicklist from './components/menu-items/MenuItemSwap.jsx';
 import ChooseBusiness from './components/setup/ChooseBusiness.jsx';
 
-import {
-	BrowserRouter as Router,
-	Route,
-	Routes,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import UserMaintenance from './components/admin/UserMaintenance';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
@@ -81,11 +77,7 @@ function App() {
 
 						<Route
 							path='/edit-login-info'
-							element={
-								<ProtectedRoute
-									component={<EditLoginInfo />}
-								/>
-							}
+							element={<ProtectedRoute component={<EditLoginInfo />} />}
 						/>
 
 						<Route
@@ -100,47 +92,27 @@ function App() {
 
 						<Route
 							path='/dashboard'
-							element={
-								<ProtectedRoute
-									component={<MenuDashboard />}
-								/>
-							}
+							element={<ProtectedRoute component={<MenuDashboard />} />}
 						/>
 
 						<Route
 							path='/edit-business-info'
-							element={
-								<ProtectedRoute
-									component={<EditBusinessInfo />}
-								/>
-							}
+							element={<ProtectedRoute component={<EditBusinessInfo />} />}
 						/>
 
 						<Route
 							path='/add-menu-item'
-							element={
-								<ProtectedRoute
-									component={<AddMenuItem />}
-								/>
-							}
+							element={<ProtectedRoute component={<AddMenuItem />} />}
 						/>
 
 						<Route
 							path='/swap-menu'
-							element={
-								<ProtectedRoute
-									component={<MenuItemPicklist />}
-								/>
-							}
+							element={<ProtectedRoute component={<MenuItemPicklist />} />}
 						/>
 
 						<Route
 							path='/menuitems'
-							element={
-								<ProtectedRoute
-									component={<MenuItemsPage />}
-								/>
-							}
+							element={<ProtectedRoute component={<MenuItemsPage />} />}
 						/>
 					</Routes>
 				</div>
