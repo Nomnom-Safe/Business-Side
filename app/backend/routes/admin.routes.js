@@ -129,7 +129,7 @@ router.post('/change-admin-status', async (req, res) => {
 		const updatedUser = await User.findOneAndUpdate(
 			{ email: targetEmail },
 			{ $set: { admin: admin } },
-			{ new: true }
+			{ new: true },
 		);
 
 		if (updatedUser.admin !== admin) {
@@ -183,7 +183,7 @@ router.post('/remove-user-access', async (req, res) => {
 		const action = 'remove';
 		const foundUser = await User.findOne(
 			{ email: targetEmail },
-			{ admin: 1, _id: 0 }
+			{ admin: 1, _id: 0 },
 		);
 
 		if (!foundUser) {
@@ -193,7 +193,7 @@ router.post('/remove-user-access', async (req, res) => {
 				message: `User not found.`,
 			});
 		}
-		
+
 		const conditionsMet = await checkConditions(action, targetEmail);
 
 		if (!conditionsMet && foundUser.admin) {
@@ -212,7 +212,7 @@ router.post('/remove-user-access', async (req, res) => {
 		const updatedUser = await User.findOneAndUpdate(
 			{ email: targetEmail },
 			{ $set: { business_id: '', admin: admin } },
-			{ new: true }
+			{ new: true },
 		);
 
 		if (updatedUser.business_id !== '' || updatedUser.admin !== admin) {
@@ -223,14 +223,17 @@ router.post('/remove-user-access', async (req, res) => {
 			});
 		}
 
-		// Check if user is removing their own acccess
+		// Check if user is removing their own access
 		if (targetEmail === req.cookies.email) {
 			// Update admin and hasBusiness cookies
 			cookies.updateCookie(res, 'isAdmin', admin);
 			cookies.updateCookie(res, 'hasBusiness', false);
 
 			// Set success response message
-			message = 'You have been demoted to user. Redirecting to your dashboard.';
+			return res.status(200).json({
+				message:
+					'You have been demoted to user. Redirecting to your dashboard.',
+			});
 		}
 
 		// Send success response
@@ -305,7 +308,7 @@ router.post('/add-user-access', async (req, res) => {
 					admin: isAdmin,
 				},
 			},
-			{ new: true }
+			{ new: true },
 		);
 
 		if (updatedUser.business_id !== business_id) {
