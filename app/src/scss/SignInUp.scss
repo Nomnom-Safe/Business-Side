@@ -1,0 +1,61 @@
+/* Classes --------------------------------------------*/
+
+.welcome {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 1 1 auto;
+	width: 1fr;
+	color: var(--dark-turq);
+}
+
+.sign {
+	&-in {
+		width: 100%;
+	}
+
+	&-in,
+	&-up {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		flex: 1 1 auto;
+		width: 1fr;
+	}
+}
+
+.sign-up-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-areas: 'sign-up welcome';
+	width: 100%;
+}
+
+.sign-in-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+.swap-form {
+	text-align: center;
+	padding: 15px;
+}
+
+.swap-btn {
+	cursor: pointer;
+	color: var(--dark-turq);
+	text-decoration: none;
+	font-weight: bold;
+
+	&:visited {
+		color: var(--dark-turq);
+	}
+
+	&:hover {
+		text-decoration: underline;
+		color: var(--turq) !important;
+	}
+}

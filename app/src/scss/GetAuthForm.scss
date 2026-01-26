@@ -1,0 +1,47 @@
+.auth-form {
+	width: 50%;
+	max-width: 325px;
+	padding: 45px;
+	border: var(--border);
+	border-radius: var(--corners-round);
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.sign-up,
+.login {
+	&-title {
+		margin-top: 0px;
+		text-align: center;
+		color: var(--dark-turq);
+	}
+}
+
+.sign-up-title {
+	margin-bottom: 0px;
+}
+
+.name {
+	width: 100% !important;
+}
+
+.email {
+	width: 100% !important;
+}
+
+.sign {
+	&-in {
+		&-btn {
+			background-color: var(--salmon);
+		}
+	}
+
+	&-in,
+	&-up {
+		&-btn {
+			margin-bottom: 0px;
+			margin-top: 0px;
+		}
+	}
+}

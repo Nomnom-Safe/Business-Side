@@ -1,4 +1,4 @@
-import '../../scss/auth.scss';
+import '../../scss/ChangeEmail.scss';
 
 function ChangeEmail() {
 	return (

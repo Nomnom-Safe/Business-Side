@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import '../scss/auth.scss';
 
 function GetConfirmationMessage({ message, destination }) {
 	const navigate = useNavigate();

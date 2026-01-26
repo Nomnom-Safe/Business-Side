@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import GetAuthForm from './GetAuthForm';
-import '../../scss/auth.scss';
+import '../../scss/SignInUp.scss';
 
 function SignInUp() {
 	const [formType, setFormType] = useState('signUpForm');

@@ -32,6 +32,10 @@ body {
 }
 
 input {
+	height: 30px;
+	flex: 1 1 auto;
+	border: 0px;
+
 	&[type='text']:not(.password),
 	&[type='number'],
 	&[type='email'] {
@@ -46,6 +50,16 @@ input {
 		border-radius: var(--corners-round);
 		border: 1px solid black;
 	}
+
+	&[type='email'] {
+		&.email {
+			width: 100% !important;
+		}
+	}
+}
+
+label {
+	font-size: 15px;
 }
 
 textarea {
@@ -470,5 +484,45 @@ ul {
 
 	&-input {
 		margin: 0; /* Remove default margin from the checkbox */
+	}
+}
+
+.form-field-container {
+	display: grid;
+	gap: 5px;
+}
+
+.confirmation,
+.error {
+	&-container {
+		position: absolute;
+		top: 30px;
+		left: 50%;
+		transform: translateX(-50%);
+		padding: 10px 20px;
+		border-radius: var(--corners-round);
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+		background-color: var(--hard-white);
+		color: var(--hard-black);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
+	}
+}
+
+.confirmation {
+	&-container {
+		border: var(--border);
+	}
+}
+
+.error {
+	&-container {
+		border: 2px solid var(--delete-red);
+	}
+
+	&-btn {
+		background-color: var(--delete-red);
 	}
 }

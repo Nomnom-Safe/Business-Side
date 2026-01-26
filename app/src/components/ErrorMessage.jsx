@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import '../scss/auth.scss';
 
 function ErrorMessage({ message, destination, onClose }) {
 	const navigate = useNavigate();

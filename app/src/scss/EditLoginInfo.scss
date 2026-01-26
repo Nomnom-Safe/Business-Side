@@ -1,0 +1,36 @@
+.edit-login-info {
+	&-container {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		height: 100%;
+		justify-content: end;
+	}
+
+	&-page-container {
+		flex: 1 1 auto;
+		display: flex;
+		flex-direction: column;
+
+		h1 {
+			text-align: center;
+		}
+	}
+
+	&-form {
+		height: 100%;
+		max-width: 340px;
+		gap: 30px;
+
+		input {
+			width: 100%;
+		}
+
+		&-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100%;
+		}
+	}
+}
