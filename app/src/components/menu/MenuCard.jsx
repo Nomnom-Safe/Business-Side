@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../css/MenuCard.css';
+import '../../css/MenuCard.scss';
 import axios from 'axios';
 
 export default function MenuCard({
@@ -35,20 +35,22 @@ export default function MenuCard({
 
 	const saveTitleToDb = async () => {
 		try {
-		  const businessId = localStorage.getItem('business_id');
-		  const res = await axios.put(`http://localhost:5000/api/menus/update-title-description`, {
-			businessId,
-			title: localTitle,
-			description: localDescription,
-		  });
-		  console.log('Menu updated successfully:', res.data);
+			const businessId = localStorage.getItem('business_id');
+			const res = await axios.put(
+				`http://localhost:5000/api/menus/update-title-description`,
+				{
+					businessId,
+					title: localTitle,
+					description: localDescription,
+				},
+			);
+			console.log('Menu updated successfully:', res.data);
 		} catch (err) {
-		  console.error('Error updating menu title:', err);
+			console.error('Error updating menu title:', err);
 		}
-	  };
-	  
+	};
+
 	const saveDescriptionToDb = saveTitleToDb;
-	
 
 	return (
 		<div className='menu-card'>
@@ -75,7 +77,10 @@ export default function MenuCard({
 				<p className='menu-description'>{description}</p>
 			)}
 
-			<button onClick={toMenu} className='view-menu-button'>
+			<button
+				onClick={toMenu}
+				className='view-menu-button'
+			>
 				{buttonLabel}
 			</button>
 		</div>

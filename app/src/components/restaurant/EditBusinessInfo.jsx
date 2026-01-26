@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GetConfirmationMessage from '../ConfirmationMessage';
-import '../../css/EditBusinessInfo.css';
+import '../../css/EditBusinessInfo.scss';
 
 const EditBusinessInfo = () => {
 	const [businessInfo, setBusinessInfo] = useState({
@@ -12,8 +12,7 @@ const EditBusinessInfo = () => {
 		diets: '',
 	});
 
-	const [showConfirmation, setShowConfirmation] =
-		useState(false);
+	const [showConfirmation, setShowConfirmation] = useState(false);
 	const navigate = useNavigate();
 
 	const businessId = localStorage.getItem('business_id'); // Get from localStorage
@@ -27,10 +26,9 @@ const EditBusinessInfo = () => {
 
 			try {
 				const response = await fetch(
-					`http://localhost:5000/api/businesses/${businessId}`
+					`http://localhost:5000/api/businesses/${businessId}`,
 				);
-				if (!response.ok)
-					throw new Error('Failed to fetch business info');
+				if (!response.ok) throw new Error('Failed to fetch business info');
 
 				const data = await response.json();
 
@@ -38,16 +36,11 @@ const EditBusinessInfo = () => {
 					name: data.name || '',
 					url: data.url || '',
 					address: data.address || '',
-					allergens: data.allergens
-						? data.allergens.join(', ')
-						: '',
+					allergens: data.allergens ? data.allergens.join(', ') : '',
 					diets: data.diets ? data.diets.join(', ') : '',
 				});
 			} catch (error) {
-				console.error(
-					'Error fetching business info:',
-					error
-				);
+				console.error('Error fetching business info:', error);
 			}
 		};
 
@@ -74,12 +67,8 @@ const EditBusinessInfo = () => {
 				name: businessInfo.name,
 				url: businessInfo.url,
 				address: businessInfo.address,
-				allergens: businessInfo.allergens
-					.split(',')
-					.map((item) => item.trim()), // convert back to array
-				diets: businessInfo.diets
-					.split(',')
-					.map((item) => item.trim()), // convert back to array
+				allergens: businessInfo.allergens.split(',').map((item) => item.trim()), // convert back to array
+				diets: businessInfo.diets.split(',').map((item) => item.trim()), // convert back to array
 			};
 
 			const response = await fetch(
@@ -88,11 +77,10 @@ const EditBusinessInfo = () => {
 					method: 'PUT',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify(updatedData),
-				}
+				},
 			);
 
-			if (!response.ok)
-				throw new Error('Failed to update business');
+			if (!response.ok) throw new Error('Failed to update business');
 
 			setShowConfirmation(true);
 		} catch (error) {
@@ -131,9 +119,7 @@ const EditBusinessInfo = () => {
 						<input
 							type='text'
 							value={businessInfo.name}
-							onChange={(e) =>
-								handleChange('name', e.target.value)
-							}
+							onChange={(e) => handleChange('name', e.target.value)}
 						/>
 					</div>
 
@@ -142,9 +128,7 @@ const EditBusinessInfo = () => {
 						<input
 							type='text'
 							value={businessInfo.url}
-							onChange={(e) =>
-								handleChange('url', e.target.value)
-							}
+							onChange={(e) => handleChange('url', e.target.value)}
 						/>
 					</div>
 
@@ -153,9 +137,7 @@ const EditBusinessInfo = () => {
 						<input
 							type='text'
 							value={businessInfo.address}
-							onChange={(e) =>
-								handleChange('address', e.target.value)
-							}
+							onChange={(e) => handleChange('address', e.target.value)}
 						/>
 					</div>
 				</div>
@@ -176,9 +158,7 @@ const EditBusinessInfo = () => {
 							type='text'
 							placeholder='example: Tree Nuts'
 							value={businessInfo.allergens}
-							onChange={(e) =>
-								handleChange('allergens', e.target.value)
-							}
+							onChange={(e) => handleChange('allergens', e.target.value)}
 						/>
 					</div>
 
@@ -188,9 +168,7 @@ const EditBusinessInfo = () => {
 							type='text'
 							placeholder='example: Kosher'
 							value={businessInfo.diets}
-							onChange={(e) =>
-								handleChange('diets', e.target.value)
-							}
+							onChange={(e) => handleChange('diets', e.target.value)}
 						/>
 					</div>
 				</div>
@@ -209,8 +187,7 @@ const EditBusinessInfo = () => {
 
 				<div className='save-section'>
 					<span className='save-note'>
-						* This information will be displayed to users of
-						the app
+						* This information will be displayed to users of the app
 					</span>
 
 					<button

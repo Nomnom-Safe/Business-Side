@@ -1,6 +1,9 @@
-import '../../css/styles.css';
+import '../../css/styles.scss';
 
-function GenerateAllergenList({ selectedAllergens = [], onAllergenChange = () => {} }) {
+function GenerateAllergenList({
+	selectedAllergens = [],
+	onAllergenChange = () => {},
+}) {
 	const allergens = [
 		{ label: 'Lactose (milk)', value: 'lactose' },
 		{ label: 'Gluten', value: 'gluten' },
@@ -16,12 +19,15 @@ function GenerateAllergenList({ selectedAllergens = [], onAllergenChange = () =>
 	return (
 		<>
 			{allergens.map((allergen) => (
-				<label key={allergen.value} className="allergen-label">
+				<label
+					key={allergen.value}
+					className='allergen-label'
+				>
 					<input
-						type="checkbox"
-						name="allergens"
+						type='checkbox'
+						name='allergens'
 						value={allergen.value}
-						className="checkbox"
+						className='checkbox'
 						checked={selectedAllergens.includes(allergen.value)}
 						onChange={(e) => onAllergenChange(e, allergen.value)}
 					/>
