@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import '../../css/auth.scss';
 import GetPasswordField from './Password';
 import ErrorMessage from '../ErrorMessage';
-import format from '../../assets/formValidation.js';
-import getCookie from '../../assets/cookies.jsx';
+import format from '../../utils/form-validation.js';
+import getCookie from '../../utils/cookies.jsx';
 
 function GetAuthForm({ formName }) {
 	const navigate = useNavigate();

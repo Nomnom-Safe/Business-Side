@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaPencilAlt, FaTrash, FaSave } from 'react-icons/fa';
 import axios from 'axios';
-import '../../../css/styles.scss';
+import '../../css/styles.scss';
 
 const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 	const [isOpen, setIsOpen] = useState(false);

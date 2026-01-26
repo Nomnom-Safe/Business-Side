@@ -3,8 +3,8 @@ import ChangeEmail from './ChangeEmail';
 import ChangePassword from './ChangePassword';
 import GetConfirmationMessage from '../ConfirmationMessage';
 import ErrorMessage from '../ErrorMessage';
-import getCookie from '../../assets/cookies';
-import format from '../../assets/formValidation.js';
+import getCookie from '../../utils/cookies.jsx';
+import format from '../../utils/form-validation.js';
 import '../../css/auth.scss';
 import { useNavigate } from 'react-router-dom';
 
@@ -85,7 +85,7 @@ function EditLoginInfo() {
 							'Content-Type': 'application/json',
 						},
 						body: JSON.stringify(formData),
-					}
+					},
 				);
 
 				const result = await response.json();

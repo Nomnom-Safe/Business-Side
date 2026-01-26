@@ -5,7 +5,7 @@ import editLoginIcon from '../icons/edit_login.png';
 import editBusinessIcon from '../icons/edit_business.png';
 import logoutIcon from '../icons/logout.png';
 import userMaintenanceIcon from '../icons/user-maintenance.png';
-import getCookie from '../assets/cookies';
+import getCookie from '../utils/cookies';
 import '../css/ProfileIcon.scss';
 
 export default function ProfileIcon() {
