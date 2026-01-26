@@ -1,0 +1,46 @@
+h1 {
+	color: var(--dark-turq);
+	margin-top: 5px;
+}
+
+.choose {
+	&-business {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		flex: 1 1 auto;
+
+		&-form {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+		}
+
+		&-container {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 10px;
+			flex: 1 1 auto;
+		}
+	}
+}
+
+.business {
+	&-options {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		flex: 1 1 auto;
+	}
+
+	// Targets internal classes of React's Select component
+	&__ {
+		&control {
+			cursor: pointer !important;
+		}
+
+		&option {
+			cursor: pointer !important;
+		}
+	}
+}

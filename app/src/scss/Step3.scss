@@ -1,0 +1,41 @@
+h1 {
+	color: var(--dark-turq);
+	margin-top: 5px;
+}
+
+.menu-item-layout {
+	&-container {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 10px 20px;
+	}
+
+	&-option {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		cursor: pointer;
+	}
+
+	&-input {
+		display: none; /* Hides radio btn */
+	}
+
+	&-image {
+		max-width: 500px;
+		padding: 5px;
+		cursor: pointer;
+		transition: border-color 0.3s ease;
+	}
+
+	&-description {
+		text-align: center;
+	}
+}
+
+.menu-item-layout-image:hover,
+.selected {
+	padding: 0px;
+	border: 5px solid var(--mint-green);
+	border-radius: var(--corners-round);
+}

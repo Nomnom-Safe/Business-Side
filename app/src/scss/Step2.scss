@@ -1,0 +1,23 @@
+h1 {
+	color: var(--dark-turq);
+	margin-top: 5px;
+}
+
+.allergens,
+.diets {
+	display: flex;
+	flex-direction: column;
+	row-gap: 20px;
+}
+
+.allergen-list {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+}
+
+.diet-list {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	column-gap: 20px;
+	max-width: 350px;
+}

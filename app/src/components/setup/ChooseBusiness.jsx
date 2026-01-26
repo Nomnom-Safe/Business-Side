@@ -1,4 +1,4 @@
-import '../../scss/setup.scss';
+import '../../scss/ChooseBusiness.scss';
 import GetConfirmationMessage from '../ConfirmationMessage';
 import ErrorMessage from '../ErrorMessage';
 import Select from 'react-select';
