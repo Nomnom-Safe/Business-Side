@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import MenuCard from './MenuCard';
-import '../../css/MenuDashboard.scss';
+import '../../scss/MenuDashboard.scss';
 import deleteIcon from '../../icons/delete.png';
 
 function MenuDashboard() {

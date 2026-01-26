@@ -4,7 +4,7 @@ import Step2 from './Step2';
 import Step3 from './Step3';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import '../../css/setup.scss';
+import '../../scss/setup.scss';
 
 function SetUp({ step }) {
 	const navigate = useNavigate();
@@ -57,7 +57,7 @@ function SetUp({ step }) {
 					const result = await response.json();
 					if (result.error?.includes('Business name already exists')) {
 						alert(
-							'That business name is already in use. Please choose another.'
+							'That business name is already in use. Please choose another.',
 						);
 						return;
 					}
@@ -83,7 +83,7 @@ function SetUp({ step }) {
 						diets: formData.diets,
 						menuLayout: formData.menuLayout,
 					}),
-				}
+				},
 			);
 
 			if (!updateResponse.ok) throw new Error('Failed to update business');

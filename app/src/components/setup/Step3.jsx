@@ -1,11 +1,10 @@
-import '../../css/setup.scss';
+import '../../scss/setup.scss';
 import menuItemLayoutOption1 from '../../temp/menu-placeholder-right.jpg';
 import menuItemLayoutOption2 from '../../temp/menu-placeholder-left.jpg';
 import { useState } from 'react';
 
 function Step3() {
-	const [selectedOption, setSelectedOption] =
-		useState(null);
+	const [selectedOption, setSelectedOption] = useState(null);
 
 	const handleOptionChange = (event) => {
 		setSelectedOption(event.target.value); // Update the selected option
@@ -20,8 +19,8 @@ function Step3() {
 				className='step3-form'
 			>
 				<div className='question'>
-					You will add menu items using this page later.
-					Which layout do you prefer?
+					You will add menu items using this page later. Which layout do you
+					prefer?
 					<br />
 					(select the picture)
 				</div>
@@ -40,9 +39,7 @@ function Step3() {
 							src={menuItemLayoutOption1}
 							alt='Menu item layout 1'
 							className={`menu-item-layout-image ${
-								selectedOption === 'layout1'
-									? 'selected'
-									: ''
+								selectedOption === 'layout1' ? 'selected' : ''
 							}`}
 						/>
 					</label>
@@ -60,21 +57,19 @@ function Step3() {
 							src={menuItemLayoutOption2}
 							alt='Menu item layout 2'
 							className={`menu-item-layout-image ${
-								selectedOption === 'layout2'
-									? 'selected'
-									: ''
+								selectedOption === 'layout2' ? 'selected' : ''
 							}`}
 						/>
 					</label>
 
 					<div className='menu-item-layout-description'>
-						This layout hides the ingredients and
-						description sections by default.
+						This layout hides the ingredients and description sections by
+						default.
 					</div>
 
 					<div className='menu-item-layout-description'>
-						This layout displays the ingredients and
-						description sections by deafult.
+						This layout displays the ingredients and description sections by
+						deafult.
 					</div>
 				</div>
 			</form>

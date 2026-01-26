@@ -1,4 +1,4 @@
-import '../../css/admin.scss';
+import '../../scss/admin.scss';
 import AdminTable from './AdminTable';
 import GetConfirmationMessage from '../ConfirmationMessage';
 import ErrorMessage from '../ErrorMessage';
@@ -30,7 +30,7 @@ function UserMaintenance() {
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify(data),
-				}
+				},
 			);
 			const result = await response.json();
 

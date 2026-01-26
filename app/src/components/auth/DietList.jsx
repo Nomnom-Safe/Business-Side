@@ -1,4 +1,4 @@
-import '../../css/styles.scss';
+import '../../scss/styles.scss';
 
 function GenerateDietList({ selectedDiets = [], onDietChange = () => {} }) {
 	const diets = [

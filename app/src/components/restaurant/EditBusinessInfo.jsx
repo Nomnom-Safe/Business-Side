@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GetConfirmationMessage from '../ConfirmationMessage';
-import '../../css/EditBusinessInfo.scss';
+import '../../scss/EditBusinessInfo.scss';
 
 const EditBusinessInfo = () => {
 	const [businessInfo, setBusinessInfo] = useState({

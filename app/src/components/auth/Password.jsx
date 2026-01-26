@@ -1,4 +1,4 @@
-import '../../css/auth.scss';
+import '../../scss/auth.scss';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useState } from 'react';
 import PropTypes from 'prop-types';

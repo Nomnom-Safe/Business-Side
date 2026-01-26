@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import Checkbox from './Checkbox';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../../css/picklist.scss';
+import '../../scss/picklist.scss';
 
 const MenuItemPicklist = () => {
 	const [menus, setMenus] = useState([]);

@@ -1,4 +1,4 @@
-import '../../css/setup.scss';
+import '../../scss/setup.scss';
 import GetConfirmationMessage from '../ConfirmationMessage';
 import ErrorMessage from '../ErrorMessage';
 import Select from 'react-select';
@@ -73,7 +73,7 @@ function ChooseBusiness() {
 							'Content-Type': 'application/json',
 						},
 						body: JSON.stringify(formData),
-					}
+					},
 				);
 				const result = await response.json();
 
@@ -112,7 +112,7 @@ function ChooseBusiness() {
 							allergens: [],
 							diets: [],
 						}),
-					}
+					},
 				);
 
 				if (!createBusinessResponse.ok) {
@@ -141,7 +141,7 @@ function ChooseBusiness() {
 							restaurant: businessId,
 							menuItems: [],
 						}),
-					}
+					},
 				);
 
 				if (!createMenuResponse.ok) {
@@ -164,7 +164,7 @@ function ChooseBusiness() {
 							type: 'new',
 							business_id: businessId,
 						}),
-					}
+					},
 				);
 
 				if (!assignResponse.ok) {

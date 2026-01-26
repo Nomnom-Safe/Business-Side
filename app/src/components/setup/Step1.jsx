@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import '../../css/setup.scss';
+import '../../scss/setup.scss';
 
 function Step1({ updateFormData }) {
 	const [localData, setLocalData] = useState({

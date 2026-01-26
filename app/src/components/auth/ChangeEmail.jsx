@@ -1,4 +1,4 @@
-import '../../css/auth.scss';
+import '../../scss/auth.scss';
 
 function ChangeEmail() {
 	return (
@@ -35,8 +35,7 @@ function ChangeEmail() {
 
 			<div className='form-field-container'>
 				<label htmlFor='confirmNewEmail'>
-					Confirm New Email{' '}
-					<span className='required'>*</span>
+					Confirm New Email <span className='required'>*</span>
 				</label>
 
 				<input

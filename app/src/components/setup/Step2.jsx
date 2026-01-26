@@ -1,4 +1,4 @@
-import '../../css/setup.scss';
+import '../../scss/setup.scss';
 import GenerateAllergenList from '../auth/AllergenList';
 import GenerateDietList from '../auth/DietList';
 import { useState, useEffect } from 'react';

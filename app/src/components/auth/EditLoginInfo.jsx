@@ -5,7 +5,7 @@ import GetConfirmationMessage from '../ConfirmationMessage';
 import ErrorMessage from '../ErrorMessage';
 import getCookie from '../../utils/cookies.jsx';
 import format from '../../utils/form-validation.js';
-import '../../css/auth.scss';
+import '../../scss/auth.scss';
 import { useNavigate } from 'react-router-dom';
 
 function EditLoginInfo() {
