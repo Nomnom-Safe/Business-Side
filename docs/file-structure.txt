@@ -1,0 +1,130 @@
+Business-Side/
+├── app/
+│   ├── backend/
+│   │   ├── config/
+│   │   │   └── db.js
+│   │   ├── routes/
+│   │   │   ├── admin.routes.js
+│   │   │   ├── business.routes.js
+│   │   │   ├── menu-items.routes.js
+│   │   │   ├── menu.routes.js
+│   │   │   └── user.routes.js
+│   │   ├── schemas/
+│   │   │   ├── Business.js
+│   │   │   ├── Menu.js
+│   │   │   ├── MenuItem.js
+│   │   │   └── User.js
+│   │   ├── utils/
+│   │   │   └── cookies.js
+│   │   └── server.js
+│   ├── public/
+│   │   └── index.html
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── admin/
+│   │   │   │   ├── AdminTable.jsx
+│   │   │   │   └── UserMaintenance.jsx
+│   │   │   ├── auth/
+│   │   │   │   ├── AllergenList.jsx
+│   │   │   │   ├── ChangeEmail.jsx
+│   │   │   │   ├── ChangePassword.jsx
+│   │   │   │   ├── DietList.jsx
+│   │   │   │   ├── EditLoginInfo.jsx
+│   │   │   │   ├── GetAuthForm.jsx
+│   │   │   │   ├── Password.jsx
+│   │   │   │   └── SignInUp.jsx
+│   │   │   ├── menu/
+│   │   │   │   ├── MenuCard.jsx
+│   │   │   │   └── MenuDashboard.jsx
+│   │   │   ├── menu-items/
+│   │   │   │   ├── AddMenuItem.jsx
+│   │   │   │   ├── Checkbox.jsx
+│   │   │   │   ├── MenuItemPanel.jsx
+│   │   │   │   ├── MenuItemsPage.jsx
+│   │   │   │   └── MenuItemSwap.jsx
+│   │   │   ├── restaurant/
+│   │   │   │   └── EditBusinessInfo.jsx
+│   │   │   ├── setup/
+│   │   │   │   ├── ChooseBusiness.jsx
+│   │   │   │   ├── SetUp.jsx
+│   │   │   │   ├── Step1.jsx
+│   │   │   │   ├── Step2.jsx
+│   │   │   │   └── Step3.jsx
+│   │   │   ├── ConfirmationMessage.jsx
+│   │   │   ├── ErrorMessage.jsx
+│   │   │   ├── Header.jsx
+│   │   │   ├── ProfileIcon.jsx
+│   │   │   └── ProtectedRoute.jsx
+│   │   ├── icons/
+│   │   │   ├── avatar.png
+│   │   │   ├── delete.png
+│   │   │   ├── demote-admin.png
+│   │   │   ├── edit_business.png
+│   │   │   ├── edit_login.png
+│   │   │   ├── logout.png
+│   │   │   ├── promote-admin.png
+│   │   │   ├── remove-user.png
+│   │   │   └── user-maintenance.png
+│   │   ├── scss/
+│   │   │   ├── AdminTable.scss
+│   │   │   ├── ChangeEmail.scss
+│   │   │   ├── ChooseBusiness.scss
+│   │   │   ├── EditBusinessInfo.scss
+│   │   │   ├── EditLoginInfo.scss
+│   │   │   ├── GetAuthForm.scss
+│   │   │   ├── Header.scss
+│   │   │   ├── MenuCard.scss
+│   │   │   ├── MenuDashboard.scss
+│   │   │   ├── Password.scss
+│   │   │   ├── picklist.scss
+│   │   │   ├── ProfileIcon.scss
+│   │   │   ├── SetUp.scss
+│   │   │   ├── SignInUp.scss
+│   │   │   ├── Step1.scss
+│   │   │   ├── Step2.scss
+│   │   │   ├── Step3.scss
+│   │   │   ├── styles.scss
+│   │   │   └── UserMaintenance.scss
+│   │   ├── temp/
+│   │   │   ├── menu-placeholder-left.jpg
+│   │   │   └── menu-placeholder-right.jpg
+│   │   ├── utils/
+│   │   │   ├── cookies.jsx
+│   │   │   └── form-validation.js
+│   │   ├── App.jsx
+│   │   └── index.jsx
+│   ├── tests/
+│   │   ├── adminRoutes.test.js
+│   │   ├── App.test.js
+│   │   ├── Business.test.js
+│   │   ├── businessRoutes.test.js
+│   │   ├── db.test.js
+│   │   ├── Menu.test.js
+│   │   ├── MenuItem.test.js
+│   │   ├── menuItemsRoutes.test.js
+│   │   ├── menuRoutes.test.js
+│   │   ├── User.test.js
+│   │   └── userRoutes.test.js
+│   ├── package.json
+│   └── README.md
+├── docs/
+│   ├── modules/
+│   │   ├── AdminModule.md
+│   │   ├── AuthenticationModule.md
+│   │   ├── BackendModule.md
+│   │   ├── BusinessModule.md
+│   │   ├── MenuItemsModule.md
+│   │   ├── MenuModule.md
+│   │   ├── SetupModule.md
+│   │   └── TestingModule.md
+│   ├── file-structure.txt
+│   ├── Nom Nom Safe Final Presentation.pdf
+│   ├── Nom Nom Safe Final Presentation.pptx
+│   ├── NomNom-HW_4.pdf
+│   ├── Requirements.md
+│   └── UserManual.md
+├── scripts/
+│   ├── compare_tree.py
+│   ├── loc_counter.py
+│   └── update_file_tree.py
+└── README.md
