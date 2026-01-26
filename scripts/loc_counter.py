@@ -1,14 +1,13 @@
-# Count lines of code in the backend/, src/, and tests/ directories, ignoring blank lines and comments.
+# Count lines of code in the api/ and src/ directories, ignoring blank lines and comments.
 # Usage (PowerShell): python .\scripts\loc_counter.py
 
 import os
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-BACKEND_PATH = os.path.join(ROOT, 'app/backend')
+API_PATH = os.path.join(ROOT, 'app/api')
 SRC_PATH = os.path.join(ROOT, 'app/src')
-TEST_PATH = os.path.join(ROOT, 'app/tests')
 
-paths = [BACKEND_PATH, SRC_PATH, TEST_PATH]
+paths = [API_PATH, SRC_PATH]
 files = []
 test_file_count = 0
 
@@ -18,7 +17,7 @@ for p in paths:
             if f.endswith('.js') or f.endswith('.jsx') or f.endswith('.html') or f.endswith('.scss'):
                 full_path = os.path.join(dirpath, f)
                 files.append(full_path)
-                if full_path.startswith(TEST_PATH):
+                if f.endswith('.test.js') or f.endswith('.test.jsx'):
                     test_file_count += 1
 
 counts = {}
@@ -38,7 +37,7 @@ for fp in sorted(files):
         count += 1
     counts[fp] = count
     total += count
-    if fp.startswith(TEST_PATH):
+    if f.endswith('.test.js') or f.endswith('.test.jsx'):
         test_total += count
 
 print('Files scanned:')

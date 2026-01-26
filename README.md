@@ -4,7 +4,7 @@
 
 ---
 
-### *Peace of mind: on every plate, every place.*
+### _Peace of mind: on every plate, every place._
 
 A simple and user-friendly web-based application that allows restaurants to store, modify, and display accurate and up-to-date dietary information about each of their menu items.
 
@@ -42,9 +42,9 @@ NomNom Safe helps restaurants enhance their reputation as a business that cares 
 
 - Create, edit, and delete menus for a restaurant
 - Add menu items with:
-    - Name, description, price
-    - Dietary tags (e.g., vegan, keto)
-    - Preset allergen tags (e.g., nuts, dairy, shellfish)
+  - Name, description, price
+  - Dietary tags (e.g., vegan, keto)
+  - Preset allergen tags (e.g., nuts, dairy, shellfish)
 - Search and filter menu items by name or allergen
 
 ### Allergen Awareness
@@ -151,10 +151,10 @@ This will install express (for backend functionality) and all of the dependencie
 
 ### Set Up Environment Variables
 
-Create a `.env` file in the `backend` directory and include the following
+Create a `.env` file in the `api` directory and include the following
 
 ```jsx
-MONGO_URI=your_mongodb_connection_string
+MONGO_URI = your_mongodb_connection_string;
 ```
 
 ### Run the App
@@ -162,7 +162,7 @@ MONGO_URI=your_mongodb_connection_string
 Start the backend server
 
 ```jsx
-cd backend
+cd api
 node server.js
 ```
 

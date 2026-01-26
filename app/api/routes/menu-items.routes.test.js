@@ -2,7 +2,7 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const express = require('express');
-const menuItemsRoutes = require('../backend/routes/menuItemsRoutes');
+const menuItemsRoutes = require('../api/routes/menuItemsRoutes');
 const MenuItem = require('../schemas/MenuItem');
 
 let app;

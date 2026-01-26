@@ -35,10 +35,10 @@ This will install express (for backend functionality) and all of the dependencie
 
 ### Set Up Environment Variables
 
-Create a `.env` file in the `backend` directory and include the following
+Create a `.env` file in the `api` directory and include the following
 
 ```jsx
-MONGO_URI=your_mongodb_connection_string
+MONGO_URI = your_mongodb_connection_string;
 ```
 
 ### Run the App
@@ -46,7 +46,7 @@ MONGO_URI=your_mongodb_connection_string
 Start the backend server
 
 ```jsx
-cd backend
+cd api
 node server.js
 ```
 

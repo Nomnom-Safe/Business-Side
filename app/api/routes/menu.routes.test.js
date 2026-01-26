@@ -2,7 +2,7 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const express = require('express');
-const menuRoutes = require('../backend/routes/menuRoutes');
+const menuRoutes = require('../api/routes/menuRoutes');
 const Menu = require('../schemas/Menu');
 const Business = require('../schemas/Business');
 
