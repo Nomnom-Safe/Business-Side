@@ -1,4 +1,4 @@
-import '../../scss/admin.scss';
+import '../../scss/UserMaintenance.scss';
 import AdminTable from './AdminTable';
 import GetConfirmationMessage from '../ConfirmationMessage';
 import ErrorMessage from '../ErrorMessage';

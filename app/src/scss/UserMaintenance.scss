@@ -1,0 +1,65 @@
+/* Elements -------------------------------------------*/
+input[type='email'].user-email {
+	width: 100%;
+}
+
+/* Classes --------------------------------------------*/
+.add-user {
+	&-form {
+		width: 340px;
+		height: fit-content;
+		display: grid;
+		gap: 20px;
+	}
+
+	&-container {
+		display: grid;
+		row-gap: 10px;
+	}
+
+	&-status-container {
+		display: grid;
+		row-gap: 10px;
+
+		input {
+			height: auto;
+		}
+	}
+}
+
+.user {
+	&-maintenance-container {
+		display: grid;
+		grid-template-columns: 340px auto;
+		gap: 100px;
+	}
+
+	&-email {
+		width: 100%;
+	}
+}
+
+.back-btn {
+	position: absolute;
+	left: 60px;
+}
+
+.admin {
+	&-container {
+		height: 100%;
+		width: 100%;
+		margin: 0px 40px;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+
+		&-table-container {
+			align-self: end;
+		}
+	}
+
+	&-header {
+		display: flex;
+		justify-content: center;
+	}
+}

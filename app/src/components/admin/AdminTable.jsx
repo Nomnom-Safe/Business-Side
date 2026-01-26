@@ -21,6 +21,7 @@ import demoteAdminIcon from '../../icons/demote-admin.png';
 import promoteAdminIcon from '../../icons/promote-admin.png';
 import GetConfirmationMessage from '../ConfirmationMessage';
 import ErrorMessage from '../ErrorMessage';
+import '../../scss/AdminTable.scss';
 
 //define TData type with JSDoc
 /**
@@ -78,7 +79,7 @@ const AdminTable = () => {
 						headers: {
 							'Content-Type': 'application/json',
 						},
-					}
+					},
 				);
 
 				if (response.ok) {
@@ -112,7 +113,7 @@ const AdminTable = () => {
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify(data),
-				}
+				},
 			);
 			const result = await response.json();
 
@@ -140,7 +141,7 @@ const AdminTable = () => {
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify({ email: targetEmail }),
-				}
+				},
 			);
 			const result = await response.json();
 
@@ -260,8 +261,8 @@ const AdminTable = () => {
 											: flexRender(
 													header.column.columnDef.Header ??
 														header.column.columnDef.header,
-													header.getContext()
-											  )}
+													header.getContext(),
+												)}
 									</TableCell>
 								))}
 							</TableRow>
