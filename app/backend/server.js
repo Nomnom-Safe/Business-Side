@@ -26,7 +26,7 @@ app.use(
 	cors({
 		origin: 'http://localhost:3000',
 		credentials: true,
-	})
+	}),
 );
 
 // Middleware for parsing cookies
@@ -34,12 +34,12 @@ const cookieparser = require('cookie-parser');
 app.use(cookieparser());
 
 // ROUTES
-// All endpoints related to menus will be handled in menuRoutes.js
+// All endpoints related to menus will be handled in menu.routes.js
 // For example: GET /api/menus or POST /api/menus
-const menuRoutes = require('./routes/menuRoutes');
+const menuRoutes = require('./routes/menu.routes');
 app.use('/api/menus', menuRoutes);
 
-const menuItemRoutes = require('./routes/menuItemsRoutes');
+const menuItemRoutes = require('./routes/menu-items.routes');
 app.use('/api/menuitems', menuItemRoutes);
 
 const auth = require('./routes/user.routes');
@@ -48,7 +48,7 @@ app.use('/api/auth', auth);
 const admin = require('./routes/admin.routes');
 app.use('/api/admin', admin);
 
-const businessRoutes = require('./routes/businessRoutes');
+const businessRoutes = require('./routes/business.routes');
 app.use('/api/businesses', businessRoutes);
 
 // You can test this by visiting http://localhost:5000/
