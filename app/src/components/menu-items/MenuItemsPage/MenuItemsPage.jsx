@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import MenuItemPanel from './MenuItemPanel.jsx';
+import MenuItemPanel from '../MenuItemPanel/MenuItemPanel.jsx';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../scss/styles.scss';

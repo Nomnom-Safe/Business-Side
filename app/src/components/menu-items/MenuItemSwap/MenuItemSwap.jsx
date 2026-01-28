@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
-import Checkbox from './Checkbox';
+import Checkbox from '../Checkbox/Checkbox.jsx';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../../scss/picklist.scss';
+import './MenuItemSwap.scss';
 
 const MenuItemPicklist = () => {
 	const [menus, setMenus] = useState([]);

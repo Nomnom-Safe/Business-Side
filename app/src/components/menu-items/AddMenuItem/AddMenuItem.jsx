@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import '../../scss/styles.scss';
-import AllergenList from '../auth/AllergenList';
+import AllergenList from '../../auth/AllergenList';
 import { FaAngleDown, FaAngleRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';

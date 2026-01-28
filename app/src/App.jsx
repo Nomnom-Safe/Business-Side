@@ -2,12 +2,12 @@ import Header from './components/Header';
 import SignInUp from './components/auth/SignInUp/SignInUp.jsx';
 import SetUp from './components/setup/SetUp';
 import MenuDashboard from './components/menu/MenuDashboard/MenuDashboard.jsx';
-import EditBusinessInfo from './components/restaurant/EditBusinessInfo';
+import EditBusinessInfo from './components/restaurant/EditBusinessInfo/EditBusinessInfo.jsx';
 import EditLoginInfo from './components/auth/EditLoginInfo/EditLoginInfo.jsx';
 // import FilterPanel from './components/menu/FilterPanel';
-import AddMenuItem from './components/menu-items/AddMenuItem.jsx';
-import MenuItemsPage from './components/menu-items/MenuItemsPage.jsx';
-import MenuItemPicklist from './components/menu-items/MenuItemSwap.jsx';
+import AddMenuItem from './components/menu-items/AddMenuItem/AddMenuItem.jsx';
+import MenuItemsPage from './components/menu-items/MenuItemsPage/MenuItemsPage.jsx';
+import MenuItemPicklist from './components/menu-items/MenuItemSwap/MenuItemSwap.jsx';
 import ChooseBusiness from './components/setup/ChooseBusiness.jsx';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
