@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import GetAuthForm from './GetAuthForm';
+import GetAuthForm from '../GetAuthForm/GetAuthForm.jsx';
 import './SignInUp.scss';
 
 function SignInUp() {

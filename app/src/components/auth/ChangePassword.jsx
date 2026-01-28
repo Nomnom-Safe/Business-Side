@@ -1,4 +1,4 @@
-import GetPasswordField from './Password';
+import GetPasswordField from './Password/Password';
 
 function ChangePassword() {
 	return (

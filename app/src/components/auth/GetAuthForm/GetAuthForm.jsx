@@ -2,10 +2,10 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import './GetAuthForm.scss';
-import GetPasswordField from './Password';
-import ErrorMessage from '../ErrorMessage';
-import format from '../../utils/form-validation.js';
-import getCookie from '../../utils/cookies.jsx';
+import GetPasswordField from '../Password/Password.jsx';
+import ErrorMessage from '../../ErrorMessage.jsx';
+import format from '../../../utils/form-validation.js';
+import getCookie from '../../../utils/cookies.jsx';
 
 function GetAuthForm({ formName }) {
 	const navigate = useNavigate();
