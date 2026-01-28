@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import MenuItemPanel from '../MenuItemPanel/MenuItemPanel.jsx';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../../scss/global.scss';
+import '../../../styles/global.scss';
 
 const MenuItemsPage = () => {
 	const [menuItems, setMenuItems] = useState([]);

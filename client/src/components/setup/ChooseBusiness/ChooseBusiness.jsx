@@ -115,9 +115,10 @@ function ChooseBusiness() {
 					},
 				);
 
+				const result = await createBusinessResponse.json();
 				if (!createBusinessResponse.ok) {
-					const result = await createBusinessResponse.json();
-					setMessage(result.message);
+					// setMessage(result.message);
+					setMessage('Failed to create business');
 					setShowError(true);
 					return;
 				}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import '../../scss/global.scss';
+import '../../../styles/global.scss';
 import AllergenList from '../../auth/AllergenList/AllergenList';
 import { FaAngleDown, FaAngleRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
