@@ -1,7 +1,7 @@
 import './UserMaintenance.scss';
-import AdminTable from './AdminTable/AdminTable';
-import GetConfirmationMessage from '../ConfirmationMessage';
-import ErrorMessage from '../ErrorMessage';
+import AdminTable from '../AdminTable/AdminTable';
+import GetConfirmationMessage from '../../ConfirmationMessage';
+import ErrorMessage from '../../ErrorMessage';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
