@@ -1,6 +1,6 @@
 import './Step3.scss';
-import menuItemLayoutOption1 from '../../temp/menu-placeholder-right.jpg';
-import menuItemLayoutOption2 from '../../temp/menu-placeholder-left.jpg';
+import menuItemLayoutOption1 from '../../../assets/images/menu-placeholder-right.jpg';
+import menuItemLayoutOption2 from '../../../assets/images/menu-placeholder-left.jpg';
 import { useState } from 'react';
 
 function Step3() {

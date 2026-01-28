@@ -16,9 +16,9 @@ import {
 	TableHead,
 	TableRow,
 } from '@mui/material';
-import removeUserIcon from '../../icons/remove-user.png';
-import demoteAdminIcon from '../../icons/demote-admin.png';
-import promoteAdminIcon from '../../icons/promote-admin.png';
+import removeUserIcon from '../../../assets/icons/remove-user.png';
+import demoteAdminIcon from '../../../assets/icons/demote-admin.png';
+import promoteAdminIcon from '../../../assets/icons/promote-admin.png';
 import GetConfirmationMessage from '../../common/ConfirmationMessage/ConfirmationMessage.jsx';
 import ErrorMessage from '../../common/ErrorMessage/ErrorMessage.jsx';
 import './AdminTable.scss';

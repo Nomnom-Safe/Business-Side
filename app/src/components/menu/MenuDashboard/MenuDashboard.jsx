@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import MenuCard from '../MenuCard/MenuCard.jsx';
 import './MenuDashboard.scss';
-import deleteIcon from '../../icons/delete.png';
+import deleteIcon from '../../../assets/icons/delete.png';
 
 function MenuDashboard() {
 	const [menus, setMenus] = useState([]);

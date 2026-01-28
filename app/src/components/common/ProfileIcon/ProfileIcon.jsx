@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import avatar from '../icons/avatar.png';
-import editLoginIcon from '../icons/edit_login.png';
-import editBusinessIcon from '../icons/edit_business.png';
-import logoutIcon from '../icons/logout.png';
-import userMaintenanceIcon from '../icons/user-maintenance.png';
+import avatar from '../../../assets/icons/avatar.png';
+import editLoginIcon from '../../../assets/icons/edit_login.png';
+import editBusinessIcon from '../../../assets/icons/edit_business.png';
+import logoutIcon from '../../../assets/icons/logout.png';
+import userMaintenanceIcon from '../../../assets/icons/user-maintenance.png';
 import getCookie from '../../../utils/cookies';
 import './ProfileIcon.scss';
 
