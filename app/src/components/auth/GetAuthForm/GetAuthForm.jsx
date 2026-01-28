@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './GetAuthForm.scss';
 import GetPasswordField from '../Password/Password.jsx';
 import ErrorMessage from '../../common/ErrorMessage/ErrorMessage.jsx';
-import format from '../../../utils/form-validation.js';
+import format from '../../../utils/formValidation.js';
 import getCookie from '../../../utils/cookies.jsx';
 
 function GetAuthForm({ formName }) {

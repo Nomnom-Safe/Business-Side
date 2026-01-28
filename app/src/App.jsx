@@ -12,7 +12,7 @@ import ChooseBusiness from './components/setup/ChooseBusiness/ChooseBusiness.jsx
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import UserMaintenance from './components/admin/UserMaintenance/UserMaintenance';
-import ProtectedRoute from './components/common/ProtectedRoute/ProtectedRoute.jsx';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx';
 
 // TODO: check authorized status for routes
 function App() {

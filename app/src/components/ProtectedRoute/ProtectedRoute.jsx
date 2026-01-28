@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import getCookie from '../../../utils/cookies';
+import getCookie from '../../utils/cookies';
 
 function ProtectedRoute({ component, route, admin }) {
 	const isAuthorized = getCookie('isAuthorized') === 'true';
