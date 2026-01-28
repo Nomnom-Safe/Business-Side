@@ -3,7 +3,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import './GetAuthForm.scss';
 import GetPasswordField from '../Password/Password.jsx';
-import ErrorMessage from '../../ErrorMessage.jsx';
+import ErrorMessage from '../../common/ErrorMessage.jsx';
 import format from '../../../utils/form-validation.js';
 import getCookie from '../../../utils/cookies.jsx';
 

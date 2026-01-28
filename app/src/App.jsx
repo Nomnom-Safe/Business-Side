@@ -1,4 +1,4 @@
-import Header from './components/Header';
+import Header from './components/common/Header.jsx';
 import SignInUp from './components/auth/SignInUp/SignInUp.jsx';
 import SetUp from './components/setup/SetUp/SetUp.jsx';
 import MenuDashboard from './components/menu/MenuDashboard/MenuDashboard.jsx';
@@ -12,7 +12,7 @@ import ChooseBusiness from './components/setup/ChooseBusiness/ChooseBusiness.jsx
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import UserMaintenance from './components/admin/UserMaintenance/UserMaintenance';
-import ProtectedRoute from './components/ProtectedRoute.jsx';
+import ProtectedRoute from './components/common/ProtectedRoute.jsx';
 
 // TODO: check authorized status for routes
 function App() {
