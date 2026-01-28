@@ -1,6 +1,6 @@
 import Header from './components/Header';
 import SignInUp from './components/auth/SignInUp/SignInUp.jsx';
-import SetUp from './components/setup/SetUp';
+import SetUp from './components/setup/SetUp/SetUp.jsx';
 import MenuDashboard from './components/menu/MenuDashboard/MenuDashboard.jsx';
 import EditBusinessInfo from './components/restaurant/EditBusinessInfo/EditBusinessInfo.jsx';
 import EditLoginInfo from './components/auth/EditLoginInfo/EditLoginInfo.jsx';
@@ -8,7 +8,7 @@ import EditLoginInfo from './components/auth/EditLoginInfo/EditLoginInfo.jsx';
 import AddMenuItem from './components/menu-items/AddMenuItem/AddMenuItem.jsx';
 import MenuItemsPage from './components/menu-items/MenuItemsPage/MenuItemsPage.jsx';
 import MenuItemPicklist from './components/menu-items/MenuItemSwap/MenuItemSwap.jsx';
-import ChooseBusiness from './components/setup/ChooseBusiness.jsx';
+import ChooseBusiness from './components/setup/ChooseBusiness/ChooseBusiness.jsx';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import UserMaintenance from './components/admin/UserMaintenance/UserMaintenance';

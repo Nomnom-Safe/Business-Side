@@ -1,6 +1,6 @@
 import './ChooseBusiness.scss';
-import GetConfirmationMessage from '../ConfirmationMessage';
-import ErrorMessage from '../ErrorMessage';
+import GetConfirmationMessage from '../../ConfirmationMessage';
+import ErrorMessage from '../../ErrorMessage';
 import Select from 'react-select';
 import { useState } from 'react';
 import React from 'react';

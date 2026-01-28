@@ -1,6 +1,6 @@
 import './Step2.scss';
-import GenerateAllergenList from '../auth/AllergenList';
-import GenerateDietList from '../auth/DietList';
+import GenerateAllergenList from '../../auth/AllergenList';
+import GenerateDietList from '../../auth/DietList';
 import { useState, useEffect } from 'react';
 
 function Step2({ updateFormData }) {
