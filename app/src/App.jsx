@@ -1,7 +1,7 @@
 import Header from './components/Header';
 import SignInUp from './components/auth/SignInUp/SignInUp.jsx';
 import SetUp from './components/setup/SetUp';
-import MenuDashboard from './components/menu/MenuDashboard';
+import MenuDashboard from './components/menu/MenuDashboard/MenuDashboard.jsx';
 import EditBusinessInfo from './components/restaurant/EditBusinessInfo';
 import EditLoginInfo from './components/auth/EditLoginInfo/EditLoginInfo.jsx';
 // import FilterPanel from './components/menu/FilterPanel';
