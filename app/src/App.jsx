@@ -5,9 +5,9 @@ import MenuDashboard from './components/menu/MenuDashboard/MenuDashboard.jsx';
 import EditBusinessInfo from './components/restaurant/EditBusinessInfo/EditBusinessInfo.jsx';
 import EditLoginInfo from './components/auth/EditLoginInfo/EditLoginInfo.jsx';
 // import FilterPanel from './components/menu/FilterPanel';
-import AddMenuItem from './components/menu-items/AddMenuItem/AddMenuItem.jsx';
-import MenuItemsPage from './components/menu-items/MenuItemsPage/MenuItemsPage.jsx';
-import MenuItemPicklist from './components/menu-items/MenuItemSwap/MenuItemSwap.jsx';
+import AddMenuItem from './components/menuItems/AddMenuItem/AddMenuItem.jsx';
+import MenuItemsPage from './components/menuItems/MenuItemsPage/MenuItemsPage.jsx';
+import MenuItemPicklist from './components/menuItems/MenuItemSwap/MenuItemSwap.jsx';
 import ChooseBusiness from './components/setup/ChooseBusiness/ChooseBusiness.jsx';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
