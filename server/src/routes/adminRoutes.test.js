@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const adminRoutes = require('./admin.routes');
+const adminRoutes = require('./adminRoutes');
 const User = require('../schemas/User');
 
 let app;

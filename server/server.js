@@ -34,21 +34,21 @@ const cookieparser = require('cookie-parser');
 app.use(cookieparser());
 
 // ROUTES
-// All endpoints related to menus will be handled in menu.routes.js
+// All endpoints related to menus will be handled in menuRoutes.js
 // For example: GET /api/menus or POST /api/menus
-const menuRoutes = require('./src/routes/menu.routes');
+const menuRoutes = require('./src/routes/menuRoutes');
 app.use('/api/menus', menuRoutes);
 
-const menuItemRoutes = require('./src/routes/menu-items.routes');
+const menuItemRoutes = require('./src/routes/menuItemRoutes');
 app.use('/api/menuitems', menuItemRoutes);
 
-const auth = require('./src/routes/user.routes');
+const auth = require('./src/routes/userRoutes');
 app.use('/api/auth', auth);
 
-const admin = require('./src/routes/admin.routes');
+const admin = require('./src/routes/adminRoutes');
 app.use('/api/admin', admin);
 
-const businessRoutes = require('./src/routes/business.routes');
+const businessRoutes = require('./src/routes/businessRoutes');
 app.use('/api/businesses', businessRoutes);
 
 // You can test this by visiting http://localhost:5000/
