@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../schemas/User');
+const User = require('../models/User');
 const cookies = require('../utils/cookies');
-const Business = require('../schemas/Business');
+const Business = require('../models/Business');
 
 // @route   POST /api/auth/signin
 // @desc    Get a user
@@ -51,7 +51,7 @@ router.post('/signin', async (req, res) => {
 				{ _id: foundUser.business_id },
 				{
 					name: 1,
-				}
+				},
 			);
 
 			if (!foundBusiness) {
@@ -97,7 +97,7 @@ router.post('/signup', async (req, res) => {
 		// Get User document from the DB if the email already exists
 		const userExists = await User.findOne(
 			{ email: email },
-			{ email: 1, _id: 0 }
+			{ email: 1, _id: 0 },
 		);
 
 		if (userExists) {
@@ -180,7 +180,7 @@ router.post('/edit-login', async (req, res) => {
 			// Check that the new email does not already exist in the DB
 			const emailExists = await User.findOne(
 				{ email: newCred },
-				{ email: 1, _id: 0 }
+				{ email: 1, _id: 0 },
 			);
 
 			if (emailExists) {
@@ -195,7 +195,7 @@ router.post('/edit-login', async (req, res) => {
 			const updatedUser = await User.findOneAndUpdate(
 				{ email: currentEmail },
 				{ $set: { email: newCred } },
-				{ new: true, fields: { email: 1, _id: 0 } }
+				{ new: true, fields: { email: 1, _id: 0 } },
 			);
 
 			if (updatedUser && updatedUser.email !== newCred) {
@@ -302,13 +302,13 @@ router.post('/set-business', async (req, res) => {
 			if (type === 'existing') {
 				updatedUser = await User.findOneAndUpdate(
 					{ email: email },
-					{ $set: { business_id: business_id, admin: false } }
+					{ $set: { business_id: business_id, admin: false } },
 				);
 			} else if (type === 'new') {
 				updatedUser = await User.findOneAndUpdate(
 					{ email: email },
 					{ $set: { business_id: business_id, admin: true } },
-					{ new: true }
+					{ new: true },
 				);
 			}
 		} catch (err) {

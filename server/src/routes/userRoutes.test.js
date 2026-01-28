@@ -4,7 +4,7 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const userRoutes = require('./userRoutes');
-const User = require('../schemas/User');
+const User = require('../models/User');
 
 let app;
 let mongoServer;

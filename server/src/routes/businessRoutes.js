@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Business = require('../schemas/Business');
-const User = require('../schemas/User');
+const Business = require('../models/Business');
+const User = require('../models/User');
 const cookies = require('../utils/cookies');
 
 // @route   GET /api/businesses/
@@ -138,7 +138,7 @@ router.put('/:id', async (req, res) => {
 				diets,
 				menus,
 			},
-			{ new: true }
+			{ new: true },
 		);
 
 		if (!updatedBusiness)

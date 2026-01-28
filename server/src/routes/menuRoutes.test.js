@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const express = require('express');
 const menuRoutes = require('../api/routes/menuRoutes');
-const Menu = require('../schemas/Menu');
-const Business = require('../schemas/Business');
+const Menu = require('../models/Menu');
+const Business = require('../models/Business');
 
 let app;
 let mongoServer;

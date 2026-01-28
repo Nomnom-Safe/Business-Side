@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Menu = require('../schemas/Menu');
-const Business = require('../schemas/Business');
+const Menu = require('../models/Menu');
+const Business = require('../models/Business');
 
 // @route   GET /api/menus
 // @desc    Get all menus
