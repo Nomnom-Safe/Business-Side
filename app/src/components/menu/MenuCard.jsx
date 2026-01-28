@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../scss/MenuCard.scss';
+import './MenuCard.scss';
 import axios from 'axios';
 
 export default function MenuCard({

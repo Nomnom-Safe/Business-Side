@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import '../../scss/GetAuthForm.scss';
+import './GetAuthForm.scss';
 import GetPasswordField from './Password';
 import ErrorMessage from '../ErrorMessage';
 import format from '../../utils/form-validation.js';

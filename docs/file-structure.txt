@@ -1,19 +1,29 @@
 Business-Side/
 ├── app/
-│   ├── backend/
+│   ├── api/
 │   │   ├── config/
-│   │   │   └── db.js
+│   │   │   ├── db.js
+│   │   │   └── db.test.js
 │   │   ├── routes/
 │   │   │   ├── admin.routes.js
+│   │   │   ├── admin.routes.test.js
 │   │   │   ├── business.routes.js
+│   │   │   ├── business.routes.test.js
 │   │   │   ├── menu-items.routes.js
+│   │   │   ├── menu-items.routes.test.js
 │   │   │   ├── menu.routes.js
-│   │   │   └── user.routes.js
+│   │   │   ├── menu.routes.test.js
+│   │   │   ├── user.routes.js
+│   │   │   └── user.routes.test.js
 │   │   ├── schemas/
 │   │   │   ├── Business.js
+│   │   │   ├── Business.test.js
 │   │   │   ├── Menu.js
+│   │   │   ├── Menu.test.js
 │   │   │   ├── MenuItem.js
-│   │   │   └── User.js
+│   │   │   ├── MenuItem.test.js
+│   │   │   ├── User.js
+│   │   │   └── User.test.js
 │   │   ├── utils/
 │   │   │   └── cookies.js
 │   │   └── server.js
@@ -92,19 +102,8 @@ Business-Side/
 │   │   │   ├── cookies.jsx
 │   │   │   └── form-validation.js
 │   │   ├── App.jsx
-│   │   └── index.jsx
-│   ├── tests/
-│   │   ├── adminRoutes.test.js
 │   │   ├── App.test.js
-│   │   ├── Business.test.js
-│   │   ├── businessRoutes.test.js
-│   │   ├── db.test.js
-│   │   ├── Menu.test.js
-│   │   ├── MenuItem.test.js
-│   │   ├── menuItemsRoutes.test.js
-│   │   ├── menuRoutes.test.js
-│   │   ├── User.test.js
-│   │   └── userRoutes.test.js
+│   │   └── index.jsx
 │   ├── package.json
 │   └── README.md
 ├── docs/
@@ -127,4 +126,5 @@ Business-Side/
 │   ├── compare_tree.py
 │   ├── loc_counter.py
 │   └── update_file_tree.py
+├── project-structure.txt
 └── README.md

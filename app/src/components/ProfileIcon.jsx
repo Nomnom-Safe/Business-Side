@@ -6,7 +6,7 @@ import editBusinessIcon from '../icons/edit_business.png';
 import logoutIcon from '../icons/logout.png';
 import userMaintenanceIcon from '../icons/user-maintenance.png';
 import getCookie from '../utils/cookies';
-import '../scss/ProfileIcon.scss';
+import './ProfileIcon.scss';
 
 export default function ProfileIcon() {
 	const navigate = useNavigate();

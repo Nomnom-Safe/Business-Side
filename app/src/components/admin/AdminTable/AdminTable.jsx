@@ -19,9 +19,9 @@ import {
 import removeUserIcon from '../../icons/remove-user.png';
 import demoteAdminIcon from '../../icons/demote-admin.png';
 import promoteAdminIcon from '../../icons/promote-admin.png';
-import GetConfirmationMessage from '../ConfirmationMessage';
-import ErrorMessage from '../ErrorMessage';
-import '../../scss/AdminTable.scss';
+import GetConfirmationMessage from '../../ConfirmationMessage';
+import ErrorMessage from '../../ErrorMessage';
+import './AdminTable.scss';
 
 //define TData type with JSDoc
 /**

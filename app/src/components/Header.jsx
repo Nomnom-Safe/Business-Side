@@ -1,5 +1,5 @@
 import '../scss/styles.scss';
-import '../scss/Header.scss';
+import './Header.scss';
 import { useNavigate } from 'react-router-dom';
 import ProfileIcon from './ProfileIcon';
 import getCookie from '../utils/cookies';

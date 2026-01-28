@@ -4,7 +4,7 @@ import Step2 from './Step2';
 import Step3 from './Step3';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import '../../scss/SetUp.scss';
+import './SetUp.scss';
 
 function SetUp({ step }) {
 	const navigate = useNavigate();
