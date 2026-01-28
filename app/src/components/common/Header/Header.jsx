@@ -1,4 +1,4 @@
-import '../scss/styles.scss';
+import '../scss/global.scss';
 import './Header.scss';
 import { useNavigate } from 'react-router-dom';
 import ProfileIcon from '../ProfileIcon/ProfileIcon.jsx';
