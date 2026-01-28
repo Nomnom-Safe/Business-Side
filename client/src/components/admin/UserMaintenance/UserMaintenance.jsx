@@ -1,5 +1,5 @@
 import './UserMaintenance.scss';
-import AdminTable from '../AdminTable/AdminTable';
+import AdminTable from '../AdminTable/AdminTable.jsx';
 import GetConfirmationMessage from '../../common/ConfirmationMessage/ConfirmationMessage.jsx';
 import ErrorMessage from '../../common/ErrorMessage/ErrorMessage.jsx';
 import { useState } from 'react';

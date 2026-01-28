@@ -11,7 +11,7 @@ import MenuItemPicklist from './components/menuItems/MenuItemSwap/MenuItemSwap.j
 import ChooseBusiness from './components/setup/ChooseBusiness/ChooseBusiness.jsx';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import UserMaintenance from './components/admin/UserMaintenance/UserMaintenance';
+import UserMaintenance from './components/admin/UserMaintenance/UserMaintenance.jsx';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx';
 
 // TODO: check authorized status for routes

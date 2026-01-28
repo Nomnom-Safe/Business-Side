@@ -2,7 +2,7 @@ import '../scss/global.scss';
 import './Header.scss';
 import { useNavigate } from 'react-router-dom';
 import ProfileIcon from '../ProfileIcon/ProfileIcon.jsx';
-import getCookie from '../../../utils/cookies';
+import getCookie from '../../../utils/cookies.jsx';
 
 function Header() {
 	const navigate = useNavigate();
