@@ -1,8 +1,8 @@
 import '../scss/styles.scss';
 import './Header.scss';
 import { useNavigate } from 'react-router-dom';
-import ProfileIcon from './ProfileIcon';
-import getCookie from '../../utils/cookies';
+import ProfileIcon from '../ProfileIcon/ProfileIcon.jsx';
+import getCookie from '../../../utils/cookies';
 
 function Header() {
 	const navigate = useNavigate();

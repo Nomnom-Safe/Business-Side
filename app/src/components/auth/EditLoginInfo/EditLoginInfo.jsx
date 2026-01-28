@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import ChangeEmail from '../ChangeEmail/ChangeEmail.jsx';
 import ChangePassword from '../ChangePassword/ChangePassword.jsx';
-import GetConfirmationMessage from '../../common/ConfirmationMessage.jsx';
-import ErrorMessage from '../../common/ErrorMessage.jsx';
+import GetConfirmationMessage from '../../common/ConfirmationMessage/ConfirmationMessage.jsx';
+import ErrorMessage from '../../common/ErrorMessage/ErrorMessage.jsx';
 import getCookie from '../../../utils/cookies.jsx';
 import format from '../../../utils/form-validation.js';
 import './EditLoginInfo.scss';

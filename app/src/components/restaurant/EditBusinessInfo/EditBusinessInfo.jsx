@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import GetConfirmationMessage from '../../common/ConfirmationMessage.jsx';
+import GetConfirmationMessage from '../../common/ConfirmationMessage/ConfirmationMessage.jsx';
 import './EditBusinessInfo.scss';
 
 const EditBusinessInfo = () => {
