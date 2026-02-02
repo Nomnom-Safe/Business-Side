@@ -346,6 +346,18 @@ docs/
 
 ---
 
+# Sprint 1 Metrics
+
+---
+
+## Current Metrics
+
+- **Total features:** 4
+- **Total requirements:** 41
+- **Total tests:** 11
+
+---
+
 # Learning with AI
 
 ---
