@@ -16,17 +16,59 @@ footer: NomNom Safe PPP - Anna Dinius
 
 ## Problem Domain
 
+- Food-service business data management
+  - Primarily affecting small businesses
+    - Locally- and independently-owned
+    - Limited skills, time, & resources
+  - Inconsistent, inefficient, or non-existent
+  - No common, public location to manage or access data
+
 ---
 
-## Importance & Impact
+## Problem Importance & Impact
+
+- Reputation
+  - Unsafe, unaccommodating, uncaring, untrustworthy
+- Limited customer reach
+  - 53% of households report having dietary restrictions ([source](https://pmc.ncbi.nlm.nih.gov/articles/PMC9639345/))
+- Legal liability
+- Wasted time (staff & customers)
+- Dangerous miscommunications
 
 ---
 
 ## Solution
 
+NomNom Safe provides:
+
+- Centralized platform for managing, viewing, & sharing menu & dietary data
+- Intuitive, streamlined onboarding & management tools
+
 ---
 
-# Sprint 1 Features
+## Solution Importance & Impact
+
+- Strengthens business reputation
+  - Demonstrates transparency, awareness, & care
+- Expands customer reach
+- Eliminates inconsistency & inefficiency
+- Reduced risk
+  - Minimized chance of miscommunications
+  - Lowered risk of outdated data
+
+---
+
+# Sprint 1
+
+---
+
+## Focus: Business-Facing Side
+
+> Context: A working version was developed in ASE 285
+
+### Goal:
+
+- Functional, maintainable, & extensible **business-side MVP**
 
 ---
 
