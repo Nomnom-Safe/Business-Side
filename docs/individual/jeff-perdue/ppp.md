@@ -175,20 +175,20 @@ Make onboarding clear and unambiguous.
 
 ### Week-by-Week
 
-**Week 1:** Feature Isolation  
+**Week 4:** Feature Isolation  
 - Identify MVP vs non-MVP  
 - Archive non-MVP features  
 
-**Week 2:** Front-End Refactoring  
+**Week 5:** Front-End Refactoring  
 - Apply design principles  
 - Standardize validation  
 
 ---
 
-**Week 3:** Item Discovery Enhancements  
+**Week 6:** Item Discovery Enhancements  
 - Search, filter, sort  
 
-**Week 4:** Onboarding Improvements  
+**Week 7:** Onboarding Improvements  
 - Structured, validated business profiles  
 
 ---
