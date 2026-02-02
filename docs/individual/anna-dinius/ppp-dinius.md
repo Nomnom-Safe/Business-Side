@@ -191,7 +191,7 @@ Enhance user experience across different devices by implementing a clean, flexib
 
 ---
 
-## Week 1: Convert Backend to Firebase
+## Week 4: Convert Backend to Firebase
 
 - **Dates:** 2/2/2026 – 2/8/2026
 - **Focus:** Convert the entire backend to accommodate a Firebase DB
@@ -199,7 +199,7 @@ Enhance user experience across different devices by implementing a clean, flexib
 
 ---
 
-## Week 2: Refactor Foundation
+## Week 5: Refactor Foundation
 
 - **Dates:** 2/9/2026 – 2/15/2026
 - **Focus:** Lay the foundation for refactoring the `server` & `auth` directories using Software Design Principles
@@ -207,7 +207,7 @@ Enhance user experience across different devices by implementing a clean, flexib
 
 ---
 
-## Week 3: Complete Refactor + Improve Navigation
+## Week 6: Complete Refactor + Improve Navigation
 
 - **Dates:** 2/16/2026 – 2/22/2026
 - **Focus:** Complete the refactor and improve navigation across the app for consistency & simplicity
@@ -215,7 +215,7 @@ Enhance user experience across different devices by implementing a clean, flexib
 
 ---
 
-## Week 4: Implement Responsive Design
+## Week 7: Implement Responsive Design
 
 - **Dates:** 2/23/2026 – 3/1/2026
 - **Focus:** Implement a consistent design across the app that responds appropriately to different screen sizes
