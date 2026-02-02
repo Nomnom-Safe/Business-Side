@@ -397,3 +397,7 @@ Explore:
 
 - [Individual Project - Anna Dinius Canvas page](https://nku.instructure.com/courses/87393/pages/individual-project-anna-dinius-2)
 - [Individual Progress - Anna Dinius Canvas page](https://nku.instructure.com/courses/87393/pages/individual-progress-anna-dinius-2)
+
+---
+
+# Questions?
