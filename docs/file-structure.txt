@@ -114,6 +114,16 @@ Business-Side/
 │   │   └── index.jsx
 │   └── package.json
 ├── docs/
+│   ├── individual/
+│   │   ├── anna-dinius/
+│   │   │   ├── sprint1/
+│   │   │   │   ├── milestones.md
+│   │   │   │   ├── milestones.pdf
+│   │   │   │   └── requirements.md
+│   │   │   ├── ppp-dinius.md
+│   │   │   └── ppp-dinius.pdf
+│   │   └── jeff-perdue/
+│   │       └── ppp.marp
 │   ├── modules/
 │   │   ├── AdminModule.md
 │   │   ├── AuthenticationModule.md
@@ -124,9 +134,6 @@ Business-Side/
 │   │   ├── SetupModule.md
 │   │   └── TestingModule.md
 │   ├── file-structure.txt
-│   ├── Nom Nom Safe Final Presentation.pdf
-│   ├── Nom Nom Safe Final Presentation.pptx
-│   ├── NomNom-HW_4.pdf
 │   ├── Requirements.md
 │   └── UserManual.md
 ├── scripts/
@@ -169,5 +176,4 @@ Business-Side/
 │   ├── README.md
 │   └── server.js
 ├── package.json
-├── project-structure.txt
 └── README.md

@@ -9,7 +9,8 @@ footer: NomNom Safe PPP - Anna Dinius
 
 ## ASE 485 Capstone Project
 
-**Title:** NomNom Safe
+### NomNom Safe
+
 **Focus:** Business-Facing MVP & Learning with AI
 
 ---
@@ -42,7 +43,7 @@ footer: NomNom Safe PPP - Anna Dinius
 NomNom Safe provides:
 
 - Centralized platform for managing, viewing, & sharing menu & dietary data
-- Intuitive, streamlined onboarding & management tools
+- Intuitive, streamlined onboarding & data management tools
 
 ---
 
@@ -77,7 +78,7 @@ NomNom Safe provides:
 1. Switch backend to Firebase
 2. Refactor using SW Design Patterns & Principles
 3. Improve navigation
-4. Responsive design
+4. Implement responsive design
 
 ---
 
@@ -119,7 +120,7 @@ Enhance user experience by implementing intuitive navigation consistently across
 
 ## Feature 4 Purpose
 
-### 4. Responsive Design
+### 4. Implement Responsive Design
 
 Enhance user experience across different devices by implementing a clean, flexible design that adjusts properly with different screen sizes.
 
@@ -132,12 +133,14 @@ Enhance user experience across different devices by implementing a clean, flexib
 # Sprint 1 Requirements Overview
 
 > Comprehensive requirements can be found on the [GitHub repo](https://github.com/Nomnom-Safe/Business-Side/blob/main/docs/individual/anna-dinius/sprint1/requirements.md)
+> **Total # of requirements:** 41
 
 ---
 
 ## Feature 1 Requirements
 
 **Feature 1:** Switch backend to Firebase
+**# of Requirements:** 8
 
 **Requirements:**
 
@@ -149,6 +152,7 @@ Enhance user experience across different devices by implementing a clean, flexib
 ## Feature 2 Requirements
 
 **Feature 2:** Refactor using SW Design Patterns & Principles
+**# of Requirements:** 11
 
 **Requirements:**
 
@@ -160,6 +164,7 @@ Enhance user experience across different devices by implementing a clean, flexib
 ## Feature 3 Requirements
 
 **Feature 3:** Improve Navigation
+**# of Requirements:** 11
 
 **Requirements:**
 
@@ -170,7 +175,8 @@ Enhance user experience across different devices by implementing a clean, flexib
 
 ## Feature 4 Requirements
 
-**Feature 4:** Responsive Design
+**Feature 4:** Implement Responsive Design
+**# of Requirements:** 11
 
 **Requirements:**
 
@@ -337,6 +343,46 @@ docs/
 ├── Requirements.md
 └── UserManual.md
 ```
+
+---
+
+# Learning with AI
+
+---
+
+## Topics
+
+1. Food allergen ontology
+2. Market validation & user-focused research
+
+---
+
+## Topic 1 Goals
+
+### Food Allergen Ontology
+
+Understand:
+
+- Basic ontology concepts
+- Ontology design through the lens of food allergens
+- Importance of ontology
+
+> More information can be found on the [GitHub repo README](https://github.com/jeffreyperdue/Learning-With-AI-ASE485/blob/main/ontology/README.md)
+
+---
+
+## Topic 2 Goals
+
+### Market Validation & User-Focused Research
+
+Explore:
+
+- User outreach methods & effectiveness
+- User testing methods & applications
+- Data collection strategies
+- Data analysis
+
+> More information can be found on the [GitHub repo README](https://github.com/jeffreyperdue/Learning-With-AI-ASE485/tree/main/anna-dinius-individual)
 
 ---
 
