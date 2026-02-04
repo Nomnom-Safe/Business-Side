@@ -1,3 +1,5 @@
+// ARCHIVED: Admin Features - Not part of MVP (single user per business)
+/*
 import React from 'react';
 import { useState } from 'react';
 import {
@@ -301,3 +303,4 @@ const AdminTable = () => {
 };
 
 export default AdminTable;
+*/

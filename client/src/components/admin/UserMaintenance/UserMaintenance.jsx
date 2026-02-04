@@ -1,3 +1,5 @@
+// ARCHIVED: Admin Features - Not part of MVP (single user per business)
+/*
 import './UserMaintenance.scss';
 import AdminTable from '../AdminTable/AdminTable.jsx';
 import GetConfirmationMessage from '../../common/ConfirmationMessage/ConfirmationMessage.jsx';
@@ -147,3 +149,4 @@ function UserMaintenance() {
 }
 
 export default UserMaintenance;
+*/

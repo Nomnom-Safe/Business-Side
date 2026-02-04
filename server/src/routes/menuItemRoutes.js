@@ -136,9 +136,11 @@ router.post('/add-menu-item', async (req, res) => {
 ///
 /// MenuItemSwap.jsx
 ///
+// ARCHIVED: Menu Item Swapping - Not part of MVP (single menu)
 // @route   GET /api/menuitems/menuswap-menus
 // @desc    Get all menus for business id
 // @access  Public (no auth yet)
+/*
 router.get('/menuswap-menus', async (req, res) => {
 	try {
 		const { businessID } = req.query;
@@ -187,10 +189,13 @@ router.get('/menuswap-items', async (req, res) => {
 		res.status(500).json({ error: 'Could not fetch menu items' });
 	}
 });
+*/
 
+// ARCHIVED: Menu Item Swapping - Not part of MVP (single menu)
 // @route   PUT /api/menuitem/swap-menu
 // @desc    Update the existing menuItems
 // @access  Public (no auth yet)
+/*
 router.put('/swap-menu/:id', async (req, res) => {
 	try {
 		const { id } = req.params;
@@ -214,5 +219,6 @@ router.put('/swap-menu/:id', async (req, res) => {
 		res.status(500).json({ error: 'Error editing menu item: ' + err.message });
 	}
 });
+*/
 
 module.exports = router;

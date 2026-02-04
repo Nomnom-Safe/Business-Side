@@ -106,7 +106,7 @@ function ChooseBusiness() {
 							'Content-Type': 'application/json',
 						},
 						body: JSON.stringify({
-							name: 'New Business',
+							name: `New Business - ${Date.now()}`,
 							url: '',
 							address: '',
 							allergens: [],
@@ -117,13 +117,13 @@ function ChooseBusiness() {
 
 				const result = await createBusinessResponse.json();
 				if (!createBusinessResponse.ok) {
-					// setMessage(result.message);
-					setMessage('Failed to create business');
+					setMessage(result.message || 'Failed to create business');
 					setShowError(true);
 					return;
 				}
 
-				const createdBusiness = await createBusinessResponse.json();
+				// Reuse result instead of calling .json() again (body stream can only be read once)
+				const createdBusiness = result;
 				const businessId = createdBusiness._id;
 				localStorage.setItem('business_id', businessId);
 

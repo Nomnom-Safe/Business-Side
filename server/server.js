@@ -45,8 +45,9 @@ app.use('/api/menuitems', menuItemRoutes);
 const auth = require('./src/routes/userRoutes');
 app.use('/api/auth', auth);
 
-const admin = require('./src/routes/adminRoutes');
-app.use('/api/admin', admin);
+// ARCHIVED: Admin Features - Not part of MVP (single user per business)
+// const admin = require('./src/routes/adminRoutes');
+// app.use('/api/admin', admin);
 
 const businessRoutes = require('./src/routes/businessRoutes');
 app.use('/api/businesses', businessRoutes);

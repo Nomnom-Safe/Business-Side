@@ -1,3 +1,5 @@
+// ARCHIVED: Menu Item Swapping - Not part of MVP (single menu)
+/*
 import { useState, useEffect } from 'react';
 import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
@@ -337,3 +339,4 @@ const MenuItemPicklist = () => {
 };
 
 export default MenuItemPicklist;
+*/
