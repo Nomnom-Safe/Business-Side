@@ -60,10 +60,11 @@ router.post('/', async (req, res) => {
 			existing = await businessService.businessNameExists(name);
 		}
 
-		if (existing && !unnamed) {
+		if (existing) {
 			return res.status(400).json({
 				error: 'Business name already exists',
-				message: 'Business name already exists.',
+				message:
+					'A business with this name already exists. Please choose a different name.',
 			});
 		}
 
@@ -100,8 +101,27 @@ router.post('/', async (req, res) => {
 		return res.status(201).json(savedBusiness);
 	} catch (err) {
 		console.error('Caught error:', err);
+
+		// Handle duplicate key error (unique constraint violation)
+		if (err.code === 11000 || err.message.includes('duplicate key')) {
+			return res.status(400).json({
+				error: 'Business name already exists',
+				message:
+					'A business with this name already exists. Please choose a different name.',
+			});
+		}
+
+		// Handle validation errors
+		if (err.name === 'ValidationError') {
+			return res.status(400).json({
+				error: 'Validation error',
+				message: err.message || 'Invalid business data provided.',
+			});
+		}
+
 		res.status(400).json({
 			error: 'Error creating business: ' + err.message,
+			message: 'Failed to create business. Please try again.',
 		});
 	}
 });

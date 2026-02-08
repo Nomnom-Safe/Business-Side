@@ -7,11 +7,13 @@ import EditLoginInfo from './components/auth/EditLoginInfo/EditLoginInfo.jsx';
 // import FilterPanel from './components/menu/FilterPanel';
 import AddMenuItem from './components/menuItems/AddMenuItem/AddMenuItem.jsx';
 import MenuItemsPage from './components/menuItems/MenuItemsPage/MenuItemsPage.jsx';
-import MenuItemPicklist from './components/menuItems/MenuItemSwap/MenuItemSwap.jsx';
+// ARCHIVED: Menu Item Swapping - Not part of MVP (single menu)
+// import MenuItemPicklist from './components/menuItems/MenuItemSwap/MenuItemSwap.jsx';
 import ChooseBusiness from './components/setup/ChooseBusiness/ChooseBusiness.jsx';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import UserMaintenance from './components/admin/UserMaintenance/UserMaintenance.jsx';
+// ARCHIVED: Admin Features - Not part of MVP (single user per business)
+// import UserMaintenance from './components/admin/UserMaintenance/UserMaintenance.jsx';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx';
 
 // TODO: check authorized status for routes
@@ -80,15 +82,16 @@ function App() {
 							element={<ProtectedRoute component={<EditLoginInfo />} />}
 						/>
 
-						<Route
-							path='/user-maintenance'
-							element={
-								<ProtectedRoute
-									admin={true}
-									component={<UserMaintenance />}
-								/>
-							}
-						/>
+					{/* ARCHIVED: Admin Features - Not part of MVP (single user per business) */}
+					{/* <Route
+						path='/user-maintenance'
+						element={
+							<ProtectedRoute
+								admin={true}
+								component={<UserMaintenance />}
+							/>
+						}
+					/> */}
 
 						<Route
 							path='/dashboard'
@@ -105,10 +108,11 @@ function App() {
 							element={<ProtectedRoute component={<AddMenuItem />} />}
 						/>
 
-						<Route
-							path='/swap-menu'
-							element={<ProtectedRoute component={<MenuItemPicklist />} />}
-						/>
+					{/* ARCHIVED: Menu Item Swapping - Not part of MVP (single menu) */}
+					{/* <Route
+						path='/swap-menu'
+						element={<ProtectedRoute component={<MenuItemPicklist />} />}
+					/> */}
 
 						<Route
 							path='/menuitems'

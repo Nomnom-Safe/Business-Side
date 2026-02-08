@@ -2,13 +2,19 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import MenuCard from '../MenuCard/MenuCard.jsx';
 import './MenuDashboard.scss';
-import deleteIcon from '../../../assets/icons/delete.png';
+
+/* Non-MVP Feature: Deleting menus. 
+	import deleteIcon from '../../../assets/icons/delete.png';
+*/
 
 function MenuDashboard() {
 	const [menus, setMenus] = useState([]);
-	const [masterMenuID, setMasterMenuID] = useState([]);
-	const [showConfirm, setShowConfirm] = useState(false);
-	const [menuToDelete, setMenuToDelete] = useState(null);
+
+	/* Non-MVP Feature: Deleting menus.
+		const [masterMenuID, setMasterMenuID] = useState([]);
+		const [showConfirm, setShowConfirm] = useState(false);
+		const [menuToDelete, setMenuToDelete] = useState(null);
+	*/
 
 	// Fetch menus from backend on initial render
 	useEffect(() => {
@@ -46,42 +52,47 @@ function MenuDashboard() {
 		if (menus.length > 0) {
 			const masterMenu = menus.find((menu) => menu.title === 'Master Menu');
 			if (masterMenu?.id) {
-				setMasterMenuID(masterMenu.id);
+				/* Non-MVP Feature: multiple menus.
+					setMasterMenuID(masterMenu.id);
+				*/
 				localStorage.setItem('masterMenu_ID', masterMenu.id);
 			}
 		}
 	}, [menus]);
 
-	// Add a new menu to backend and update state
-	const handleAddMenu = async () => {
-		const businessId = localStorage.getItem('business_id');
-		if (!businessId) {
-			console.error('No business ID found in localStorage.');
-			return;
-		}
+	/* Non-MVP Feature: Adding new menus.
+		// Add a new menu to backend and update state
+		const handleAddMenu = async () => {
+			const businessId = localStorage.getItem('business_id');
+			if (!businessId) {
+				console.error('No business ID found in localStorage.');
+				return;
+			}
 
-		try {
-			const res = await axios.post('http://localhost:5000/api/menus', {
-				title: 'Untitled Menu',
-				description: 'New menu created',
-				restaurant: businessId,
-				menuItems: [],
-			});
+			try {
+				const res = await axios.post('http://localhost:5000/api/menus', {
+					title: 'Untitled Menu',
+					description: 'New menu created',
+					restaurant: businessId,
+					menuItems: [],
+				});
 
-			const newMenu = { ...res.data, isEditable: true };
-			setMenus((prev) => [...prev, newMenu]); // Append to current menus
-		} catch (err) {
-			console.error('Error adding menu:', err);
-		}
-	};
+				const newMenu = { ...res.data, isEditable: true };
+				setMenus((prev) => [...prev, newMenu]); // Append to current menus
+			} catch (err) {
+				console.error('Error adding menu:', err);
+			}
+		};
+	*/
 
-	const handleRequestDelete = (index) => {
-		setMenuToDelete(index);
-		setShowConfirm(true);
-	};
+	/* Non-MVP feature: Deleting menus.
+		const handleRequestDelete = (index) => {
+			setMenuToDelete(index);
+			setShowConfirm(true);
+		};
 
-	const handleConfirmDelete = async () => {
-		const menuToRemove = menus[menuToDelete];
+		const handleConfirmDelete = async () => {
+			const menuToRemove = menus[menuToDelete];
 
 		if (!menuToRemove?.id) {
 			console.error('Menu ID missing — cannot delete');
@@ -91,19 +102,20 @@ function MenuDashboard() {
 		try {
 			await axios.delete(`http://localhost:5000/api/menus/${menuToRemove.id}`); // Make DELETE request
 
-			// Remove menu from local state
-			setMenus((prevMenus) => prevMenus.filter((_, i) => i !== menuToDelete));
-			setMenuToDelete(null);
-			setShowConfirm(false);
-		} catch (err) {
-			console.error('Error deleting menu:', err);
-		}
-	};
+				// Remove menu from local state
+				setMenus((prevMenus) => prevMenus.filter((_, i) => i !== menuToDelete));
+				setMenuToDelete(null);
+				setShowConfirm(false);
+			} catch (err) {
+				console.error('Error deleting menu:', err);
+			}
+		};
 
-	const handleCancelDelete = () => {
-		setShowConfirm(false);
-		setMenuToDelete(null);
-	};
+		const handleCancelDelete = () => {
+			setShowConfirm(false);
+			setMenuToDelete(null);
+		};
+	*/
 
 	const handleTitleChange = (index, newTitle) => {
 		const updatedMenus = menus.map((menu, i) =>
@@ -122,12 +134,14 @@ function MenuDashboard() {
 	return (
 		<div className='dashboard-container'>
 			<div className='dashboard-header'>
-				<button
-					className='button add-menu-btn'
-					onClick={handleAddMenu}
-				>
-					+ Add a Menu
-				</button>
+				{/* Non-MVP Feature: Adding new menus.
+					<button
+						className='button add-menu-btn'
+						onClick={handleAddMenu}
+					>
+						+ Add a Menu
+					</button>
+				*/}
 				<h2 className='dashboard-title'>Your Menu Dashboard</h2>
 			</div>
 
@@ -137,14 +151,16 @@ function MenuDashboard() {
 						className='menu-card-wrapper'
 						key={menu.id || index}
 					>
-						{menu.isEditable && (
-							<img
-								src={deleteIcon}
-								alt='Delete'
-								className='delete-icon'
-								onClick={() => handleRequestDelete(index)}
-							/>
-						)}
+						{/* Non-MVP Feature: Deleting menus.
+							{menu.isEditable && (
+								<img
+									src={deleteIcon}
+									alt='Delete'
+									className='delete-icon'
+									onClick={() => handleRequestDelete(index)}
+								/>
+							)}
+						*/}
 						<MenuCard
 							title='Master Menu'
 							description='Description placeholder'
@@ -159,32 +175,34 @@ function MenuDashboard() {
 				))}
 			</div>
 
-			{showConfirm && (
-				<div className='confirm-delete-box'>
-					<div className='confirm-content'>
-						<p className='confirm-title'>Confirm Deletion?</p>
-						<p className='confirm-message'>
-							You are deleting <strong>{menus[menuToDelete]?.title}</strong>.
-						</p>
+			{/* Non-MVP Feature: Deleting menus.
+				{showConfirm && (
+					<div className='confirm-delete-box'>
+						<div className='confirm-content'>
+							<p className='confirm-title'>Confirm Deletion?</p>
+							<p className='confirm-message'>
+								You are deleting <strong>{menus[menuToDelete]?.title}</strong>.
+							</p>
+						</div>
+						<div className='delete-buttons-box'>
+							<button
+								type='button'
+								className='delete-cancel'
+								onClick={handleCancelDelete}
+							>
+								No, do not Delete
+							</button>
+							<button
+								type='button'
+								className='delete-confirm'
+								onClick={handleConfirmDelete}
+							>
+								Yes, Delete
+							</button>
+						</div>
 					</div>
-					<div className='delete-buttons-box'>
-						<button
-							type='button'
-							className='delete-cancel'
-							onClick={handleCancelDelete}
-						>
-							No, do not Delete
-						</button>
-						<button
-							type='button'
-							className='delete-confirm'
-							onClick={handleConfirmDelete}
-						>
-							Yes, Delete
-						</button>
-					</div>
-				</div>
-			)}
+				)}
+			*/}
 		</div>
 	);
 }

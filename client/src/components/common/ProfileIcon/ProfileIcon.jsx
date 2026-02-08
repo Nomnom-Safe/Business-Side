@@ -4,7 +4,8 @@ import avatar from '../../../assets/icons/avatar.png';
 import editLoginIcon from '../../../assets/icons/edit_login.png';
 import editBusinessIcon from '../../../assets/icons/edit_business.png';
 import logoutIcon from '../../../assets/icons/logout.png';
-import userMaintenanceIcon from '../../../assets/icons/user-maintenance.png';
+// ARCHIVED: Admin Features - Not part of MVP (single user per business)
+// import userMaintenanceIcon from '../../../assets/icons/user-maintenance.png';
 import getCookie from '../../../utils/cookies';
 import './ProfileIcon.scss';
 
@@ -19,11 +20,12 @@ export default function ProfileIcon() {
 
 	const toggleDropdown = () => setIsOpen(!isOpen);
 
-	const toUserMaintenance = (event) => {
-		event.preventDefault();
-		setIsOpen(false);
-		navigate('/user-maintenance');
-	};
+	// ARCHIVED: Admin Features - Not part of MVP (single user per business)
+	// const toUserMaintenance = (event) => {
+	// 	event.preventDefault();
+	// 	setIsOpen(false);
+	// 	navigate('/user-maintenance');
+	// };
 
 	const toEditLoginInfo = (event) => {
 		event.preventDefault();
@@ -98,20 +100,21 @@ export default function ProfileIcon() {
 							<span>{getCookie('email')}</span>
 						</div>
 
-						{isAdmin && hasBusiness ? (
-							<div
-								onClick={toUserMaintenance}
-								className='dropdown-item'
-							>
-								<img
-									src={userMaintenanceIcon}
-									alt='User Maintenance Icon'
-								/>
-								<span>User Maintenance</span>
-							</div>
-						) : (
-							<></>
-						)}
+					{/* ARCHIVED: Admin Features - Not part of MVP (single user per business) */}
+					{/* {isAdmin && hasBusiness ? (
+						<div
+							onClick={toUserMaintenance}
+							className='dropdown-item'
+						>
+							<img
+								src={userMaintenanceIcon}
+								alt='User Maintenance Icon'
+							/>
+							<span>User Maintenance</span>
+						</div>
+					) : (
+						<></>
+					)} */}
 
 						{hasBusiness ? (
 							<>

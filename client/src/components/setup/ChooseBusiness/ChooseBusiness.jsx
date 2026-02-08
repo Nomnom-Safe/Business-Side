@@ -106,7 +106,7 @@ function ChooseBusiness() {
 							'Content-Type': 'application/json',
 						},
 						body: JSON.stringify({
-							name: 'New Business',
+							name: `New Business - ${Date.now()}`,
 							url: '',
 							address: '',
 							allergens: [],
@@ -117,8 +117,7 @@ function ChooseBusiness() {
 
 				const result = await createBusinessResponse.json();
 				if (!createBusinessResponse.ok) {
-					// setMessage(result.message);
-					setMessage('Failed to create business');
+					setMessage(result.message || 'Failed to create business');
 					setShowError(true);
 					return;
 				}

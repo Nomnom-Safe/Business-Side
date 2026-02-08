@@ -89,13 +89,13 @@ const MenuItemsPage = () => {
 		});
 	};
 
-	// for navigation
-	const toMenuSwap = (event) => {
-		event.preventDefault();
-		navigate('/swap-menu', {
-			state: { menuTitle: fetchedMenu.title },
-		});
-	};
+	// ARCHIVED: Menu Item Swapping - Not part of MVP (single menu)
+	// const toMenuSwap = (event) => {
+	// 	event.preventDefault();
+	// 	navigate('/swap-menu', {
+	// 		state: { menuTitle: fetchedMenu.title },
+	// 	});
+	// };
 
 	return (
 		<div className='center'>
@@ -116,14 +116,15 @@ const MenuItemsPage = () => {
 					>
 						{menuTitle}
 					</div>
-					<div style={{ flex: 1, textAlign: 'right' }}>
+					{/* ARCHIVED: Menu Item Swapping - Not part of MVP (single menu) */}
+					{/* <div style={{ flex: 1, textAlign: 'right' }}>
 						<button
 							className='button'
 							onClick={toMenuSwap}
 						>
 							Integrate Menus
 						</button>
-					</div>
+					</div> */}
 				</div>
 
 				{/* Search bar */}

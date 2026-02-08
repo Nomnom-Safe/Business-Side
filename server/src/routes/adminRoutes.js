@@ -1,3 +1,5 @@
+// ARCHIVED: Admin Features - Not part of MVP (single user per business)
+/*
 const express = require('express');
 const router = express.Router();
 const cookies = require('../utils/cookies');
@@ -306,3 +308,4 @@ router.post('/add-user-access', async (req, res) => {
 });
 
 module.exports = router;
+*/

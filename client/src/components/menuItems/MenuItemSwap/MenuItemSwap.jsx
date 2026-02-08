@@ -1,3 +1,5 @@
+// ARCHIVED: Menu Item Swapping - Not part of MVP (single menu)
+/*
 import { useState, useEffect } from 'react';
 import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
@@ -247,7 +249,7 @@ const MenuItemPicklist = () => {
 
 	return (
 		<div className='center add-center-flex'>
-			{/* Top section: buttons + menu name */}
+			// Top section: buttons + menu name
 			<div className='picklist-header-row'>
 				<div style={{ flex: 1, textAlign: 'left' }}>
 					<button
@@ -274,7 +276,7 @@ const MenuItemPicklist = () => {
 			</div>
 
 			<div className='flex-container menu-items-container'>
-				{/* Left Tree for Other Menus */}
+				// Left Tree for Other Menus
 				<div className='menu-wrapper'>
 					<div className='menu-header-wrapper'>
 						<h3 className='menu-header-row'>Other Menus</h3>
@@ -297,7 +299,7 @@ const MenuItemPicklist = () => {
 					</div>
 				</div>
 
-				{/* Buttons in the middle */}
+				// Buttons in the middle
 				<div className='menu-buttons-container'>
 					<button className='menu-button'>
 						<FaChevronRight
@@ -313,7 +315,7 @@ const MenuItemPicklist = () => {
 					</button>
 				</div>
 
-				{/* Right Tree for Master Menu */}
+				// Right Tree for Master Menu
 				<div className='menu-wrapper'>
 					<div className='menu-header-wrapper'>
 						<h3 className='menu-header-row'>Master Menu</h3>
@@ -335,3 +337,4 @@ const MenuItemPicklist = () => {
 };
 
 export default MenuItemPicklist;
+*/

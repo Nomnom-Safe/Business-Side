@@ -42,6 +42,9 @@ const allergenRoutes = require('./src/routes/allergenRoutes');
 app.use('/api/allergens', allergenRoutes);
 
 // Admin routes archived (no longer mounted). See server/src/routes/adminRoutes.js for legacy code.
+// ARCHIVED: Admin Features - Not part of MVP (single user per business)
+// const admin = require('./src/routes/adminRoutes');
+// app.use('/api/admin', admin);
 
 const businessRoutes = require('./src/routes/businessRoutes');
 app.use('/api/businesses', businessRoutes);
