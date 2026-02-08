@@ -45,8 +45,7 @@ app.use('/api/menuitems', menuItemRoutes);
 const auth = require('./src/routes/userRoutes');
 app.use('/api/auth', auth);
 
-const admin = require('./src/routes/adminRoutes');
-app.use('/api/admin', admin);
+// Admin routes archived (no longer mounted). See server/src/routes/adminRoutes.js for legacy code.
 
 const businessRoutes = require('./src/routes/businessRoutes');
 app.use('/api/businesses', businessRoutes);

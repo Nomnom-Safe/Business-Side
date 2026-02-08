@@ -29,11 +29,11 @@ const MenuItemsPage = () => {
 
 	// used for refreshing the menu items.
 	const fetchMenuItems = async () => {
-		if (!fetchedMenu || !fetchedMenu._id) return;
+		if (!fetchedMenu || !fetchedMenu.id) return;
 
 		try {
 			const itemRes = await axios.get(
-				`http://localhost:5000/api/menuitems?menuID=${fetchedMenu._id}`,
+				`http://localhost:5000/api/menuitems?menuID=${fetchedMenu.id}`,
 			);
 			const fetchedMenuItems = itemRes.data.map((menuItem) => ({
 				...menuItem,
@@ -59,7 +59,7 @@ const MenuItemsPage = () => {
 	const handleSave = async (updatedItem) => {
 		try {
 			await axios.put(
-				`http://localhost:5000/api/menuitems/${updatedItem._id}`,
+				`http://localhost:5000/api/menuitems/${updatedItem.id}`,
 				updatedItem,
 			);
 			alert('Menu item updated successfully!');
@@ -85,7 +85,7 @@ const MenuItemsPage = () => {
 	const toAddItem = (event) => {
 		event.preventDefault();
 		navigate('/add-menu-item', {
-			state: { menuID: fetchedMenu._id, menuTitle: fetchedMenu.title },
+			state: { menuID: fetchedMenu.id, menuTitle: fetchedMenu.title },
 		});
 	};
 
@@ -142,9 +142,9 @@ const MenuItemsPage = () => {
 					<h2>Menu Items</h2>
 					{filteredItems.map((item) => (
 						<MenuItemPanel
-							key={item._id}
+							key={item.id}
 							item={item}
-							menuID={fetchedMenu._id}
+							menuID={fetchedMenu.id}
 							onSave={handleSave}
 							onDelete={handleDelete}
 						/>

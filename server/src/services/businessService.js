@@ -40,7 +40,6 @@ async function getBusinessWithMenus(id) {
 			return menu;
 		}),
 	);
-
 	return { ...business, menus };
 }
 

@@ -90,7 +90,7 @@ const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 						size={18}
 						onClick={(e) => {
 							e.stopPropagation();
-							handleRequestDelete(item._id);
+							handleRequestDelete(item.id);
 						}}
 					/>
 				</div>

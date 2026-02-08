@@ -32,7 +32,7 @@ function ChooseBusiness() {
 					const businesses = result
 						.filter((business) => business.name !== 'New Business')
 						.map((business) => ({
-							value: business._id,
+							value: business.id,
 							label: business.name,
 						}));
 
@@ -124,7 +124,7 @@ function ChooseBusiness() {
 				}
 
 				const createdBusiness = await createBusinessResponse.json();
-				const businessId = createdBusiness._id;
+				const businessId = createdBusiness.id;
 				localStorage.setItem('business_id', businessId);
 
 				// Create master menu

@@ -1,20 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
 const cookies = require('../utils/cookies');
+const { authenticate } = require('../middleware/auth');
+const userService = require('../services/userService');
 
 // Returns the business_id of a user
 const getBusinessId = async (email) => {
-	// Get User document from the DB
-	const user = await User.findOne({ email: email }, { business_id: 1 });
-
-	if (!user) {
-		// User not found in the DB
-		return null;
-	}
-
-	const businessId = user.business_id;
-	return businessId;
+	const user = await userService.getUserByEmail(email);
+	if (!user) return null;
+	return user.business_id;
 };
 
 const checkConditions = async (action, targetEmail) => {
@@ -22,10 +16,7 @@ const checkConditions = async (action, targetEmail) => {
 	const business_id = await getBusinessId(targetEmail);
 
 	// Count the number of admins in the business
-	const admin_count = await User.countDocuments({
-		business_id: business_id,
-		admin: true,
-	});
+	const admin_count = await userService.countAdmins(business_id);
 
 	if (admin_count === 1 && (action === 'demote' || action === 'remove')) {
 		return false;
@@ -34,12 +25,15 @@ const checkConditions = async (action, targetEmail) => {
 	return true;
 };
 
+// Protect admin routes with Firebase authentication
+router.use(authenticate);
+
 // @route   POST /api/admin/get-user-list
 // @desc    Get a list of users w/ the same business_id
-// @access  Public (no auth yet)
+// @access  Protected
 router.post('/get-user-list', async (req, res) => {
 	try {
-		const { email } = req.cookies;
+		const email = req.user && req.user.email;
 		const business_id = await getBusinessId(email);
 
 		if (business_id === null || !business_id) {
@@ -50,24 +44,13 @@ router.post('/get-user-list', async (req, res) => {
 		}
 
 		// Get array of users that have access to the business
-		const users = await User.aggregate([
-			{ $match: { business_id: business_id } },
-			{
-				$project: {
-					_id: 0,
-					first_name: 1,
-					last_name: 1,
-					email: 1,
-					status: {
-						$cond: {
-							if: '$admin',
-							then: 'admin',
-							else: 'user',
-						},
-					},
-				},
-			},
-		]);
+		const usersRaw = await userService.getUsersByBusinessId(business_id);
+		const users = (usersRaw || []).map((u) => ({
+			first_name: u.first_name,
+			last_name: u.last_name,
+			email: u.email,
+			status: u.admin ? 'admin' : 'user',
+		}));
 
 		if (users.length === 0) {
 			// No users are associated with the business_id
@@ -125,14 +108,12 @@ router.post('/change-admin-status', async (req, res) => {
 			admin = true;
 		}
 
-		// Update the user's admin status in the DB
-		const updatedUser = await User.findOneAndUpdate(
-			{ email: targetEmail },
-			{ $set: { admin: admin } },
-			{ new: true },
-		);
+		// Update the user's admin status
+		const updatedUser = await userService.updateUserByEmail(targetEmail, {
+			admin: admin,
+		});
 
-		if (updatedUser.admin !== admin) {
+		if (!updatedUser || updatedUser.admin !== admin) {
 			// Admin status was not updated in the DB
 			return res.status(400).json({
 				error: 'Error saving admin status',
@@ -147,7 +128,7 @@ router.post('/change-admin-status', async (req, res) => {
 				: 'Demoted admin to user successfully.';
 
 		// Check if user is demoting theirself
-		if (targetEmail === req.cookies.email) {
+		if (targetEmail === req.user.email) {
 			// Update admin cookie
 			cookies.updateCookie(res, 'isAdmin', admin);
 
@@ -169,7 +150,7 @@ router.post('/change-admin-status', async (req, res) => {
 // @access  Public (no auth yet)
 router.post('/remove-user-access', async (req, res) => {
 	try {
-		const business_id = getBusinessId(req.cookies.email);
+		const business_id = await getBusinessId(req.user.email);
 		const { email: targetEmail } = req.body;
 
 		if (business_id === null || !business_id) {
@@ -181,10 +162,7 @@ router.post('/remove-user-access', async (req, res) => {
 		}
 
 		const action = 'remove';
-		const foundUser = await User.findOne(
-			{ email: targetEmail },
-			{ admin: 1, _id: 0 },
-		);
+		const foundUser = await userService.getUserByEmail(targetEmail);
 
 		if (!foundUser) {
 			// User not found in the DB
@@ -209,13 +187,16 @@ router.post('/remove-user-access', async (req, res) => {
 		const admin = false;
 
 		// Remove user's business_id from the DB
-		const updatedUser = await User.findOneAndUpdate(
-			{ email: targetEmail },
-			{ $set: { business_id: '', admin: admin } },
-			{ new: true },
-		);
+		const updatedUser = await userService.updateUserByEmail(targetEmail, {
+			business_id: '',
+			admin: admin,
+		});
 
-		if (updatedUser.business_id !== '' || updatedUser.admin !== admin) {
+		if (
+			!updatedUser ||
+			updatedUser.business_id !== '' ||
+			updatedUser.admin !== admin
+		) {
 			// User's business_id was not removed from the DB
 			return res.status(400).json({
 				error: 'Error removing user access',
@@ -224,7 +205,7 @@ router.post('/remove-user-access', async (req, res) => {
 		}
 
 		// Check if user is removing their own access
-		if (targetEmail === req.cookies.email) {
+		if (targetEmail === req.user.email) {
 			// Update admin and hasBusiness cookies
 			cookies.updateCookie(res, 'isAdmin', admin);
 			cookies.updateCookie(res, 'hasBusiness', false);
@@ -252,7 +233,7 @@ router.post('/remove-user-access', async (req, res) => {
 // @access  Public (no auth yet)
 router.post('/add-user-access', async (req, res) => {
 	try {
-		const business_id = await getBusinessId(req.cookies.email);
+		const business_id = await getBusinessId(req.user.email);
 		const { email: targetEmail, status } = req.body;
 
 		if (!targetEmail || !status) {
@@ -273,7 +254,7 @@ router.post('/add-user-access', async (req, res) => {
 			});
 		}
 
-		const foundUser = await User.findOne({ email: targetEmail });
+		const foundUser = await userService.getUserByEmail(targetEmail);
 
 		if (!foundUser) {
 			return res.status(400).json({
@@ -300,18 +281,12 @@ router.post('/add-user-access', async (req, res) => {
 		}
 
 		// Update user's business_id & admin status in the DB
-		const updatedUser = await User.findOneAndUpdate(
-			{ email: targetEmail },
-			{
-				$set: {
-					business_id: business_id,
-					admin: isAdmin,
-				},
-			},
-			{ new: true },
-		);
+		const updatedUser = await userService.updateUserByEmail(targetEmail, {
+			business_id: business_id,
+			admin: isAdmin,
+		});
 
-		if (updatedUser.business_id !== business_id) {
+		if (!updatedUser || updatedUser.business_id !== business_id) {
 			// User's business_id and/or admin status was not changed in the DB
 			return res.status(400).json({
 				error: 'Error saving user access',

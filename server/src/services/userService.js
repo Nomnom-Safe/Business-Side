@@ -41,8 +41,25 @@ async function updateUserByEmail(email, updateObj) {
 	return data;
 }
 
+async function getUsersByBusinessId(businessId) {
+	const snap = await usersCollection
+		.where('business_id', '==', businessId)
+		.get();
+	return snap.docs.map((d) => ({ id: d.id, ...(d.data() || {}) }));
+}
+
+async function countAdmins(businessId) {
+	const snap = await usersCollection
+		.where('business_id', '==', businessId)
+		.where('admin', '==', true)
+		.get();
+	return snap.size || 0;
+}
+
 module.exports = {
 	getUserByEmail,
 	createUser,
 	updateUserByEmail,
+	getUsersByBusinessId,
+	countAdmins,
 };

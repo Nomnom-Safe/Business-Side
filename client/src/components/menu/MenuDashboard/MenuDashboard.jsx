@@ -45,9 +45,9 @@ function MenuDashboard() {
 	useEffect(() => {
 		if (menus.length > 0) {
 			const masterMenu = menus.find((menu) => menu.title === 'Master Menu');
-			if (masterMenu?._id) {
-				setMasterMenuID(masterMenu._id);
-				localStorage.setItem('masterMenu_ID', masterMenu._id);
+			if (masterMenu?.id) {
+				setMasterMenuID(masterMenu.id);
+				localStorage.setItem('masterMenu_ID', masterMenu.id);
 			}
 		}
 	}, [menus]);
@@ -83,13 +83,13 @@ function MenuDashboard() {
 	const handleConfirmDelete = async () => {
 		const menuToRemove = menus[menuToDelete];
 
-		if (!menuToRemove?._id) {
+		if (!menuToRemove?.id) {
 			console.error('Menu ID missing — cannot delete');
 			return;
 		}
 
 		try {
-			await axios.delete(`http://localhost:5000/api/menus/${menuToRemove._id}`); // Make DELETE request
+			await axios.delete(`http://localhost:5000/api/menus/${menuToRemove.id}`); // Make DELETE request
 
 			// Remove menu from local state
 			setMenus((prevMenus) => prevMenus.filter((_, i) => i !== menuToDelete));
@@ -135,7 +135,7 @@ function MenuDashboard() {
 				{menus.map((menu, index) => (
 					<div
 						className='menu-card-wrapper'
-						key={menu._id || index}
+						key={menu.id || index}
 					>
 						{menu.isEditable && (
 							<img

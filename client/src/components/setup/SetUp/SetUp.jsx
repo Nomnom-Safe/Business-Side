@@ -65,7 +65,7 @@ function SetUp({ step }) {
 				}
 
 				const created = await response.json();
-				businessId = created._id;
+				businessId = created.id;
 				localStorage.setItem('business_id', businessId);
 			}
 

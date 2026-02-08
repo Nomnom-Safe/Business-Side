@@ -24,7 +24,13 @@ const setCookies = (res, user, extraFields = {}) => {
 
 	// Set each cookie
 	for (const [key, value] of Object.entries(cookies)) {
-		res.cookie(key, value, options);
+		// If we're setting an ID token for client-side use, do not set httpOnly
+		if (key === 'token') {
+			const tokenOptions = { ...options, httpOnly: false };
+			res.cookie(key, value, tokenOptions);
+		} else {
+			res.cookie(key, value, options);
+		}
 	}
 };
 

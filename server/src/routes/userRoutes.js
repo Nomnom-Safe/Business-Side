@@ -41,8 +41,14 @@ router.post('/signin', async (req, res) => {
 			});
 		}
 
-		// Set cookies
-		cookies.setCookies(res, foundUser);
+		// Extract id token from request (client may provide it after Firebase sign-in)
+		const idToken =
+			req.body.idToken ||
+			(req.get('Authorization') || '').replace('Bearer ', '') ||
+			null;
+
+		// Set cookies (include token if provided)
+		cookies.setCookies(res, foundUser, idToken ? { token: idToken } : {});
 
 		// Get business name
 		if (foundUser.business_id === '') {
@@ -126,8 +132,14 @@ router.post('/signup', async (req, res) => {
 			});
 		}
 
-		// Set cookies
-		cookies.setCookies(res, savedUser);
+		// Extract id token if provided by client
+		const idToken =
+			req.body.idToken ||
+			(req.get('Authorization') || '').replace('Bearer ', '') ||
+			null;
+
+		// Set cookies (include token if provided)
+		cookies.setCookies(res, savedUser, idToken ? { token: idToken } : {});
 
 		// Send response
 		return res.status(201).json(savedUser);

@@ -8,10 +8,14 @@ async function listMenuItems(filter = {}) {
 		const snap = await menuItemsCollection
 			.where('menu_id', '==', filter.menu_id)
 			.get();
-		return snap.docs.map((d) => ({ id: d.id, ...(d.data() || {}) }));
+		return snap.docs.map((d) => {
+			return { id: d.id, ...(d.data() || {}) };
+		});
 	}
 	const snap = await menuItemsCollection.get();
-	return snap.docs.map((d) => ({ id: d.id, ...(d.data() || {}) }));
+	return snap.docs.map((d) => {
+		return { id: d.id, ...(d.data() || {}) };
+	});
 }
 
 async function getMenuItemById(id) {
