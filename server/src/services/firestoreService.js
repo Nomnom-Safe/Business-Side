@@ -10,7 +10,7 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-const usersCollection = db.collection('users');
+const usersCollection = db.collection('business_users');
 const restaurantsCollection = db.collection('restaurants');
 
 async function getUserByEmail(email) {

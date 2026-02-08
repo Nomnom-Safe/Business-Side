@@ -1,7 +1,7 @@
 const { db } = require('./firestoreInit');
 const bcrypt = require('bcrypt');
 
-const usersCollection = db.collection('users');
+const usersCollection = db.collection('business_users');
 
 async function getUserByEmail(email) {
 	const q = await usersCollection.where('email', '==', email).limit(1).get();
