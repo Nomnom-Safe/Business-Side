@@ -107,6 +107,7 @@ Business-Side/
 │   │   ├── styles/
 │   │   │   └── global.scss
 │   │   ├── utils/
+│   │   │   ├── allergenCache.js
 │   │   │   ├── cookies.jsx
 │   │   │   └── formValidation.js
 │   │   ├── App.jsx
@@ -123,7 +124,8 @@ Business-Side/
 │   │   │   ├── ppp-dinius.md
 │   │   │   └── ppp-dinius.pdf
 │   │   └── jeff-perdue/
-│   │       └── ppp.marp
+│   │       ├── ppp.md
+│   │       └── ppp.pdf
 │   ├── modules/
 │   │   ├── AdminModule.md
 │   │   ├── AuthenticationModule.md
@@ -148,8 +150,10 @@ Business-Side/
 │   │       └── testDb.test.js
 │   ├── src/
 │   │   ├── config/
-│   │   │   ├── db.js
-│   │   │   └── db.test.js
+│   │   │   ├── db.test.js
+│   │   │   └── firebase.js
+│   │   ├── middleware/
+│   │   │   └── auth.js
 │   │   ├── models/
 │   │   │   ├── Business.js
 │   │   │   ├── Business.test.js
@@ -162,6 +166,7 @@ Business-Side/
 │   │   ├── routes/
 │   │   │   ├── adminRoutes.js
 │   │   │   ├── adminRoutes.test.js
+│   │   │   ├── allergenRoutes.js
 │   │   │   ├── businessRoutes.js
 │   │   │   ├── businessRoutes.test.js
 │   │   │   ├── menuItemRoutes.js
@@ -170,10 +175,18 @@ Business-Side/
 │   │   │   ├── menuRoutes.test.js
 │   │   │   ├── userRoutes.js
 │   │   │   └── userRoutes.test.js
+│   │   ├── services/
+│   │   │   ├── businessService.js
+│   │   │   ├── firestoreInit.js
+│   │   │   ├── firestoreService.js
+│   │   │   ├── menuItemService.js
+│   │   │   ├── menuService.js
+│   │   │   └── userService.js
 │   │   └── utils/
 │   │       └── cookies.js
 │   ├── package.json
 │   ├── README.md
 │   └── server.js
+├── archiving_explainer.md
 ├── package.json
 └── README.md
