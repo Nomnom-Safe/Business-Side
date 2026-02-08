@@ -1,29 +1,14 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+// Legacy Mongoose model removed.
+// Routes now use Firestore services. If you see an import of this file,
+// replace it with the appropriate service in `src/services`.
 
-class Business {
-	constructor(name, url, address, allergens = [], diets = [], menus = []) {
-		this.name = name;
-		this.url = url;
-		this.address = address;
-		this.allergens = allergens;
-		this.diets = diets;
-		this.menus = menus;
-	}
-}
-
-const BusinessSchema = new Schema({
-	name: { type: String, required: true, unique: true },
-	url: { type: String },
-	address: { type: String },
-	allergens: {
-		type: [String],
-		default: [],
+module.exports = new Proxy(
+	{},
+	{
+		get() {
+			throw new Error(
+				'Legacy model `Business` removed. Use ../services/businessService instead.',
+			);
+		},
 	},
-	diets: { type: [String] },
-	menus: [{ type: Schema.Types.ObjectId, ref: 'Menu' }],
-});
-
-BusinessSchema.loadClass(Business);
-
-module.exports = mongoose.model('Business', BusinessSchema);
+);

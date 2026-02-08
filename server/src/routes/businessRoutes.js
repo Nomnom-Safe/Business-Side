@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const Business = require('../models/Business');
-const User = require('../models/User');
 const cookies = require('../utils/cookies');
+const businessService = require('../services/businessService');
+const userService = require('../services/userService');
 
 // @route   GET /api/businesses/
 // @desc    Get a list of all businesses
 // @access  Public (no auth yet)
 router.get('/', async (req, res) => {
 	try {
-		const businesses = await Business.find({}, { name: 1, _id: 1 });
+		const businesses = await businessService.listBusinesses();
 
-		if (businesses.length <= 0) {
+		if (!businesses || businesses.length <= 0) {
 			// No businesses exist in the DB
 			return res.status(404).json({
 				error: 'No businesses found',
@@ -33,12 +33,7 @@ router.get('/', async (req, res) => {
 // @access  Public (no auth yet)
 router.get('/:id', async (req, res) => {
 	try {
-		const business = await Business.findById(req.params.id)
-			.populate({
-				path: 'menus',
-				select: 'title description _id restaurant',
-			})
-			.lean();
+		const business = await businessService.getBusinessWithMenus(req.params.id);
 
 		if (!business) {
 			return res.status(404).json({ error: 'Business not found' });
@@ -62,7 +57,7 @@ router.post('/', async (req, res) => {
 		var existing;
 
 		if (!unnamed && name !== '') {
-			existing = await Business.findOne({ name: name.trim() });
+			existing = await businessService.businessNameExists(name);
 		}
 
 		if (existing && !unnamed) {
@@ -72,16 +67,16 @@ router.post('/', async (req, res) => {
 			});
 		}
 
-		const newBusiness = new Business({
+		const newBusiness = {
 			name: name.trim(),
-			url: url?.trim().toLowerCase(),
-			address: address?.trim(),
+			website: url?.trim().toLowerCase() || 'None',
+			address_id: address?.trim(),
 			allergens,
 			diets,
 			menus: [],
-		});
+		};
 
-		const savedBusiness = await newBusiness.save();
+		const savedBusiness = await businessService.createBusiness(newBusiness);
 
 		if (!savedBusiness) {
 			return res.status(400).json({
@@ -91,7 +86,7 @@ router.post('/', async (req, res) => {
 		}
 
 		const email = req.cookies.email;
-		const user = await User.findOne({ email: email });
+		const user = await userService.getUserByEmail(email);
 
 		if (!user) {
 			return res.status(400).json({
@@ -119,26 +114,27 @@ router.put('/:id', async (req, res) => {
 		const { name, url, address, allergens, diets, menus } = req.body;
 
 		// Check if another business already exists with the same name
-		const existingBusiness = await Business.findOne({
-			name: name?.trim(),
-			_id: { $ne: req.params.id }, // Exclude the current business from the check
-		});
+		const existingBusiness = await businessService.businessNameExists(
+			name,
+			req.params.id,
+		);
 
 		if (existingBusiness) {
 			return res.status(400).json({ error: 'Business name already exists.' });
 		}
 
-		const updatedBusiness = await Business.findByIdAndUpdate(
+		const updateObj = {
+			name: name?.trim(),
+			website: url?.trim().toLowerCase() || 'None',
+			address_id: address?.trim(),
+			allergens,
+			diets,
+			menus,
+		};
+
+		const updatedBusiness = await businessService.updateBusiness(
 			req.params.id,
-			{
-				name: name?.trim(),
-				url: url?.trim().toLowerCase(),
-				address: address?.trim(),
-				allergens,
-				diets,
-				menus,
-			},
-			{ new: true },
+			updateObj,
 		);
 
 		if (!updatedBusiness)
@@ -156,9 +152,8 @@ router.put('/:id', async (req, res) => {
 // @access  Public (no auth yet)
 router.delete('/:id', async (req, res) => {
 	try {
-		const deletedBusiness = await Business.findByIdAndDelete(req.params.id);
-		if (!deletedBusiness)
-			return res.status(404).json({ error: 'Business not found' });
+		const deleted = await businessService.deleteBusiness(req.params.id);
+		if (!deleted) return res.status(404).json({ error: 'Business not found' });
 		res.json({ message: 'Business deleted successfully' });
 	} catch (err) {
 		res.status(500).json({ error: 'Could not delete business' });

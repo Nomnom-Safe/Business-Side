@@ -2,23 +2,32 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 class MenuItem {
-  constructor(name, ingredients=[], allergens = [], description = '', menuIDs = []) {
-    this.name = name;
-    this.ingredients = ingredients;
-    this.description = description;
-    this.allergens = allergens;
-    this.menuIDs = menuIDs
-  }
+	constructor(
+		name,
+		ingredients = [],
+		allergens = [],
+		description = '',
+		menuIDs = [],
+	) {
+		this.name = name;
+		this.ingredients = ingredients;
+		this.description = description;
+		this.allergens = allergens;
+		this.menuIDs = menuIDs;
+	}
 }
 
-const MenuItemSchema = new Schema({
-  name: String, // String is shorthand for {type: String}
-  ingredients: [String],
-  description: String,
-  allergens: [String],
-  menuIDs: [String]
-});
+// Legacy Mongoose model removed.
+// Routes now use Firestore services. If you see an import of this file,
+// replace it with the appropriate service in `src/services`.
 
-MenuItemSchema.loadClass(MenuItem);
-
-module.exports = mongoose.model('MenuItem', MenuItemSchema);
+module.exports = new Proxy(
+	{},
+	{
+		get() {
+			throw new Error(
+				'Legacy model `MenuItem` removed. Use ../services/menuItemService instead.',
+			);
+		},
+	},
+);

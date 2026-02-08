@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const MenuItem = require('../models/MenuItem');
-const Menu = require('../models/Menu');
+const menuItemService = require('../services/menuItemService');
+const menuService = require('../services/menuService');
 
 //
 // MenuItems.jsx
@@ -12,23 +12,16 @@ const Menu = require('../models/Menu');
 // @access Public
 router.get('/menu/', async (req, res) => {
 	try {
-		const { encodedMenuName, businessID } = req.query;
+		const { businessID } = req.query;
 
-		if (!encodedMenuName || !businessID) {
-			return res
-				.status(400)
-				.json({ error: 'Both encodedMenuName and businessID are required' });
+		if (!businessID) {
+			return res.status(400).json({ error: 'businessID is required' });
 		}
-		// decript from safe for url formate
-		const menuName = decodeURIComponent(encodedMenuName);
 
-		const filter = {
-			title: menuName,
-			restaurant: businessID,
-		};
-		// get only the menu
-		const menu = await Menu.findOne(filter);
-
+		// With the new schema menus are identified by restaurant_id. Return the menu for the business.
+		// There is a single menu per restaurant in the new schema.
+		const menus = await menuService.listMenus();
+		const menu = menus.find((m) => m.restaurant_id === businessID) || null;
 		res.status(200).json(menu || []);
 	} catch (err) {
 		console.error('Error fetching menu:', err);
@@ -44,12 +37,11 @@ router.get('/', async (req, res) => {
 		const { menuID } = req.query;
 
 		let filter = {};
-		// only get menuItems with the menuID in their menuIDs
 		if (menuID) {
-			filter = { menuIDs: menuID };
+			filter.menu_id = menuID;
 		}
 
-		const menuitems = await MenuItem.find(filter);
+		const menuitems = await menuItemService.listMenuItems(filter);
 
 		res.status(200).json(menuitems || []);
 	} catch (err) {
@@ -64,20 +56,19 @@ router.get('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
 	try {
 		const { id } = req.params;
-		const { name, description, ingredients, allergens, menuIDs } = req.body;
+		const { name, description, allergens, menu_id } = req.body;
 
 		// Ensure the ID is provided
 		if (!id) {
 			return res.status(400).json({ error: 'Menu item ID is required' });
 		}
 
-		const updatedMenuItem = await MenuItem.findByIdAndUpdate(
-			id,
-			// updated fields
-			{ name, description, ingredients, allergens, menuIDs },
-			// Return the updated document and validate the data
-			{ new: true, runValidators: true },
-		);
+		const updatedMenuItem = await menuItemService.updateMenuItem(id, {
+			name,
+			description,
+			allergens,
+			menu_id,
+		});
 
 		// If no menu item is found, return an error
 		if (!updatedMenuItem) {
@@ -96,7 +87,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
 	try {
 		const { id } = req.params;
-		const deleted = await MenuItem.findByIdAndDelete(id);
+		const deleted = await menuItemService.deleteMenuItem(id);
 		if (!deleted) {
 			return res.status(404).json({ error: 'Menu Item not found' });
 		}
@@ -115,18 +106,21 @@ router.delete('/:id', async (req, res) => {
 // @access  Public (no auth yet)
 router.post('/add-menu-item', async (req, res) => {
 	try {
-		const { name, description, ingredients, allergens, menuIDs } = req.body;
+		const { name, description, allergens, menu_id, menuIDs } = req.body;
 
-		// Create new menu document from request body
-		const newMenuItem = new MenuItem({
+		// normalize menu_id: accept either menu_id or menuIDs array (legacy)
+		let finalMenuId = menu_id;
+		if (!finalMenuId && Array.isArray(menuIDs) && menuIDs.length > 0)
+			finalMenuId = menuIDs[0];
+
+		const newMenuItem = {
 			name,
 			description,
-			ingredients,
-			allergens,
-			menuIDs,
-		});
+			allergens: allergens || [],
+			menu_id: finalMenuId,
+		};
 
-		const savedMenuItem = await newMenuItem.save();
+		const savedMenuItem = await menuItemService.createMenuItem(newMenuItem);
 		res.status(201).json(savedMenuItem);
 	} catch (err) {
 		res.status(400).json({ error: 'Error creating menu: ' + err.message });
@@ -142,24 +136,13 @@ router.post('/add-menu-item', async (req, res) => {
 router.get('/menuswap-menus', async (req, res) => {
 	try {
 		const { businessID } = req.query;
-		let filter = {};
 
-		// only get menus belonging to the business
-		if (businessID) {
-			filter = { restaurant: businessID };
-		}
+		if (!businessID)
+			return res.status(400).json({ error: 'businessID required' });
 
-		const menus = await Menu.find(filter);
-
-		// Always ensure Master Menu appears first
-		menus.sort((a, b) => {
-			if (a.title === 'Master Menu') return -1;
-			if (b.title === 'Master Menu') return 1;
-			return 0;
-		});
-
-		// Return the menus
-		res.json(menus);
+		const menus = await menuService.listMenus();
+		const filtered = menus.filter((m) => m.restaurant_id === businessID);
+		res.json(filtered);
 	} catch (err) {
 		console.error('Error fetching menu:', err);
 		res.status(500).json({ error: 'Could not fetch menus' });
@@ -172,16 +155,10 @@ router.get('/menuswap-menus', async (req, res) => {
 router.get('/menuswap-items', async (req, res) => {
 	try {
 		const { menuID } = req.query;
-		let filter = {};
-
-		// only get menuItemss on the menu
-		if (menuID) {
-			filter = { menuIDs: menuID };
-		}
-		// Get the menu items
-		const menuItems = await MenuItem.find(filter);
-
-		res.status(200).json(menuItems || []);
+		const items = await menuItemService.listMenuItems(
+			menuID ? { menu_id: menuID } : {},
+		);
+		res.status(200).json(items || []);
 	} catch (err) {
 		console.error('Error fetching menu items:', err);
 		res.status(500).json({ error: 'Could not fetch menu items' });
@@ -194,20 +171,19 @@ router.get('/menuswap-items', async (req, res) => {
 router.put('/swap-menu/:id', async (req, res) => {
 	try {
 		const { id } = req.params;
-		const { name, description, ingredients, allergens, menuIDs } = req.body;
+		const { name, description, allergens, menu_id } = req.body;
 
-		if (!id) {
-			return res.status(400).json({ error: 'Menu item ID is required' });
-		}
-		const updatedMenuItem = await MenuItem.findByIdAndUpdate(
-			id,
-			{ name, description, ingredients, allergens, menuIDs },
-			{ new: true, runValidators: true },
-		);
+		if (!id) return res.status(400).json({ error: 'Menu item ID is required' });
 
-		if (!updatedMenuItem) {
+		const updatedMenuItem = await menuItemService.updateMenuItem(id, {
+			name,
+			description,
+			allergens,
+			menu_id,
+		});
+
+		if (!updatedMenuItem)
 			return res.status(404).json({ error: 'Menu item not found' });
-		}
 
 		res.status(200).json(updatedMenuItem);
 	} catch (err) {
