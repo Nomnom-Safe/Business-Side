@@ -37,6 +37,10 @@ app.use('/api/menuitems', menuItemRoutes);
 const auth = require('./src/routes/userRoutes');
 app.use('/api/auth', auth);
 
+// Allergen routes (provide id/label mapping for client)
+const allergenRoutes = require('./src/routes/allergenRoutes');
+app.use('/api/allergens', allergenRoutes);
+
 // Admin routes archived (no longer mounted). See server/src/routes/adminRoutes.js for legacy code.
 
 const businessRoutes = require('./src/routes/businessRoutes');

@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaPencilAlt, FaTrash, FaSave } from 'react-icons/fa';
 import axios from 'axios';
 import '../../../styles/global.scss';
+import {
+	getAllergenLabels,
+	resolveLabelsToIDs,
+} from '../../../utils/allergenCache';
 
 const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -9,23 +13,42 @@ const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 	const [menuItemToDelete, setMenuItemToDelete] = useState(null);
 	const [isEditing, setIsEditing] = useState(false);
 	const [formData, setFormData] = useState({ ...item });
+	const [allergenLabels, setAllergenLabels] = useState([]);
+	const [editableAllergenLabels, setEditableAllergenLabels] = useState('');
 
 	const masterMenuID = localStorage.getItem('masterMenu_ID');
 
 	const toggleOpen = () => setIsOpen(!isOpen);
-	const toggleEdit = () => setIsEditing(!isEditing);
+	const toggleEdit = async () => {
+		setIsEditing(!isEditing);
+
+		if (!isEditing) {
+			// entering edit mode
+			const ids = item.allergens.map((a) => (typeof a === 'string' ? a : a.id));
+
+			const labels = await getAllergenLabels(ids);
+
+			setEditableAllergenLabels(labels.join(', '));
+		}
+	};
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSave = () => {
+	const handleSave = async () => {
 		if (!formData.name || formData.name.trim() === '') {
 			alert('Please enter a name for the menu item.');
 			return;
 		}
-		onSave(formData);
+		const resolvedIDs = await resolveLabelsToIDs(formData.allergens);
+		const updated = {
+			...formData,
+			allergens: resolvedIDs,
+		};
+
+		onSave(updated);
 		setIsEditing(false);
 	};
 
@@ -69,6 +92,31 @@ const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 		setShowConfirm(false);
 		setMenuItemToDelete(null);
 	};
+
+	useEffect(() => {
+		let mounted = true;
+
+		const load = async () => {
+			try {
+				if (item?.allergens?.length > 0) {
+					// Normalize allergens to IDs
+					const ids = item.allergens.map((a) =>
+						typeof a === 'string' ? a.toLowerCase() : a.id,
+					);
+					const labels = await getAllergenLabels(ids);
+					if (mounted) setAllergenLabels(labels);
+				} else {
+					if (mounted) setAllergenLabels([]);
+				}
+			} catch (err) {
+				console.error('Could not load allergen labels', err);
+			}
+		};
+		load();
+		return () => {
+			mounted = false;
+		};
+	}, [item]);
 
 	return (
 		<div className='menu-item-panel collapsible-panel'>
@@ -125,13 +173,17 @@ const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 							<h4>Allergens:</h4>
 							<textarea
 								name='allergens'
-								value={formData.allergens.join(', ')}
-								onChange={(e) =>
+								value={editableAllergenLabels}
+								onChange={(e) => {
+									const labels = e.target.value.split(',').map((a) => a.trim());
+									setEditableAllergenLabels(e.target.value);
+
+									// temporarily store labels in formData
 									setFormData((prev) => ({
 										...prev,
-										allergens: e.target.value.split(',').map((a) => a.trim()),
-									}))
-								}
+										allergens: labels,
+									}));
+								}}
 								placeholder='List allergens separated by commas'
 							/>
 							<button
@@ -153,10 +205,10 @@ const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 							<h4>Ingredients:</h4>
 							<pre>{item.ingredients}</pre>
 							<h4>Allergens:</h4>
-							{item.allergens && item.allergens.length > 0 ? (
+							{allergenLabels && allergenLabels.length > 0 ? (
 								<ul>
-									{item.allergens.map((allergen, index) => (
-										<li key={index}>{allergen}</li>
+									{allergenLabels.map((label, index) => (
+										<li key={index}>{label}</li>
 									))}
 								</ul>
 							) : (
