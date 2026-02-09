@@ -2,12 +2,15 @@
 marp: true
 theme: default
 paginate: true
-title: 'Individual Project — Week 4 Progress Report'
+title: 'Capstone Project — Week 4 Progress Report'
+footer: 'Week 4 Progress Report — Anna Dinius'
 ---
 
-# **Individual Project**
+# **Capstone Project**
 
 ## **Week 4 Progress Report**
+
+### 2/2/2026 - 2/8/2026
 
 > Commit range:  
 > `ea536c131fec5af3a9ec602d849da213d0e70f24 → HEAD`
@@ -69,9 +72,7 @@ This week focused on:
 
 ---
 
-# **Major File Modifications**
-
-### Server
+# **Major File Modifications (Server)**
 
 - Updated many routes under `server/src/routes/*`  
   → Now use Zod schemas + refactored services
@@ -82,6 +83,11 @@ This week focused on:
   - `businessUserService.js`
   - `menuItemService.js`
   - `menuService.js`
+
+---
+
+# **Major File Modifications (Server Continued)**
+
 - Added `firestoreInit.js`
 - Removed entire `server/src/models/*` directory
 
@@ -94,6 +100,11 @@ This week focused on:
   - `ChooseBusiness`
   - `SetUp`
   - `Step1`
+
+---
+
+# **Major File Modifications (Client Continued)**
+
 - Updated menu‑related components:
   - `MenuDashboard.jsx`
   - `MenuCard.jsx`
@@ -114,7 +125,7 @@ This week focused on:
 ### Needed next
 
 - Unit tests for all `server/src/schemas/*`
-- Unit tests for `server/src/services/*`
+- Unit tests for all `server/src/services/*`
 - Integration tests for:
   - `allergenRoutes`
   - `client/src/utils/allergenCache.js`
@@ -174,7 +185,16 @@ This week focused on:
 
 # **How to Run / Verify Locally**
 
+> Monorepo structure enables single commands for installing dependencies and running the app
+
 1. **Install dependencies**
+
    ```powershell
    npm install
+   ```
+
+2. **Run**
+
+   ```powershell
+   npm run dev
    ```
