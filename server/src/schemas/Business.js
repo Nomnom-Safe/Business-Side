@@ -52,8 +52,8 @@ const CreateBusinessSchema = BusinessSchema.omit({ id: true });
 /**
  * Schema for updating a business (all fields optional except ID)
  */
-const UpdateBusinessSchema = BusinessSchema.partial().required({
-	id: true,
+const UpdateBusinessSchema = BusinessSchema.partial().extend({
+	id: z.string().regex(/^bid_[a-z0-9]{11}$/),
 });
 
 module.exports = {

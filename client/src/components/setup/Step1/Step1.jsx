@@ -4,7 +4,7 @@ import './Step1.scss';
 function Step1({ updateFormData }) {
 	const [localData, setLocalData] = useState({
 		name: '',
-		url: '',
+		website: '',
 		streetAddress1: '',
 		streetAddress2: '',
 		city: '',
@@ -20,7 +20,7 @@ function Step1({ updateFormData }) {
 		}`;
 		updateFormData({
 			name: localData.name,
-			url: localData.url,
+			website: localData.website,
 			address: formattedAddress.trim(),
 		});
 	}, [localData]);
@@ -59,7 +59,7 @@ function Step1({ updateFormData }) {
 						<div>
 							<input
 								type='text'
-								name='url'
+								name='website'
 								placeholder='Web Profile URL'
 								className='website'
 								onChange={handleChange}

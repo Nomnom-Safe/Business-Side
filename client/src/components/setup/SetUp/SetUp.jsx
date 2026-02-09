@@ -11,7 +11,7 @@ function SetUp({ step }) {
 	const [formData, setFormData] = useState({
 		// Step 1 data
 		name: '',
-		url: '',
+		website: '',
 		address: '',
 		// Step 2 data
 		allergens: [],
@@ -46,7 +46,7 @@ function SetUp({ step }) {
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({
 						name: formData.name,
-						url: formData.url,
+						website: formData.website,
 						address: formData.address,
 						allergens: formData.allergens,
 						diets: formData.diets,
@@ -77,7 +77,7 @@ function SetUp({ step }) {
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({
 						name: formData.name,
-						url: formData.url,
+						website: formData.website,
 						address: formData.address,
 						allergens: formData.allergens,
 						diets: formData.diets,

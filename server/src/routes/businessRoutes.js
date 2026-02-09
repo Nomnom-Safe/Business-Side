@@ -40,7 +40,19 @@ router.get('/:id', async (req, res) => {
 			return res.status(404).json({ error: 'Business not found' });
 		}
 
-		res.json(business);
+		res.json({
+			id: business.id,
+			name: business.name || '',
+			website: business.website || '',
+			address: business.address_id,
+			allergens: business.allergens || [],
+			diets: business.diets || [],
+			phone: business.phone || '000-000-0000',
+			hours: business.hours || [],
+			disclaimers: business.disclaimers || [],
+			cuisine: business.cuisine || '',
+			menus: business.menus,
+		});
 	} catch (err) {
 		console.error('GET /:id error:', err);
 		res.status(500).json({ error: 'Could not fetch business' });
@@ -54,7 +66,7 @@ router.post('/', async (req, res) => {
 	try {
 		const {
 			name,
-			url,
+			website,
 			address_id,
 			address,
 			hours = [],
@@ -98,7 +110,7 @@ router.post('/', async (req, res) => {
 
 		const newBusiness = {
 			name: name.trim(),
-			website: url?.trim().toLowerCase() || 'None',
+			website: website?.trim().toLowerCase() || 'None',
 			address_id: address_id || (address ? address.trim() : undefined),
 			hours: Array.isArray(hours) ? hours : [],
 			phone: phone || '',
@@ -178,7 +190,7 @@ router.put('/:id', async (req, res) => {
 	try {
 		const {
 			name,
-			url,
+			website,
 			address_id,
 			address,
 			allergens,
@@ -217,7 +229,7 @@ router.put('/:id', async (req, res) => {
 
 		const updateObj = {
 			name: name?.trim(),
-			website: url?.trim().toLowerCase() || 'None',
+			website: website?.trim().toLowerCase() || 'None',
 			address_id: address_id || (address ? address.trim() : undefined),
 			allergens,
 			diets,

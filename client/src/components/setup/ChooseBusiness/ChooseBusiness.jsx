@@ -107,7 +107,7 @@ function ChooseBusiness() {
 						},
 						body: JSON.stringify({
 							name: `New Business - ${Date.now()}`,
-							url: '',
+							website: '',
 							address: '',
 							allergens: [],
 							diets: [],

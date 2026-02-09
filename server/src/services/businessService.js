@@ -58,6 +58,12 @@ async function updateBusiness(id, updateObj) {
 	if (!snap.exists) return null;
 
 	const merged = { id, ...snap.data(), ...updateObj };
+
+	// Remove undefined fields so Zod doesn't validate them
+	Object.keys(merged).forEach(
+		(key) => merged[key] === undefined && delete merged[key],
+	);
+
 	const valid = UpdateBusinessSchema.parse(merged);
 
 	await docRef.update(valid);
