@@ -41,6 +41,10 @@ app.use('/api/auth', auth);
 const allergenRoutes = require('./src/routes/allergenRoutes');
 app.use('/api/allergens', allergenRoutes);
 
+// Addresses routes (allow creating address documents to reference by businesses)
+const addressRoutes = require('./src/routes/addressRoutes');
+app.use('/api/addresses', addressRoutes);
+
 // Admin routes archived (no longer mounted). See server/src/routes/adminRoutes.js for legacy code.
 // ARCHIVED: Admin Features - Not part of MVP (single user per business)
 // const admin = require('./src/routes/adminRoutes');
