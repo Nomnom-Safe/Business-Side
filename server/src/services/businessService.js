@@ -47,6 +47,12 @@ async function getBusinessWithMenus(id) {
 async function createBusiness(businessObj) {
 	const valid = CreateBusinessSchema.parse(businessObj);
 	valid.menu_id = null; // Ensure menu_id initialized to null
+	
+	// Remove undefined fields so Firestore doesn't reject them
+	Object.keys(valid).forEach(
+		(key) => valid[key] === undefined && delete valid[key],
+	);
+	
 	const ref = await businessesCollection.add(valid);
 	const snap = await ref.get();
 	return { id: ref.id, ...snap.data() };

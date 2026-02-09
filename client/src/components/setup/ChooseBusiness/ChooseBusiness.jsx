@@ -121,36 +121,13 @@ function ChooseBusiness() {
 					setShowError(true);
 					return;
 				}
-
-				const createdBusiness = await createBusinessResponse.json();
-				const businessId = createdBusiness.id;
+				
+				const businessId = result.id;
 				localStorage.setItem('businessId', businessId);
-
-				// Create master menu
-				const createMenuResponse = await fetch(
-					'http://localhost:5000/api/menus',
-					{
-						method: 'POST',
-						credentials: 'include',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({
-							// title: 'Master Menu',
-							// description: 'This menu will be shown to customers',
-							business_id: businessId,
-							// menuItems: [],
-						}),
-					},
-				);
-
-				if (!createMenuResponse.ok) {
-					const result = await createMenuResponse.json();
-					setMessage(result.message || 'Failed to create menu');
-					setShowError(true);
-					return;
-				}
-
+				
+				// Menu is automatically created by the backend when creating a business
+				// No need to create it separately here
+				
 				// Associate business with user
 				const assignResponse = await fetch(
 					'http://localhost:5000/api/auth/set-business',
@@ -162,7 +139,7 @@ function ChooseBusiness() {
 						},
 						body: JSON.stringify({
 							type: 'new',
-							business_id: businessId,
+							businessId: businessId,
 						}),
 					},
 				);

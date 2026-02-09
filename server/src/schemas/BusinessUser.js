@@ -33,23 +33,42 @@ const BusinessUserSchema = z.object({
 /**
  * Schema for creating a new business user (without ID, with password requirements)
  * Use this for user registration/creation before hashing the password
+ * business_id is optional at signup since users haven't been assigned to a business yet
  */
-const CreateBusinessUserSchema = BusinessUserSchema.omit({ id: true }).extend({
-	password: z
-		.string()
-		.min(8, 'Password must be at least 8 characters')
-		.regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-		.regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-		.regex(/[0-9]/, 'Password must contain at least one number'),
-});
+const CreateBusinessUserSchema = BusinessUserSchema.omit({ id: true })
+	.extend({
+		password: z
+			.string()
+			.min(8, 'Password must be at least 8 characters')
+			.regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+			.regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+			.regex(/[0-9]/, 'Password must contain at least one number'),
+		business_id: z
+			.union([
+				z
+					.string()
+					.regex(
+						/^bid_[a-z0-9]{11}$/,
+						"Business ID must start with 'bid_' followed by 11 lowercase alphanumeric characters",
+					),
+				z.literal(''),
+			])
+			.optional()
+			.default(''),
+	});
 
 /**
  * Schema for updating a business user (all fields optional except ID)
  * Password validation is less strict since it will be hashed
+ * When business_id is provided in an update, it must match the strict format
  */
-const UpdateBusinessUserSchema = BusinessUserSchema.partial().extend({
-	id: z.string().regex(/^bus_[a-z0-9]{11}$/),
-});
+const UpdateBusinessUserSchema = BusinessUserSchema.partial()
+	.extend({
+		id: z.string().min(1, 'User ID is required'),
+	})
+	.extend({
+		business_id: z.string().min(1, 'Business ID is required').optional(),
+	});
 
 /**
  * Schema for user login validation
