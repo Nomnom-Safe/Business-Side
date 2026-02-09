@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const cookies = require('../utils/cookies');
 const { authenticate } = require('../middleware/auth');
-const userService = require('../services/userService');
+const userService = require('../services/businessUserService');
 
 // Returns the business_id of a user
 const getBusinessId = async (email) => {

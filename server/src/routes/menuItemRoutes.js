@@ -7,21 +7,20 @@ const menuService = require('../services/menuService');
 // MenuItems.jsx
 //
 
-// @route GET /api/menuitems/menu/:menuname&:businessID
+// @route GET /api/menuitems/menu/:menuname&:restaurant_id
 // @desc Get menu by menuTitle
 // @access Public
 router.get('/menu/', async (req, res) => {
 	try {
-		const { businessID } = req.query;
+		const { restaurant_id } = req.query;
 
-		if (!businessID) {
-			return res.status(400).json({ error: 'businessID is required' });
+		if (!restaurant_id) {
+			return res.status(400).json({ error: 'restaurant_id is required' });
 		}
 
-		// With the new schema menus are identified by restaurant_id. Return the menu for the business.
-		// There is a single menu per restaurant in the new schema.
+		// With the schema menus are identified by restaurant_id. Return the menu for the restaurant.
 		const menus = await menuService.listMenus();
-		const menu = menus.find((m) => m.restaurant_id === businessID) || null;
+		const menu = menus.find((m) => m.restaurant_id === restaurant_id) || null;
 		res.status(200).json(menu || []);
 	} catch (err) {
 		console.error('Error fetching menu:', err);
@@ -104,26 +103,26 @@ router.delete('/:id', async (req, res) => {
 // @route   POST /api/menuitems/add-menu-item
 // @desc    Create a new menu item
 // @access  Public (no auth yet)
+// Schema requires `menu_id` to reference the menu this item belongs to.
 router.post('/add-menu-item', async (req, res) => {
 	try {
-		const { name, description, allergens, menu_id, menuIDs } = req.body;
+		const { name, description, allergens, menu_id } = req.body;
 
-		// normalize menu_id: accept either menu_id or menuIDs array (legacy)
-		let finalMenuId = menu_id;
-		if (!finalMenuId && Array.isArray(menuIDs) && menuIDs.length > 0)
-			finalMenuId = menuIDs[0];
+		if (!menu_id) {
+			return res.status(400).json({ error: 'menu_id is required' });
+		}
 
 		const newMenuItem = {
 			name,
 			description,
 			allergens: allergens || [],
-			menu_id: finalMenuId,
+			menu_id,
 		};
 
 		const savedMenuItem = await menuItemService.createMenuItem(newMenuItem);
 		res.status(201).json(savedMenuItem);
 	} catch (err) {
-		res.status(400).json({ error: 'Error creating menu: ' + err.message });
+		res.status(400).json({ error: 'Error creating menu item: ' + err.message });
 	}
 });
 
@@ -137,13 +136,13 @@ router.post('/add-menu-item', async (req, res) => {
 /*
 router.get('/menuswap-menus', async (req, res) => {
 	try {
-		const { businessID } = req.query;
+		const { restaurant_id } = req.query;
 
-		if (!businessID)
-			return res.status(400).json({ error: 'businessID required' });
+		if (!restaurant_id)
+			return res.status(400).json({ error: 'restaurant_id required' });
 
 		const menus = await menuService.listMenus();
-		const filtered = menus.filter((m) => m.restaurant_id === businessID);
+		const filtered = menus.filter((m) => m.restaurant_id === restaurant_id);
 		res.json(filtered);
 	} catch (err) {
 		console.error('Error fetching menu:', err);

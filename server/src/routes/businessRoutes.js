@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const cookies = require('../utils/cookies');
 const businessService = require('../services/businessService');
-const userService = require('../services/userService');
+const userService = require('../services/businessUserService');
+const { db } = require('../services/firestoreInit');
 
 // @route   GET /api/businesses/
 // @desc    Get a list of all businesses
@@ -51,7 +52,18 @@ router.get('/:id', async (req, res) => {
 // @access  Public (no auth yet)
 router.post('/', async (req, res) => {
 	try {
-		const { name, url, address, allergens = [], diets = [] } = req.body;
+		const {
+			name,
+			url,
+			address_id,
+			address,
+			hours = [],
+			phone = '',
+			allergens = [],
+			diets = [],
+			disclaimers = [],
+			cuisine = '',
+		} = req.body;
 
 		const unnamed = name === 'New Business';
 		var existing;
@@ -68,16 +80,45 @@ router.post('/', async (req, res) => {
 			});
 		}
 
+		// validate phone (USA format ###-###-####) if provided
+		if (phone && !/^\d{3}-\d{3}-\d{4}$/.test(phone)) {
+			return res
+				.status(400)
+				.json({ error: 'phone must be in format ###-###-####' });
+		}
+
+		// if address_id provided, verify it exists
+		if (address_id) {
+			const addrRef = db.collection('addresses').doc(address_id);
+			const addrSnap = await addrRef.get();
+			if (!addrSnap.exists) {
+				return res.status(400).json({ error: 'address_id does not exist' });
+			}
+		}
+
 		const newBusiness = {
 			name: name.trim(),
 			website: url?.trim().toLowerCase() || 'None',
-			address_id: address?.trim(),
+			address_id: address_id || (address ? address.trim() : undefined),
+			hours: Array.isArray(hours) ? hours : [],
+			phone: phone || '',
 			allergens,
 			diets,
-			menus: [],
+			disclaimers: Array.isArray(disclaimers) ? disclaimers : [],
+			cuisine: cuisine || '',
+			// menu_id will be created and set after creating the menu
+			menu_id: null,
 		};
 
 		const savedBusiness = await businessService.createBusiness(newBusiness);
+
+		// Create a menu for the new restaurant and set the restaurant.menu_id
+		const menuService = require('../services/menuService');
+		try {
+			await menuService.createMenuForRestaurant(savedBusiness.id);
+		} catch (err) {
+			console.error('Failed to create menu for new restaurant:', err);
+		}
 
 		if (!savedBusiness) {
 			return res.status(400).json({
@@ -98,7 +139,11 @@ router.post('/', async (req, res) => {
 
 		cookies.updateCookie(res, 'isAdmin', user.admin);
 
-		return res.status(201).json(savedBusiness);
+		// Return business with its menus populated
+		const populated = await businessService.getBusinessWithMenus(
+			savedBusiness.id,
+		);
+		return res.status(201).json(populated);
 	} catch (err) {
 		console.error('Caught error:', err);
 
@@ -131,7 +176,19 @@ router.post('/', async (req, res) => {
 // @access  Public (no auth yet)
 router.put('/:id', async (req, res) => {
 	try {
-		const { name, url, address, allergens, diets, menus } = req.body;
+		const {
+			name,
+			url,
+			address_id,
+			address,
+			allergens,
+			diets,
+			menu_id,
+			hours,
+			phone,
+			disclaimers,
+			cuisine,
+		} = req.body;
 
 		// Check if another business already exists with the same name
 		const existingBusiness = await businessService.businessNameExists(
@@ -143,13 +200,32 @@ router.put('/:id', async (req, res) => {
 			return res.status(400).json({ error: 'Business name already exists.' });
 		}
 
+		// validate phone if present
+		if (phone && !/^\d{3}-\d{3}-\d{4}$/.test(phone)) {
+			return res
+				.status(400)
+				.json({ error: 'phone must be in format ###-###-####' });
+		}
+
+		if (address_id) {
+			const addrRef = db.collection('addresses').doc(address_id);
+			const addrSnap = await addrRef.get();
+			if (!addrSnap.exists) {
+				return res.status(400).json({ error: 'address_id does not exist' });
+			}
+		}
+
 		const updateObj = {
 			name: name?.trim(),
 			website: url?.trim().toLowerCase() || 'None',
-			address_id: address?.trim(),
+			address_id: address_id || (address ? address.trim() : undefined),
 			allergens,
 			diets,
-			menus,
+			menu_id: menu_id || null,
+			hours: Array.isArray(hours) ? hours : undefined,
+			phone: phone || undefined,
+			disclaimers: Array.isArray(disclaimers) ? disclaimers : undefined,
+			cuisine: cuisine || undefined,
 		};
 
 		const updatedBusiness = await businessService.updateBusiness(

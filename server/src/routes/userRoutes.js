@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const cookies = require('../utils/cookies');
 const bcrypt = require('bcrypt');
-const userService = require('../services/userService');
+const userService = require('../services/businessUserService');
 const businessService = require('../services/businessService');
 
 // @route   POST /api/auth/signin
