@@ -37,7 +37,7 @@ function SetUp({ step }) {
 		event.preventDefault();
 
 		try {
-			let businessId = localStorage.getItem('business_id');
+			let businessId = localStorage.getItem('businessId');
 
 			// Step 1: Create business if not already created
 			if (!businessId) {
@@ -66,7 +66,7 @@ function SetUp({ step }) {
 
 				const created = await response.json();
 				businessId = created.id;
-				localStorage.setItem('business_id', businessId);
+				localStorage.setItem('businessId', businessId);
 			}
 
 			// Step 2: Update business (layout, etc.)

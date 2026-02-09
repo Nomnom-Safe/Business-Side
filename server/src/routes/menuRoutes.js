@@ -22,14 +22,14 @@ router.get('/', async (req, res) => {
 	// @access  Public (no auth yet)
 	router.post('/', async (req, res) => {
 		try {
-			// Expect payload: { restaurant_id }
-			const { restaurant_id } = req.body;
+			// Expect payload: { businessId }
+			const { businessId } = req.body;
 
-			if (!restaurant_id) {
-				return res.status(400).json({ error: 'restaurant_id is required' });
+			if (!businessId) {
+				return res.status(400).json({ error: 'businessId is required' });
 			}
 
-			const savedMenu = await menuService.createMenuForRestaurant(restaurant_id);
+			const savedMenu = await menuService.createMenuForBusiness(businessId);
 
 			res.status(201).json(savedMenu);
 		} catch (err) {

@@ -112,12 +112,12 @@ router.post('/', async (req, res) => {
 
 		const savedBusiness = await businessService.createBusiness(newBusiness);
 
-		// Create a menu for the new restaurant and set the restaurant.menu_id
+		// Create a menu for the new business and set the business.menu_id
 		const menuService = require('../services/menuService');
 		try {
-			await menuService.createMenuForRestaurant(savedBusiness.id);
+			await menuService.createMenuForBusiness(savedBusiness.id);
 		} catch (err) {
-			console.error('Failed to create menu for new restaurant:', err);
+			console.error('Failed to create menu for new business:', err);
 		}
 
 		if (!savedBusiness) {

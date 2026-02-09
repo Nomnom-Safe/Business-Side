@@ -277,17 +277,17 @@ router.post('/edit-login', async (req, res) => {
 // @access  Public (no auth yet)
 router.post('/set-business', async (req, res) => {
 	try {
-		const { type, business_id } = req.body;
+		const { type, businessId } = req.body;
 		const { email } = req.cookies;
 
-		if (!business_id) {
+		if (!businessId) {
 			return res.status(400).json({
 				error: 'A business is required',
 				message: 'A business is required.',
 			});
 		}
 
-		const foundBusiness = await businessService.getBusinessById(business_id);
+		const foundBusiness = await businessService.getBusinessById(businessId);
 
 		if (!foundBusiness) {
 			return res.status(401).json({
@@ -301,12 +301,12 @@ router.post('/set-business', async (req, res) => {
 		try {
 			if (type === 'existing') {
 				updatedUser = await userService.updateUserByEmail(email, {
-					business_id: business_id,
+					business_id: businessId,
 					admin: false,
 				});
 			} else if (type === 'new') {
 				updatedUser = await userService.updateUserByEmail(email, {
-					business_id: business_id,
+					business_id: businessId,
 					admin: true,
 				});
 			}

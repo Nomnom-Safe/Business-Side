@@ -1,20 +1,20 @@
 const { z } = require('zod');
 
 /**
- * Restaurant Schema
+ * Business Schema
  *
- * Validates restaurant data structure for Firebase.
- * Each restaurant must have one address and one menu.
+ * Validates business data structure for Firebase.
+ * Each business must have one address and one menu.
  */
 
-const RestaurantSchema = z.object({
+const BusinessSchema = z.object({
 	id: z
 		.string()
 		.regex(
-			/^rstr_[a-z0-9]{11}$/,
-			"Restaurant ID must start with 'rstr_' followed by 11 lowercase alphanumeric characters",
+			/^bid_[a-z0-9]{11}$/,
+			"Business ID must start with 'bid_' followed by 11 lowercase alphanumeric characters",
 		),
-	name: z.string().min(1, 'Restaurant name is required'),
+	name: z.string().min(1, 'Business name is required'),
 	menu_id: z
 		.string()
 		.regex(
@@ -44,20 +44,20 @@ const RestaurantSchema = z.object({
 });
 
 /**
- * Schema for creating a new restaurant (without ID)
- * Use this when creating a new restaurant before generating the ID
+ * Schema for creating a new business (without ID)
+ * Use this when creating a new business before generating the ID
  */
-const CreateRestaurantSchema = RestaurantSchema.omit({ id: true });
+const CreateBusinessSchema = BusinessSchema.omit({ id: true });
 
 /**
- * Schema for updating a restaurant (all fields optional except ID)
+ * Schema for updating a business (all fields optional except ID)
  */
-const UpdateRestaurantSchema = RestaurantSchema.partial().required({
+const UpdateBusinessSchema = BusinessSchema.partial().required({
 	id: true,
 });
 
 module.exports = {
-	RestaurantSchema,
-	CreateRestaurantSchema,
-	UpdateRestaurantSchema,
+	BusinessSchema,
+	CreateBusinessSchema,
+	UpdateBusinessSchema,
 };

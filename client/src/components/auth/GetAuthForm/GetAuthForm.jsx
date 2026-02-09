@@ -96,7 +96,7 @@ function GetAuthForm({ formName }) {
 			if (response.ok) {
 				// Store business_id if it exists
 				if (result.business_id) {
-					localStorage.setItem('business_id', result.business_id);
+					localStorage.setItem('businessId', result.business_id);
 				}
 
 				if (getCookie('hasBusiness') === 'false') {

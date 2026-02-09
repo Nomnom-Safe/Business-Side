@@ -13,13 +13,12 @@ const MenuItemsPage = () => {
 	const menuTitle = location.state?.menuTitle || 'Untitled Menu';
 	const navigate = useNavigate();
 
-	// To be used in useEffect to fetch menuItems on intiial render, and to be called after handleDelete is used
+	// To be used in useEffect to fetch menuItems on initial render, and to be called after handleDelete is used
 	const fetchMenu = async () => {
 		try {
-			const businessID = localStorage.getItem('business_id');
-			const encodedTitle = encodeURIComponent(menuTitle);
+			const businessId = localStorage.getItem('businessId');
 			const res = await axios.get(
-				`http://localhost:5000/api/menuitems/menu?encodedMenuName=${encodedTitle}&businessID=${businessID}`,
+				`http://localhost:5000/api/menuitems/menu?businessId=${businessId}`,
 			);
 			setFetchedMenu(res.data);
 		} catch (err) {

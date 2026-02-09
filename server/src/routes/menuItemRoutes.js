@@ -7,20 +7,20 @@ const menuService = require('../services/menuService');
 // MenuItems.jsx
 //
 
-// @route GET /api/menuitems/menu/:menuname&:restaurant_id
+// @route GET /api/menuitems/menu/:businessId
 // @desc Get menu by menuTitle
 // @access Public
 router.get('/menu/', async (req, res) => {
 	try {
-		const { restaurant_id } = req.query;
+		const { businessId } = req.query;
 
-		if (!restaurant_id) {
-			return res.status(400).json({ error: 'restaurant_id is required' });
+		if (!businessId) {
+			return res.status(400).json({ error: 'businessId is required' });
 		}
 
-		// With the schema menus are identified by restaurant_id. Return the menu for the restaurant.
+		// With the schema, menus are identified by business_id. Return the menu for the business.
 		const menus = await menuService.listMenus();
-		const menu = menus.find((m) => m.restaurant_id === restaurant_id) || null;
+		const menu = menus.find((m) => m.business_id === businessId) || null;
 		res.status(200).json(menu || []);
 	} catch (err) {
 		console.error('Error fetching menu:', err);
@@ -136,13 +136,13 @@ router.post('/add-menu-item', async (req, res) => {
 /*
 router.get('/menuswap-menus', async (req, res) => {
 	try {
-		const { restaurant_id } = req.query;
+		const { businessId } = req.query;
 
-		if (!restaurant_id)
-			return res.status(400).json({ error: 'restaurant_id required' });
+		if (!businessId)
+			return res.status(400).json({ error: 'businessId required' });
 
 		const menus = await menuService.listMenus();
-		const filtered = menus.filter((m) => m.restaurant_id === restaurant_id);
+		const filtered = menus.filter((m) => m.business_id === businessId);
 		res.json(filtered);
 	} catch (err) {
 		console.error('Error fetching menu:', err);

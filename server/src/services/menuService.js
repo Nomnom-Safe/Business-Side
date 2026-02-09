@@ -2,27 +2,26 @@ const { db } = require('./firestoreInit');
 const { CreateMenuSchema } = require('../schemas/Menu');
 
 const menusCollection = db.collection('menus');
-const restaurantsCollection = db.collection('restaurants');
+const businessesCollection = db.collection('businesses');
 
 async function listMenus() {
 	const snap = await menusCollection.get();
 	return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 
-async function createMenuForRestaurant(restaurantId) {
+async function createMenuForBusiness(businessId) {
 	// Validate input using Zod
-	CreateMenuSchema.parse({ restaurant_id: restaurantId });
+	CreateMenuSchema.parse({ business_id: businessId });
 
-	// Ensure restaurant exists
-	const restRef = restaurantsCollection.doc(restaurantId);
+	// Ensure business exists
+	const restRef = businessesCollection.doc(businessId);
 	const restSnap = await restRef.get();
-	if (!restSnap.exists)
-		throw new Error('Referenced restaurant_id does not exist');
+	if (!restSnap.exists) throw new Error('Referenced businessId does not exist');
 
 	// Create menu
-	const ref = await menusCollection.add({ restaurant_id: restaurantId });
+	const ref = await menusCollection.add({ business_id: businessId });
 
-	// Update restaurant.menu_id
+	// Update business.menu_id
 	await restRef.update({ menu_id: ref.id });
 
 	const snap = await ref.get();
@@ -40,10 +39,10 @@ async function getMenuById(id) {
 		const doc = await menusCollection.doc(id).get();
 		if (!doc.exists) return null;
 		const menu = doc.data();
-		const restaurantId = menu.restaurant_id;
+		const businessId = menu.business_id;
 		await menusCollection.doc(id).delete();
-		if (restaurantId) {
-			await restaurantsCollection.doc(restaurantId).update({ menu_id: null });
+		if (businessId) {
+			await businessesCollection.doc(businessId).update({ menu_id: null });
 		}
 		return true;
 	}
@@ -54,12 +53,12 @@ async function deleteMenu(id) {
 	if (!doc.exists) return null;
 
 	const menu = doc.data();
-	const restaurantId = menu.restaurant_id;
+	const businessId = menu.business_id;
 
 	await menusCollection.doc(id).delete();
 
-	if (restaurantId) {
-		await restaurantsCollection.doc(restaurantId).update({ menu_id: null });
+	if (businessId) {
+		await businessesCollection.doc(businessId).update({ menu_id: null });
 	}
 
 	return true;
@@ -67,7 +66,7 @@ async function deleteMenu(id) {
 
 module.exports = {
 	listMenus,
-	createMenuForRestaurant,
+	createMenuForBusiness,
 	getMenuById,
 	deleteMenu,
 };

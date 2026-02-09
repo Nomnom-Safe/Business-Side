@@ -28,7 +28,7 @@ const MenuItemPicklist = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const businessID = localStorage.getItem('business_id');
+				const businessID = localStorage.getItem('businessId');
 				if (!businessID) return alert('No business ID found.');
 
 				// Get the menus based on business ID

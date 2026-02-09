@@ -79,7 +79,7 @@ function ChooseBusiness() {
 
 				if (response.ok) {
 					if (option === 'existing') {
-						localStorage.setItem('business_id', result.business_id);
+						localStorage.setItem('businessId', result.business_id);
 
 						setMessage(result.message);
 						setShowConfirmation(true);
@@ -124,7 +124,7 @@ function ChooseBusiness() {
 
 				const createdBusiness = await createBusinessResponse.json();
 				const businessId = createdBusiness.id;
-				localStorage.setItem('business_id', businessId);
+				localStorage.setItem('businessId', businessId);
 
 				// Create master menu
 				const createMenuResponse = await fetch(
@@ -136,10 +136,10 @@ function ChooseBusiness() {
 							'Content-Type': 'application/json',
 						},
 						body: JSON.stringify({
-							title: 'Master Menu',
-							description: 'This menu will be shown to customers',
-							restaurant: businessId,
-							menuItems: [],
+							// title: 'Master Menu',
+							// description: 'This menu will be shown to customers',
+							business_id: businessId,
+							// menuItems: [],
 						}),
 					},
 				);

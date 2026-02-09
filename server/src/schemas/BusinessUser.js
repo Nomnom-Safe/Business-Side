@@ -17,8 +17,8 @@ const BusinessUserSchema = z.object({
 	business_id: z
 		.string()
 		.regex(
-			/^rstr_[a-z0-9]{11}$/,
-			"Restaurant ID must start with 'rstr_' followed by 11 lowercase alphanumeric characters",
+			/^bid_[a-z0-9]{11}$/,
+			"Business ID must start with 'bid_' followed by 11 lowercase alphanumeric characters",
 		),
 	first_name: z.string().min(1, 'First name is required'),
 	last_name: z.string().min(1, 'Last name is required'),

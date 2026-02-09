@@ -15,7 +15,7 @@ const EditBusinessInfo = () => {
 	const [showConfirmation, setShowConfirmation] = useState(false);
 	const navigate = useNavigate();
 
-	const businessId = localStorage.getItem('business_id'); // Get from localStorage
+	const businessId = localStorage.getItem('businessId'); // Get from localStorage
 
 	useEffect(() => {
 		const fetchBusinessInfo = async () => {

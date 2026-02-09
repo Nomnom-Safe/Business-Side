@@ -1,15 +1,15 @@
 const { db } = require('./firestoreInit');
 const {
-	CreateRestaurantSchema,
-	UpdateRestaurantSchema,
-} = require('../schemas/Restaurant');
+	CreateBusinessSchema,
+	UpdateBusinessSchema,
+} = require('../schemas/Business');
 
-const restaurantsCollection = db.collection('restaurants');
+const businessesCollection = db.collection('businesses');
 const menusCollection = db.collection('menus');
 const menuItemsCollection = db.collection('menu_items');
 
 async function listBusinesses() {
-	const snap = await restaurantsCollection.get();
+	const snap = await businessesCollection.get();
 	return snap.docs.map((d) => ({
 		id: d.id,
 		name: d.data().name,
@@ -17,7 +17,7 @@ async function listBusinesses() {
 }
 
 async function getBusinessById(id) {
-	const doc = await restaurantsCollection.doc(id).get();
+	const doc = await businessesCollection.doc(id).get();
 	if (!doc.exists) return null;
 	return { id: doc.id, ...doc.data() };
 }
@@ -26,9 +26,7 @@ async function getBusinessWithMenus(id) {
 	const business = await getBusinessById(id);
 	if (!business) return null;
 
-	const menusSnap = await menusCollection
-		.where('restaurant_id', '==', id)
-		.get();
+	const menusSnap = await menusCollection.where('business_id', '==', id).get();
 
 	const menus = await Promise.all(
 		menusSnap.docs.map(async (mDoc) => {
@@ -47,20 +45,20 @@ async function getBusinessWithMenus(id) {
 }
 
 async function createBusiness(businessObj) {
-	const valid = CreateRestaurantSchema.parse(businessObj);
+	const valid = CreateBusinessSchema.parse(businessObj);
 	valid.menu_id = null; // Ensure menu_id initialized to null
-	const ref = await restaurantsCollection.add(valid);
+	const ref = await businessesCollection.add(valid);
 	const snap = await ref.get();
 	return { id: ref.id, ...snap.data() };
 }
 
 async function updateBusiness(id, updateObj) {
-	const docRef = restaurantsCollection.doc(id);
+	const docRef = businessesCollection.doc(id);
 	const snap = await docRef.get();
 	if (!snap.exists) return null;
 
 	const merged = { id, ...snap.data(), ...updateObj };
-	const valid = UpdateRestaurantSchema.parse(merged);
+	const valid = UpdateBusinessSchema.parse(merged);
 
 	await docRef.update(valid);
 	const updated = await docRef.get();
@@ -68,7 +66,7 @@ async function updateBusiness(id, updateObj) {
 }
 
 async function deleteBusiness(id) {
-	const docRef = restaurantsCollection.doc(id);
+	const docRef = businessesCollection.doc(id);
 	const snap = await docRef.get();
 	if (!snap.exists) return null;
 	await docRef.delete();
@@ -76,7 +74,7 @@ async function deleteBusiness(id) {
 }
 
 async function businessNameExists(name, excludeId = null) {
-	const snap = await restaurantsCollection
+	const snap = await businessesCollection
 		.where('name', '==', name.trim())
 		.get();
 	if (snap.empty) return false;

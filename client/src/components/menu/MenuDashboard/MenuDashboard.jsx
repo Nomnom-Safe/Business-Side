@@ -19,9 +19,9 @@ function MenuDashboard() {
 	// Fetch menus from backend on initial render
 	useEffect(() => {
 		const fetchMenus = async () => {
-			const businessId = localStorage.getItem('business_id');
+			const businessId = localStorage.getItem('businessId');
 			if (!businessId) {
-				console.warn('No business_id in localStorage');
+				console.warn('No businessId in localStorage');
 				return;
 			}
 			try {
@@ -63,7 +63,7 @@ function MenuDashboard() {
 	/* Non-MVP Feature: Adding new menus.
 		// Add a new menu to backend and update state
 		const handleAddMenu = async () => {
-			const businessId = localStorage.getItem('business_id');
+			const businessId = localStorage.getItem('businessId');
 			if (!businessId) {
 				console.error('No business ID found in localStorage.');
 				return;
@@ -71,10 +71,10 @@ function MenuDashboard() {
 
 			try {
 				const res = await axios.post('http://localhost:5000/api/menus', {
-					title: 'Untitled Menu',
-					description: 'New menu created',
-					restaurant: businessId,
-					menuItems: [],
+					// title: 'Untitled Menu',
+					// description: 'New menu created',
+					business_id: businessId,
+					// menuItems: [],
 				});
 
 				const newMenu = { ...res.data, isEditable: true };

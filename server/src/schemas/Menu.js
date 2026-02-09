@@ -4,7 +4,7 @@ const { z } = require('zod');
  * Menu Schema
  *
  * Validates menu data for Firebase.
- * Each restaurant must have only one menu.
+ * Each business must have only one menu.
  */
 
 const MenuSchema = z.object({
@@ -14,11 +14,11 @@ const MenuSchema = z.object({
 			/^menu_[a-z0-9]{11}$/,
 			"Menu ID must start with 'menu_' followed by 11 lowercase alphanumeric characters",
 		),
-	restaurant_id: z
+	business_id: z
 		.string()
 		.regex(
-			/^rstr_[a-z0-9]{11}$/,
-			"Restaurant ID must start with 'rstr_' followed by 11 lowercase alphanumeric characters",
+			/^bid_[a-z0-9]{11}$/,
+			"Business ID must start with 'bid_' followed by 11 lowercase alphanumeric characters",
 		),
 });
 
