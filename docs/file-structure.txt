@@ -52,6 +52,10 @@ Business-Side/
 │   │   │   │   └── SignInUp/
 │   │   │   │       ├── SignInUp.jsx
 │   │   │   │       └── SignInUp.scss
+│   │   │   ├── business/
+│   │   │   │   └── EditBusinessInfo/
+│   │   │   │       ├── EditBusinessInfo.jsx
+│   │   │   │       └── EditBusinessInfo.scss
 │   │   │   ├── common/
 │   │   │   │   ├── ConfirmationMessage/
 │   │   │   │   │   └── ConfirmationMessage.jsx
@@ -84,10 +88,6 @@ Business-Side/
 │   │   │   │       └── MenuItemSwap.scss
 │   │   │   ├── ProtectedRoute/
 │   │   │   │   └── ProtectedRoute.jsx
-│   │   │   ├── restaurant/
-│   │   │   │   └── EditBusinessInfo/
-│   │   │   │       ├── EditBusinessInfo.jsx
-│   │   │   │       └── EditBusinessInfo.scss
 │   │   │   └── setup/
 │   │   │       ├── ChooseBusiness/
 │   │   │       │   ├── ChooseBusiness.jsx
@@ -121,6 +121,11 @@ Business-Side/
 │   │   │   │   ├── milestones.md
 │   │   │   │   ├── milestones.pdf
 │   │   │   │   └── requirements.md
+│   │   │   ├── week4/
+│   │   │   │   ├── project-statistics-detailed.md
+│   │   │   │   ├── week4-presentation.md
+│   │   │   │   ├── week4-presentation.pdf
+│   │   │   │   └── week4-progress-report.md
 │   │   │   ├── ppp-dinius.md
 │   │   │   └── ppp-dinius.pdf
 │   │   └── jeff-perdue/
@@ -137,7 +142,8 @@ Business-Side/
 │   │   └── TestingModule.md
 │   ├── file-structure.txt
 │   ├── Requirements.md
-│   └── UserManual.md
+│   ├── UserManual.md
+│   └── ZOD_QUICK_START.md
 ├── scripts/
 │   ├── compare_tree.py
 │   ├── loc_counter.py
@@ -150,38 +156,33 @@ Business-Side/
 │   │       └── testDb.test.js
 │   ├── src/
 │   │   ├── config/
-│   │   │   ├── db.test.js
 │   │   │   └── firebase.js
 │   │   ├── middleware/
 │   │   │   └── auth.js
-│   │   ├── models/
-│   │   │   ├── Business.js
-│   │   │   ├── Business.test.js
-│   │   │   ├── Menu.js
-│   │   │   ├── Menu.test.js
-│   │   │   ├── MenuItem.js
-│   │   │   ├── MenuItem.test.js
-│   │   │   ├── User.js
-│   │   │   └── User.test.js
 │   │   ├── routes/
+│   │   │   ├── addressRoutes.js
 │   │   │   ├── adminRoutes.js
-│   │   │   ├── adminRoutes.test.js
 │   │   │   ├── allergenRoutes.js
 │   │   │   ├── businessRoutes.js
-│   │   │   ├── businessRoutes.test.js
 │   │   │   ├── menuItemRoutes.js
-│   │   │   ├── menuItemRoutes.test.js
 │   │   │   ├── menuRoutes.js
-│   │   │   ├── menuRoutes.test.js
-│   │   │   ├── userRoutes.js
-│   │   │   └── userRoutes.test.js
+│   │   │   └── userRoutes.js
+│   │   ├── schemas/
+│   │   │   ├── Address.js
+│   │   │   ├── Allergen.js
+│   │   │   ├── Business.js
+│   │   │   ├── BusinessUser.js
+│   │   │   ├── index.js
+│   │   │   ├── Menu.js
+│   │   │   ├── MenuItem.js
+│   │   │   └── README.md
 │   │   ├── services/
+│   │   │   ├── addressService.js
 │   │   │   ├── businessService.js
+│   │   │   ├── businessUserService.js
 │   │   │   ├── firestoreInit.js
-│   │   │   ├── firestoreService.js
 │   │   │   ├── menuItemService.js
-│   │   │   ├── menuService.js
-│   │   │   └── userService.js
+│   │   │   └── menuService.js
 │   │   └── utils/
 │   │       └── cookies.js
 │   ├── package.json
@@ -189,4 +190,5 @@ Business-Side/
 │   └── server.js
 ├── archiving_explainer.md
 ├── package.json
-└── README.md
+├── README.md
+└── troubleshooting_explainer_2_9_26.md

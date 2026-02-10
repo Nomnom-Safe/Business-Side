@@ -203,6 +203,18 @@ This week focused on:
 
 # Metrics
 
+### Total Project Statistics
+
+- LOC: 6,858
+- Production LOC: 6,851
+- Test LOC: 7
+- File count: 82
+- Test file count: 4
+
+---
+
+# Metrics
+
 ### 🔥 **Week 4 Burndown Rates**
 
 - 1/1 Week 4 feature completed

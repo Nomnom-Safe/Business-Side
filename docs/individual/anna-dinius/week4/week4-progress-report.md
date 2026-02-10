@@ -138,3 +138,22 @@ Suggested next tests:
 ### Completion summary
 
 This commit range completed a focused migration from model objects to `zod` schemas and service-oriented server code, consistent renaming from `restaurant` → `business`, and added address/allergen support needed by the client. The repo is in a cleaner state with clearer server-side validation; next steps are test updates, performance tuning for client-side allergen lookups, and debugging.
+
+### Metrics
+
+🔥 **Burndown Rates**
+
+- 1/1 Week 4 feature completed
+  - 100% total
+  - ~14% per day
+- 8/8 Week 4 requirements completed
+  - 100% total
+  - ~14% per day
+- 1/4 Sprint 1 total features completed
+  - 25% total
+  - 25% per week
+  - ~3% per day
+- 8/41 Sprint 1 total requirements completed
+  - ~19% total
+  - ~19% per week
+  - ~3% per day
