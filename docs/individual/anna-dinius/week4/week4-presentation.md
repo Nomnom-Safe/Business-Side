@@ -198,3 +198,31 @@ This week focused on:
    ```powershell
    npm run dev
    ```
+
+---
+
+# Metrics
+
+### 🔥 **Week 4 Burndown Rates**
+
+- 1/1 Week 4 feature completed
+  - 100% total
+  - ~14% per day
+- 8/8 Week 4 requirements completed
+  - 100% total
+  - ~14% per day
+
+---
+
+# Metrics (Continued)
+
+### 🔥 **Sprint 1 Burndown Rates**
+
+- 1/4 Sprint 1 total features completed
+  - 25% total
+  - 25% per week
+  - ~3% per day
+- 8/41 Sprint 1 total requirements completed
+  - ~19% total
+  - ~19% per week
+  - ~3% per day
