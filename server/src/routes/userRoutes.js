@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
 const cookies = require('../utils/cookies');
-const Business = require('../models/Business');
+const bcrypt = require('bcrypt');
+const userService = require('../services/businessUserService');
+const businessService = require('../services/businessService');
 
 // @route   POST /api/auth/signin
 // @desc    Get a user
@@ -19,7 +20,7 @@ router.post('/signin', async (req, res) => {
 			});
 		}
 
-		const foundUser = await User.findOne({ email: email });
+		const foundUser = await userService.getUserByEmail(email);
 
 		if (!foundUser) {
 			// Email is wrong or doesn't exist
@@ -30,7 +31,7 @@ router.post('/signin', async (req, res) => {
 		}
 
 		// Check that the password is correct
-		const passwordMatches = await foundUser.comparePassword(password);
+		const passwordMatches = await bcrypt.compare(password, foundUser.password);
 
 		if (!passwordMatches) {
 			// Password is wrong
@@ -40,18 +41,21 @@ router.post('/signin', async (req, res) => {
 			});
 		}
 
-		// Set cookies
-		cookies.setCookies(res, foundUser);
+		// Extract id token from request (client may provide it after Firebase sign-in)
+		const idToken =
+			req.body.idToken ||
+			(req.get('Authorization') || '').replace('Bearer ', '') ||
+			null;
+
+		// Set cookies (include token if provided)
+		cookies.setCookies(res, foundUser, idToken ? { token: idToken } : {});
 
 		// Get business name
 		if (foundUser.business_id === '') {
 			cookies.updateCookie(res, 'hasBusiness', false);
 		} else {
-			const foundBusiness = await Business.findOne(
-				{ _id: foundUser.business_id },
-				{
-					name: 1,
-				},
+			const foundBusiness = await businessService.getBusinessById(
+				foundUser.business_id,
 			);
 
 			if (!foundBusiness) {
@@ -95,10 +99,7 @@ router.post('/signup', async (req, res) => {
 		}
 
 		// Get User document from the DB if the email already exists
-		const userExists = await User.findOne(
-			{ email: email },
-			{ email: 1, _id: 0 },
-		);
+		const userExists = await userService.getUserByEmail(email);
 
 		if (userExists) {
 			// Email already exists in DB
@@ -109,7 +110,8 @@ router.post('/signup', async (req, res) => {
 		}
 
 		// Create new User document from request body
-		const newUser = new User({
+
+		const newUser = {
 			first_name,
 			last_name,
 			email,
@@ -117,10 +119,10 @@ router.post('/signup', async (req, res) => {
 			business_id: '',
 			menu_item_layout: 0,
 			admin: false,
-		});
+		};
 
-		// Save new user to DB
-		const savedUser = await newUser.save();
+		// Save new user to Firestore
+		const savedUser = await userService.createUser(newUser);
 
 		if (!savedUser) {
 			// User was not saved
@@ -130,8 +132,14 @@ router.post('/signup', async (req, res) => {
 			});
 		}
 
-		// Set cookies
-		cookies.setCookies(res, newUser);
+		// Extract id token if provided by client
+		const idToken =
+			req.body.idToken ||
+			(req.get('Authorization') || '').replace('Bearer ', '') ||
+			null;
+
+		// Set cookies (include token if provided)
+		cookies.setCookies(res, savedUser, idToken ? { token: idToken } : {});
 
 		// Send response
 		return res.status(201).json(savedUser);
@@ -178,10 +186,7 @@ router.post('/edit-login', async (req, res) => {
 		// Handle email change
 		if (credType === 'email') {
 			// Check that the new email does not already exist in the DB
-			const emailExists = await User.findOne(
-				{ email: newCred },
-				{ email: 1, _id: 0 },
-			);
+			const emailExists = await userService.getUserByEmail(newCred);
 
 			if (emailExists) {
 				// Email already exists in the DB
@@ -192,11 +197,9 @@ router.post('/edit-login', async (req, res) => {
 			}
 
 			// Update the user's email in the DB
-			const updatedUser = await User.findOneAndUpdate(
-				{ email: currentEmail },
-				{ $set: { email: newCred } },
-				{ new: true, fields: { email: 1, _id: 0 } },
-			);
+			const updatedUser = await userService.updateUserByEmail(currentEmail, {
+				email: newCred,
+			});
 
 			if (updatedUser && updatedUser.email !== newCred) {
 				// Email was not saved to the DB
@@ -218,9 +221,7 @@ router.post('/edit-login', async (req, res) => {
 		// Handle password change
 		if (credType === 'password') {
 			// Get User document from the DB
-			const user = await User.findOne({
-				email: currentEmail,
-			});
+			const user = await userService.getUserByEmail(currentEmail);
 
 			if (!user) {
 				// Email does not exist in the DB
@@ -231,7 +232,7 @@ router.post('/edit-login', async (req, res) => {
 			}
 
 			// Check that the current password is correct
-			const currentMatchesDb = await user.comparePassword(currentCred);
+			const currentMatchesDb = await bcrypt.compare(currentCred, user.password);
 
 			if (!currentMatchesDb) {
 				// Current password is incorrect
@@ -249,9 +250,8 @@ router.post('/edit-login', async (req, res) => {
 				});
 			}
 
-			// Change and save user password (save() is required for hashing)
-			user.password = newCred;
-			await user.save();
+			// Change and save user password (hashing handled by service)
+			await userService.updateUserByEmail(currentEmail, { password: newCred });
 
 			// Send response
 			return res.status(200).json({
@@ -277,17 +277,17 @@ router.post('/edit-login', async (req, res) => {
 // @access  Public (no auth yet)
 router.post('/set-business', async (req, res) => {
 	try {
-		const { type, business_id } = req.body;
+		const { type, businessId } = req.body;
 		const { email } = req.cookies;
 
-		if (!business_id) {
+		if (!businessId) {
 			return res.status(400).json({
 				error: 'A business is required',
 				message: 'A business is required.',
 			});
 		}
 
-		const foundBusiness = await Business.findById(business_id);
+		const foundBusiness = await businessService.getBusinessById(businessId);
 
 		if (!foundBusiness) {
 			return res.status(401).json({
@@ -300,16 +300,15 @@ router.post('/set-business', async (req, res) => {
 
 		try {
 			if (type === 'existing') {
-				updatedUser = await User.findOneAndUpdate(
-					{ email: email },
-					{ $set: { business_id: business_id, admin: false } },
-				);
+				updatedUser = await userService.updateUserByEmail(email, {
+					business_id: businessId,
+					admin: false,
+				});
 			} else if (type === 'new') {
-				updatedUser = await User.findOneAndUpdate(
-					{ email: email },
-					{ $set: { business_id: business_id, admin: true } },
-					{ new: true },
-				);
+				updatedUser = await userService.updateUserByEmail(email, {
+					business_id: businessId,
+					admin: true,
+				});
 			}
 		} catch (err) {
 			console.error('Error updating user:', err);
@@ -335,7 +334,7 @@ router.post('/set-business', async (req, res) => {
 			// Include business_id in response
 			res.status(200).json({
 				message: `You have been added to ${foundBusiness.name} successfully.`,
-				business_id: foundBusiness._id,
+				business_id: foundBusiness.id,
 			});
 		} else if (type === 'new') {
 			res.status(200).json({ message: 'Business template created.' });

@@ -32,7 +32,7 @@ function ChooseBusiness() {
 					const businesses = result
 						.filter((business) => business.name !== 'New Business')
 						.map((business) => ({
-							value: business._id,
+							value: business.id,
 							label: business.name,
 						}));
 
@@ -79,7 +79,7 @@ function ChooseBusiness() {
 
 				if (response.ok) {
 					if (option === 'existing') {
-						localStorage.setItem('business_id', result.business_id);
+						localStorage.setItem('businessId', result.business_id);
 
 						setMessage(result.message);
 						setShowConfirmation(true);
@@ -107,7 +107,7 @@ function ChooseBusiness() {
 						},
 						body: JSON.stringify({
 							name: `New Business - ${Date.now()}`,
-							url: '',
+							website: '',
 							address: '',
 							allergens: [],
 							diets: [],
@@ -121,37 +121,13 @@ function ChooseBusiness() {
 					setShowError(true);
 					return;
 				}
-
-				// Reuse result instead of calling .json() again (body stream can only be read once)
-				const createdBusiness = result;
-				const businessId = createdBusiness._id;
-				localStorage.setItem('business_id', businessId);
-
-				// Create master menu
-				const createMenuResponse = await fetch(
-					'http://localhost:5000/api/menus',
-					{
-						method: 'POST',
-						credentials: 'include',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({
-							title: 'Master Menu',
-							description: 'This menu will be shown to customers',
-							restaurant: businessId,
-							menuItems: [],
-						}),
-					},
-				);
-
-				if (!createMenuResponse.ok) {
-					const result = await createMenuResponse.json();
-					setMessage(result.message || 'Failed to create menu');
-					setShowError(true);
-					return;
-				}
-
+				
+				const businessId = result.id;
+				localStorage.setItem('businessId', businessId);
+				
+				// Menu is automatically created by the backend when creating a business
+				// No need to create it separately here
+				
 				// Associate business with user
 				const assignResponse = await fetch(
 					'http://localhost:5000/api/auth/set-business',
@@ -163,7 +139,7 @@ function ChooseBusiness() {
 						},
 						body: JSON.stringify({
 							type: 'new',
-							business_id: businessId,
+							businessId: businessId,
 						}),
 					},
 				);

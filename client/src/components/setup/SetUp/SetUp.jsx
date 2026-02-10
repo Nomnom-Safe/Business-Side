@@ -11,7 +11,7 @@ function SetUp({ step }) {
 	const [formData, setFormData] = useState({
 		// Step 1 data
 		name: '',
-		url: '',
+		website: '',
 		address: '',
 		// Step 2 data
 		allergens: [],
@@ -37,7 +37,7 @@ function SetUp({ step }) {
 		event.preventDefault();
 
 		try {
-			let businessId = localStorage.getItem('business_id');
+			let businessId = localStorage.getItem('businessId');
 
 			// Step 1: Create business if not already created
 			if (!businessId) {
@@ -46,7 +46,7 @@ function SetUp({ step }) {
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({
 						name: formData.name,
-						url: formData.url,
+						website: formData.website,
 						address: formData.address,
 						allergens: formData.allergens,
 						diets: formData.diets,
@@ -65,8 +65,8 @@ function SetUp({ step }) {
 				}
 
 				const created = await response.json();
-				businessId = created._id;
-				localStorage.setItem('business_id', businessId);
+				businessId = created.id;
+				localStorage.setItem('businessId', businessId);
 			}
 
 			// Step 2: Update business (layout, etc.)
@@ -77,7 +77,7 @@ function SetUp({ step }) {
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({
 						name: formData.name,
-						url: formData.url,
+						website: formData.website,
 						address: formData.address,
 						allergens: formData.allergens,
 						diets: formData.diets,

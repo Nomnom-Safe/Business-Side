@@ -1,21 +1,13 @@
-// Load environment variables from .env (MongoDB connection string)
+// Load environment variables
 require('dotenv').config();
 
-// Import Express framework and MongoDB connection logic
+// Initialize Express and Firebase Admin (Firestore)
 const express = require('express');
-const connectDB = require('./src/config/db');
-const mongoose = require('mongoose');
+// Initialize Firebase Admin (firestoreInit performs idempotent init)
+const { admin, db } = require('./src/services/firestoreInit');
 
-mongoose
-	.connect(process.env.MONGO_URI)
-	.then(() => console.log('Connected to MongoDB'))
-	.catch((err) => console.error('Error connecting to MongoDB:', err));
 // Create an instance of an Express application
 const app = express();
-
-// Connect to MongoDB using Mongoose
-// This uses the MONGO_URI defined in the .env file
-connectDB();
 
 // Tells Express to automatically parse incoming JSON in requests
 app.use(express.json());
@@ -45,6 +37,15 @@ app.use('/api/menuitems', menuItemRoutes);
 const auth = require('./src/routes/userRoutes');
 app.use('/api/auth', auth);
 
+// Allergen routes (provide id/label mapping for client)
+const allergenRoutes = require('./src/routes/allergenRoutes');
+app.use('/api/allergens', allergenRoutes);
+
+// Addresses routes (allow creating address documents to reference by businesses)
+const addressRoutes = require('./src/routes/addressRoutes');
+app.use('/api/addresses', addressRoutes);
+
+// Admin routes archived (no longer mounted). See server/src/routes/adminRoutes.js for legacy code.
 // ARCHIVED: Admin Features - Not part of MVP (single user per business)
 // const admin = require('./src/routes/adminRoutes');
 // app.use('/api/admin', admin);

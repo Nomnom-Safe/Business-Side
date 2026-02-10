@@ -1,17 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const Business = require('../models/Business');
-const User = require('../models/User');
 const cookies = require('../utils/cookies');
+const businessService = require('../services/businessService');
+const userService = require('../services/businessUserService');
+const { db } = require('../services/firestoreInit');
 
 // @route   GET /api/businesses/
 // @desc    Get a list of all businesses
 // @access  Public (no auth yet)
 router.get('/', async (req, res) => {
 	try {
-		const businesses = await Business.find({}, { name: 1, _id: 1 });
+		const businesses = await businessService.listBusinesses();
 
-		if (businesses.length <= 0) {
+		if (!businesses || businesses.length <= 0) {
 			// No businesses exist in the DB
 			return res.status(404).json({
 				error: 'No businesses found',
@@ -33,18 +34,25 @@ router.get('/', async (req, res) => {
 // @access  Public (no auth yet)
 router.get('/:id', async (req, res) => {
 	try {
-		const business = await Business.findById(req.params.id)
-			.populate({
-				path: 'menus',
-				select: 'title description _id restaurant',
-			})
-			.lean();
+		const business = await businessService.getBusinessWithMenus(req.params.id);
 
 		if (!business) {
 			return res.status(404).json({ error: 'Business not found' });
 		}
 
-		res.json(business);
+		res.json({
+			id: business.id,
+			name: business.name || '',
+			website: business.website || '',
+			address: business.address_id,
+			allergens: business.allergens || [],
+			diets: business.diets || [],
+			phone: business.phone || '000-000-0000',
+			hours: business.hours || [],
+			disclaimers: business.disclaimers || [],
+			cuisine: business.cuisine || '',
+			menus: business.menus,
+		});
 	} catch (err) {
 		console.error('GET /:id error:', err);
 		res.status(500).json({ error: 'Could not fetch business' });
@@ -56,33 +64,73 @@ router.get('/:id', async (req, res) => {
 // @access  Public (no auth yet)
 router.post('/', async (req, res) => {
 	try {
-		const { name, url, address, allergens = [], diets = [] } = req.body;
+		const {
+			name,
+			website,
+			address_id,
+			address,
+			hours = [],
+			phone = '',
+			allergens = [],
+			diets = [],
+			disclaimers = [],
+			cuisine = '',
+		} = req.body;
 
 		const unnamed = name === 'New Business';
 		var existing;
 
-		// Check for existing business with the same name (including "New Business")
-		if (name && name.trim() !== '') {
-			existing = await Business.findOne({ name: name.trim() });
+		if (!unnamed && name !== '') {
+			existing = await businessService.businessNameExists(name);
 		}
 
 		if (existing) {
 			return res.status(400).json({
 				error: 'Business name already exists',
-				message: 'A business with this name already exists. Please choose a different name.',
+				message:
+					'A business with this name already exists. Please choose a different name.',
 			});
 		}
 
-		const newBusiness = new Business({
+		// validate phone (USA format ###-###-####) if provided
+		if (phone && !/^\d{3}-\d{3}-\d{4}$/.test(phone)) {
+			return res
+				.status(400)
+				.json({ error: 'phone must be in format ###-###-####' });
+		}
+
+		// if address_id provided, verify it exists
+		if (address_id) {
+			const addrRef = db.collection('addresses').doc(address_id);
+			const addrSnap = await addrRef.get();
+			if (!addrSnap.exists) {
+				return res.status(400).json({ error: 'address_id does not exist' });
+			}
+		}
+
+		const newBusiness = {
 			name: name.trim(),
-			url: url?.trim().toLowerCase(),
-			address: address?.trim(),
+			website: website?.trim().toLowerCase() || 'None',
+			address_id: address_id || (address ? address.trim() : undefined),
+			hours: Array.isArray(hours) ? hours : [],
+			phone: phone || '',
 			allergens,
 			diets,
-			menus: [],
-		});
+			disclaimers: Array.isArray(disclaimers) ? disclaimers : [],
+			cuisine: cuisine || '',
+			// menu_id will be created and set after creating the menu
+			menu_id: null,
+		};
 
-		const savedBusiness = await newBusiness.save();
+		const savedBusiness = await businessService.createBusiness(newBusiness);
+
+		// Create a menu for the new business and set the business.menu_id
+		const menuService = require('../services/menuService');
+		try {
+			await menuService.createMenuForBusiness(savedBusiness.id);
+		} catch (err) {
+			console.error('Failed to create menu for new business:', err);
+		}
 
 		if (!savedBusiness) {
 			return res.status(400).json({
@@ -92,7 +140,7 @@ router.post('/', async (req, res) => {
 		}
 
 		const email = req.cookies.email;
-		const user = await User.findOne({ email: email });
+		const user = await userService.getUserByEmail(email);
 
 		if (!user) {
 			return res.status(400).json({
@@ -103,18 +151,23 @@ router.post('/', async (req, res) => {
 
 		cookies.updateCookie(res, 'isAdmin', user.admin);
 
-		return res.status(201).json(savedBusiness);
+		// Return business with its menus populated
+		const populated = await businessService.getBusinessWithMenus(
+			savedBusiness.id,
+		);
+		return res.status(201).json(populated);
 	} catch (err) {
 		console.error('Caught error:', err);
-		
+
 		// Handle duplicate key error (unique constraint violation)
 		if (err.code === 11000 || err.message.includes('duplicate key')) {
 			return res.status(400).json({
 				error: 'Business name already exists',
-				message: 'A business with this name already exists. Please choose a different name.',
+				message:
+					'A business with this name already exists. Please choose a different name.',
 			});
 		}
-		
+
 		// Handle validation errors
 		if (err.name === 'ValidationError') {
 			return res.status(400).json({
@@ -122,7 +175,7 @@ router.post('/', async (req, res) => {
 				message: err.message || 'Invalid business data provided.',
 			});
 		}
-		
+
 		res.status(400).json({
 			error: 'Error creating business: ' + err.message,
 			message: 'Failed to create business. Please try again.',
@@ -135,29 +188,61 @@ router.post('/', async (req, res) => {
 // @access  Public (no auth yet)
 router.put('/:id', async (req, res) => {
 	try {
-		const { name, url, address, allergens, diets, menus } = req.body;
+		const {
+			name,
+			website,
+			address_id,
+			address,
+			allergens,
+			diets,
+			menu_id,
+			hours,
+			phone,
+			disclaimers,
+			cuisine,
+		} = req.body;
 
 		// Check if another business already exists with the same name
-		const existingBusiness = await Business.findOne({
-			name: name?.trim(),
-			_id: { $ne: req.params.id }, // Exclude the current business from the check
-		});
+		const existingBusiness = await businessService.businessNameExists(
+			name,
+			req.params.id,
+		);
 
 		if (existingBusiness) {
 			return res.status(400).json({ error: 'Business name already exists.' });
 		}
 
-		const updatedBusiness = await Business.findByIdAndUpdate(
+		// validate phone if present
+		if (phone && !/^\d{3}-\d{3}-\d{4}$/.test(phone)) {
+			return res
+				.status(400)
+				.json({ error: 'phone must be in format ###-###-####' });
+		}
+
+		if (address_id) {
+			const addrRef = db.collection('addresses').doc(address_id);
+			const addrSnap = await addrRef.get();
+			if (!addrSnap.exists) {
+				return res.status(400).json({ error: 'address_id does not exist' });
+			}
+		}
+
+		const updateObj = {
+			name: name?.trim(),
+			website: website?.trim().toLowerCase() || 'None',
+			address_id: address_id || (address ? address.trim() : undefined),
+			allergens,
+			diets,
+			menu_id: menu_id || null,
+			hours: Array.isArray(hours) ? hours : undefined,
+			phone: phone || undefined,
+			disclaimers: Array.isArray(disclaimers) ? disclaimers : undefined,
+			cuisine: cuisine || undefined,
+		};
+
+		const updatedBusiness = await businessService.updateBusiness(
 			req.params.id,
-			{
-				name: name?.trim(),
-				url: url?.trim().toLowerCase(),
-				address: address?.trim(),
-				allergens,
-				diets,
-				menus,
-			},
-			{ new: true },
+			updateObj,
 		);
 
 		if (!updatedBusiness)
@@ -175,9 +260,8 @@ router.put('/:id', async (req, res) => {
 // @access  Public (no auth yet)
 router.delete('/:id', async (req, res) => {
 	try {
-		const deletedBusiness = await Business.findByIdAndDelete(req.params.id);
-		if (!deletedBusiness)
-			return res.status(404).json({ error: 'Business not found' });
+		const deleted = await businessService.deleteBusiness(req.params.id);
+		if (!deleted) return res.status(404).json({ error: 'Business not found' });
 		res.json({ message: 'Business deleted successfully' });
 	} catch (err) {
 		res.status(500).json({ error: 'Could not delete business' });

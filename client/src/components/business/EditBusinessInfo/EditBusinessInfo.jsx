@@ -5,17 +5,22 @@ import './EditBusinessInfo.scss';
 
 const EditBusinessInfo = () => {
 	const [businessInfo, setBusinessInfo] = useState({
+		id: '',
 		name: '',
-		url: '',
-		address: '',
+		address_id: '',
 		allergens: '',
 		diets: '',
+		phone: '',
+		hours: [],
+		website: '',
+		disclaimers: [],
+		cuisine: '',
 	});
 
 	const [showConfirmation, setShowConfirmation] = useState(false);
 	const navigate = useNavigate();
 
-	const businessId = localStorage.getItem('business_id'); // Get from localStorage
+	const businessId = localStorage.getItem('businessId'); // Get from localStorage
 
 	useEffect(() => {
 		const fetchBusinessInfo = async () => {
@@ -33,11 +38,16 @@ const EditBusinessInfo = () => {
 				const data = await response.json();
 
 				setBusinessInfo({
+					id: data.id,
 					name: data.name || '',
-					url: data.url || '',
-					address: data.address || '',
+					website: data.website || '',
+					address_id: data.address_id || '',
 					allergens: data.allergens ? data.allergens.join(', ') : '',
 					diets: data.diets ? data.diets.join(', ') : '',
+					phone: data.phone || '',
+					hours: data.hours || [],
+					disclaimers: data.disclaimers || [],
+					cuisine: data.cuisine || '',
 				});
 			} catch (error) {
 				console.error('Error fetching business info:', error);
@@ -64,11 +74,9 @@ const EditBusinessInfo = () => {
 
 		try {
 			const updatedData = {
+				id: businessId,
 				name: businessInfo.name,
-				url: businessInfo.url,
-				address: businessInfo.address,
-				allergens: businessInfo.allergens.split(',').map((item) => item.trim()), // convert back to array
-				diets: businessInfo.diets.split(',').map((item) => item.trim()), // convert back to array
+				website: businessInfo.website,
 			};
 
 			const response = await fetch(
@@ -127,8 +135,8 @@ const EditBusinessInfo = () => {
 						<label>Website URL</label>
 						<input
 							type='text'
-							value={businessInfo.url}
-							onChange={(e) => handleChange('url', e.target.value)}
+							value={businessInfo.website}
+							onChange={(e) => handleChange('website', e.target.value)}
 						/>
 					</div>
 
@@ -138,6 +146,7 @@ const EditBusinessInfo = () => {
 							type='text'
 							value={businessInfo.address}
 							onChange={(e) => handleChange('address', e.target.value)}
+							disabled
 						/>
 					</div>
 				</div>
@@ -159,6 +168,7 @@ const EditBusinessInfo = () => {
 							placeholder='example: Tree Nuts'
 							value={businessInfo.allergens}
 							onChange={(e) => handleChange('allergens', e.target.value)}
+							disabled
 						/>
 					</div>
 
@@ -169,6 +179,7 @@ const EditBusinessInfo = () => {
 							placeholder='example: Kosher'
 							value={businessInfo.diets}
 							onChange={(e) => handleChange('diets', e.target.value)}
+							disabled
 						/>
 					</div>
 				</div>

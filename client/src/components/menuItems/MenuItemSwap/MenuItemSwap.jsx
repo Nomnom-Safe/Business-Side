@@ -28,7 +28,7 @@ const MenuItemPicklist = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const businessID = localStorage.getItem('business_id');
+				const businessID = localStorage.getItem('businessId');
 				if (!businessID) return alert('No business ID found.');
 
 				// Get the menus based on business ID
@@ -52,10 +52,10 @@ const MenuItemPicklist = () => {
 
 				if (masterMenu) {
 					setMasterMenu(masterMenu);
-					setMasterMenuID(masterMenu._id);
+					setMasterMenuID(masterMenu.id);
 
 					const itemsRes = await axios.get(
-						`http://localhost:5000/api/menuitems/menuswap-items?menuID=${masterMenu._id}`,
+						`http://localhost:5000/api/menuitems/menuswap-items?menuID=${masterMenu.id}`,
 					);
 					setMenuItems(itemsRes.data);
 				}
@@ -93,7 +93,7 @@ const MenuItemPicklist = () => {
 	const handleMenuCheckboxChange = (menuID) => {
 		setMenus((prevMenus) =>
 			prevMenus.map((menu) =>
-				menu._id === menuID ? { ...menu, isSelected: !menu.isSelected } : menu,
+				menu.id === menuID ? { ...menu, isSelected: !menu.isSelected } : menu,
 			),
 		);
 	};
@@ -103,29 +103,29 @@ const MenuItemPicklist = () => {
 		const itemsForThisMenu = menuItems.filter(
 			(item) =>
 				// this item belongs to this menu
-				item.menuIDs.includes(menu._id) &&
+				item.menuIDs.includes(menu.id) &&
 				item.name.toLowerCase().includes(searchTerm.toLowerCase()),
 		);
 
 		return (
 			<div
-				key={menu._id}
+				key={menu.id}
 				className='menu-tree'
 			>
 				<Checkbox
 					label={menu.title}
 					isSelected={menu.isSelected || false}
-					onCheckboxChange={() => handleMenuCheckboxChange(menu._id)}
+					onCheckboxChange={() => handleMenuCheckboxChange(menu.id)}
 					disabled={menu.title === 'Master Menu'}
 				/>
 				<ul className='ml-4 mt-2'>
 					{itemsForThisMenu.length > 0 ? (
 						itemsForThisMenu.map((item) => {
-							const compositeKey = `${item._id}_${menu._id}`;
+							const compositeKey = `${item.id}_${menu.id}`;
 							return (
 								<li
 									key={compositeKey}
-									className={`text-sm ${item._id === selectedItemID ? 'bg-yellow-100' : 'text-gray-500'}`}
+									className={`text-sm ${item.id === selectedItemID ? 'bg-yellow-100' : 'text-gray-500'}`}
 								>
 									<Checkbox
 										label={item.name}
@@ -145,9 +145,7 @@ const MenuItemPicklist = () => {
 
 	// menuItem is moved
 	const handleMoveToMenu = () => {
-		const targetMenu = menus.find(
-			(menu) => menu.isSelected && menu._id !== '0',
-		);
+		const targetMenu = menus.find((menu) => menu.isSelected && menu.id !== '0');
 
 		if (!targetMenu) {
 			alert('No target menu selected.');
@@ -157,13 +155,13 @@ const MenuItemPicklist = () => {
 		setMenuItems((prevItems) => {
 			return prevItems.map((item) => {
 				const itemSelected = [...selectedKeys].some((key) =>
-					key.startsWith(item._id),
+					key.startsWith(item.id),
 				);
 				if (itemSelected) {
-					if (!item.menuIDs.includes(targetMenu._id)) {
+					if (!item.menuIDs.includes(targetMenu.id)) {
 						return {
 							...item,
-							menuIDs: [...item.menuIDs, targetMenu._id],
+							menuIDs: [...item.menuIDs, targetMenu.id],
 						};
 					}
 				}
@@ -191,7 +189,7 @@ const MenuItemPicklist = () => {
 			return;
 		}
 		// Do not allow user to remove from MasterMenu
-		if (parentMenu._id === masterMenuID) {
+		if (parentMenu.id === masterMenuID) {
 			alert('Cannot remove from Master Menu.');
 			return;
 		}
@@ -199,11 +197,11 @@ const MenuItemPicklist = () => {
 		setMenuItems((prevItems) => {
 			return prevItems.map((item) => {
 				const itemSelected = [...selectedKeys].some((key) =>
-					key.startsWith(item._id),
+					key.startsWith(item.id),
 				);
 				if (itemSelected) {
 					const updatedMenuIDs = item.menuIDs.filter(
-						(id) => id !== parentMenu._id,
+						(id) => id !== parentMenu.id,
 					);
 					return {
 						...item,
@@ -230,7 +228,7 @@ const MenuItemPicklist = () => {
 		try {
 			const saveRequests = menuItems.map((menuItem) => {
 				return axios.put(
-					`http://localhost:5000/api/menuitems/swap-menu/${menuItem._id}`,
+					`http://localhost:5000/api/menuitems/swap-menu/${menuItem.id}`,
 					menuItem,
 				);
 			});
@@ -294,7 +292,7 @@ const MenuItemPicklist = () => {
 						{menus
 							.filter((menu) => menu.title !== 'Master Menu')
 							.map((menu) => (
-								<div key={menu._id}>
+								<div key={menu.id}>
 									{renderMenuTree(menu, searchTerms.otherMenus)}
 								</div>
 							))}

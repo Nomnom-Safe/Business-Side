@@ -19,9 +19,9 @@ function MenuDashboard() {
 	// Fetch menus from backend on initial render
 	useEffect(() => {
 		const fetchMenus = async () => {
-			const businessId = localStorage.getItem('business_id');
+			const businessId = localStorage.getItem('businessId');
 			if (!businessId) {
-				console.warn('No business_id in localStorage');
+				console.warn('No businessId in localStorage');
 				return;
 			}
 			try {
@@ -51,11 +51,11 @@ function MenuDashboard() {
 	useEffect(() => {
 		if (menus.length > 0) {
 			const masterMenu = menus.find((menu) => menu.title === 'Master Menu');
-			if (masterMenu?._id) {
+			if (masterMenu?.id) {
 				/* Non-MVP Feature: multiple menus.
-					setMasterMenuID(masterMenu._id);
+					setMasterMenuID(masterMenu.id);
 				*/
-				localStorage.setItem('masterMenu_ID', masterMenu._id);
+				localStorage.setItem('masterMenu_ID', masterMenu.id);
 			}
 		}
 	}, [menus]);
@@ -63,7 +63,7 @@ function MenuDashboard() {
 	/* Non-MVP Feature: Adding new menus.
 		// Add a new menu to backend and update state
 		const handleAddMenu = async () => {
-			const businessId = localStorage.getItem('business_id');
+			const businessId = localStorage.getItem('businessId');
 			if (!businessId) {
 				console.error('No business ID found in localStorage.');
 				return;
@@ -71,10 +71,10 @@ function MenuDashboard() {
 
 			try {
 				const res = await axios.post('http://localhost:5000/api/menus', {
-					title: 'Untitled Menu',
-					description: 'New menu created',
-					restaurant: businessId,
-					menuItems: [],
+					// title: 'Untitled Menu',
+					// description: 'New menu created',
+					business_id: businessId,
+					// menuItems: [],
 				});
 
 				const newMenu = { ...res.data, isEditable: true };
@@ -94,13 +94,13 @@ function MenuDashboard() {
 		const handleConfirmDelete = async () => {
 			const menuToRemove = menus[menuToDelete];
 
-		if (!menuToRemove?._id) {
+		if (!menuToRemove?.id) {
 			console.error('Menu ID missing — cannot delete');
 			return;
 		}
 
 		try {
-			await axios.delete(`http://localhost:5000/api/menus/${menuToRemove._id}`); // Make DELETE request
+			await axios.delete(`http://localhost:5000/api/menus/${menuToRemove.id}`); // Make DELETE request
 
 				// Remove menu from local state
 				setMenus((prevMenus) => prevMenus.filter((_, i) => i !== menuToDelete));
@@ -149,7 +149,7 @@ function MenuDashboard() {
 				{menus.map((menu, index) => (
 					<div
 						className='menu-card-wrapper'
-						key={menu._id || index}
+						key={menu.id || index}
 					>
 						{/* Non-MVP Feature: Deleting menus.
 							{menu.isEditable && (
@@ -162,8 +162,8 @@ function MenuDashboard() {
 							)}
 						*/}
 						<MenuCard
-							title={menu.title}
-							description={menu.description}
+							title='Master Menu'
+							description='Description placeholder'
 							buttonLabel='View Menu'
 							isEditable={menu.isEditable}
 							onTitleChange={(newTitle) => handleTitleChange(index, newTitle)}

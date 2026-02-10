@@ -13,13 +13,12 @@ const MenuItemsPage = () => {
 	const menuTitle = location.state?.menuTitle || 'Untitled Menu';
 	const navigate = useNavigate();
 
-	// To be used in useEffect to fetch menuItems on intiial render, and to be called after handleDelete is used
+	// To be used in useEffect to fetch menuItems on initial render, and to be called after handleDelete is used
 	const fetchMenu = async () => {
 		try {
-			const businessID = localStorage.getItem('business_id');
-			const encodedTitle = encodeURIComponent(menuTitle);
+			const businessId = localStorage.getItem('businessId');
 			const res = await axios.get(
-				`http://localhost:5000/api/menuitems/menu?encodedMenuName=${encodedTitle}&businessID=${businessID}`,
+				`http://localhost:5000/api/menuitems/menu?businessId=${businessId}`,
 			);
 			setFetchedMenu(res.data);
 		} catch (err) {
@@ -29,11 +28,11 @@ const MenuItemsPage = () => {
 
 	// used for refreshing the menu items.
 	const fetchMenuItems = async () => {
-		if (!fetchedMenu || !fetchedMenu._id) return;
+		if (!fetchedMenu || !fetchedMenu.id) return;
 
 		try {
 			const itemRes = await axios.get(
-				`http://localhost:5000/api/menuitems?menuID=${fetchedMenu._id}`,
+				`http://localhost:5000/api/menuitems?menuID=${fetchedMenu.id}`,
 			);
 			const fetchedMenuItems = itemRes.data.map((menuItem) => ({
 				...menuItem,
@@ -59,7 +58,7 @@ const MenuItemsPage = () => {
 	const handleSave = async (updatedItem) => {
 		try {
 			await axios.put(
-				`http://localhost:5000/api/menuitems/${updatedItem._id}`,
+				`http://localhost:5000/api/menuitems/${updatedItem.id}`,
 				updatedItem,
 			);
 			alert('Menu item updated successfully!');
@@ -85,7 +84,7 @@ const MenuItemsPage = () => {
 	const toAddItem = (event) => {
 		event.preventDefault();
 		navigate('/add-menu-item', {
-			state: { menuID: fetchedMenu._id, menuTitle: fetchedMenu.title },
+			state: { menuID: fetchedMenu.id, menuTitle: fetchedMenu.title },
 		});
 	};
 
@@ -143,9 +142,9 @@ const MenuItemsPage = () => {
 					<h2>Menu Items</h2>
 					{filteredItems.map((item) => (
 						<MenuItemPanel
-							key={item._id}
+							key={item.id}
 							item={item}
-							menuID={fetchedMenu._id}
+							menuID={fetchedMenu.id}
 							onSave={handleSave}
 							onDelete={handleDelete}
 						/>

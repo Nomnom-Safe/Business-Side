@@ -36,8 +36,8 @@ const CollapsiblePanel = ({
 		}
 
 		try {
-			const menuIDs =
-				masterMenuID === menuID ? [masterMenuID] : [masterMenuID, menuID];
+			// choose a single menu_id: prefer the route menuID, fallback to masterMenuID
+			const targetMenuId = menuID || masterMenuID;
 			const response = await axios.post(
 				'http://localhost:5000/api/menuitems/add-menu-item',
 				{
@@ -45,7 +45,8 @@ const CollapsiblePanel = ({
 					description: formData.description,
 					ingredients: formData.ingredients,
 					allergens: formData.selectedAllergens || [],
-					menuIDs: menuIDs,
+					menu_id: targetMenuId,
+					item_type: formData.item_type || 'entree',
 				},
 			);
 			if (response.ok) {
@@ -161,6 +162,22 @@ const CollapsiblePanel = ({
 										/>
 									</div>
 								</div>
+								<div style={{ marginTop: '12px' }}>
+									<h3>Item Type</h3>
+									<select
+										name='item_type'
+										value={formData.item_type || 'entree'}
+										onChange={(e) =>
+											onFormChange({ ...formData, item_type: e.target.value })
+										}
+									>
+										<option value='entree'>Entree</option>
+										<option value='appetizer'>Appetizer</option>
+										<option value='side'>Side</option>
+										<option value='dessert'>Dessert</option>
+										<option value='drink'>Drink</option>
+									</select>
+								</div>
 							</form>
 						</div>
 					</div>
@@ -194,7 +211,7 @@ const AddMenuItemForm = () => {
 			ingredients: '',
 			description: '',
 			selectedAllergens: [],
-			menuIDs: [],
+			item_type: 'entree',
 		},
 	]);
 	const location = useLocation();
@@ -222,9 +239,8 @@ const AddMenuItemForm = () => {
 	// must exist out side due to trying to get all of them.
 	const handleSaveAll = async () => {
 		try {
-			// Calculating what to save into the menuItems
-			const menuIDs =
-				masterMenuID === menuID ? [masterMenuID] : [masterMenuID, menuID];
+			// Choose single target menu id (prefer route menuID)
+			const targetMenuId = menuID || masterMenuID;
 
 			const validPanels = panels.filter(
 				(panel) => panel.name && panel.name.trim() !== '',
@@ -243,7 +259,8 @@ const AddMenuItemForm = () => {
 					description: panel.description,
 					ingredients: panel.ingredients,
 					allergens: panel.selectedAllergens || [],
-					menuIDs: menuIDs,
+					menu_id: targetMenuId,
+					item_type: panel.item_type || 'entree',
 				}),
 			);
 
