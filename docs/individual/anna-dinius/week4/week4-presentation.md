@@ -12,8 +12,11 @@ footer: 'Week 4 Progress Report — Anna Dinius'
 
 ### 2/2/2026 - 2/8/2026
 
-> Commit range:  
-> `ea536c131fec5af3a9ec602d849da213d0e70f24 → HEAD`
+> Commit range:
+>
+> - `ea536c131fec5af3a9ec602d849da213d0e70f24 → 36802a602ce42bdd0031998d376fa6bf94abd2b5`
+>
+> See [`week4-progress-report.md`](https://github.com/Nomnom-Safe/Business-Side/blob/refactor/migrate-database/docs/individual/anna-dinius/week4/week4-progress-report.md) for more details.
 
 ---
 
@@ -204,6 +207,8 @@ This week focused on:
 # Metrics
 
 ### Total Project Statistics
+
+> See [`project-statistics-detailed.md`](https://github.com/Nomnom-Safe/Business-Side/blob/refactor/migrate-database/docs/individual/anna-dinius/week4/project-statistics-detailed.md) for a detailed breakdown of LoC for the entire project
 
 - LOC: 6,858
 - Production LOC: 6,851

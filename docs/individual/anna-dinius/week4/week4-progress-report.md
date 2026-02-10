@@ -2,7 +2,11 @@
 
 ## Week 4 Progress Report
 
-> (commit range starting ea536c131fec5af3a9ec602d849da213d0e70f24 → HEAD)
+> Commit range:
+>
+> - ea536c131fec5af3a9ec602d849da213d0e70f24 → 36802a602ce42bdd0031998d376fa6bf94abd2b5
+>
+> See [`project-statistics-detailed.md`](https://github.com/Nomnom-Safe/Business-Side/blob/refactor/migrate-database/docs/individual/anna-dinius/week4/project-statistics-detailed.md) for LoC and other project statistics.
 
 ### Summary
 
