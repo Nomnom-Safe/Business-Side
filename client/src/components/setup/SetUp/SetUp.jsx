@@ -5,6 +5,8 @@ import Step3 from '../Step3/Step3';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import './SetUp.scss';
+import api from '../../../api';
+import ErrorMessage from '../../common/ErrorMessage/ErrorMessage.jsx';
 
 function SetUp({ step }) {
 	const navigate = useNavigate();
@@ -19,6 +21,8 @@ function SetUp({ step }) {
 		// Step 3 data
 		menuLayout: '',
 	});
+	const [message, setMessage] = useState('');
+	const [showError, setShowError] = useState(false);
 
 	const getProgressBarClass = () => {
 		switch (step) {
@@ -41,54 +45,45 @@ function SetUp({ step }) {
 
 			// Step 1: Create business if not already created
 			if (!businessId) {
-				const response = await fetch('http://localhost:5000/api/businesses', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({
-						name: formData.name,
-						website: formData.website,
-						address: formData.address,
-						allergens: formData.allergens,
-						diets: formData.diets,
-					}),
+				const createResult = await api.businesses.create({
+					name: formData.name,
+					website: formData.website,
+					address: formData.address,
+					allergens: formData.allergens,
+					diets: formData.diets,
 				});
 
-				if (!response.ok) {
-					const result = await response.json();
-					if (result.error?.includes('Business name already exists')) {
-						alert(
+				if (!createResult.ok) {
+					if (
+						createResult.data?.error?.includes('Business name already exists')
+					) {
+						setMessage(
 							'That business name is already in use. Please choose another.',
 						);
+						setShowError(true);
 						return;
 					}
 					throw new Error('Failed to create business');
 				}
 
-				const created = await response.json();
+				const created = createResult.data;
 				businessId = created.id;
 				localStorage.setItem('businessId', businessId);
 			}
 
 			// Step 2: Update business (layout, etc.)
-			const updateResponse = await fetch(
-				`http://localhost:5000/api/businesses/${businessId}`,
-				{
-					method: 'PUT',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({
-						name: formData.name,
-						website: formData.website,
-						address: formData.address,
-						allergens: formData.allergens,
-						diets: formData.diets,
-						menuLayout: formData.menuLayout,
-					}),
-				},
-			);
+			const updateResult = await api.businesses.update(businessId, {
+				name: formData.name,
+				website: formData.website,
+				address: formData.address,
+				allergens: formData.allergens,
+				diets: formData.diets,
+				menuLayout: formData.menuLayout,
+			});
 
-			if (!updateResponse.ok) throw new Error('Failed to update business');
+			if (!updateResult.ok) throw new Error('Failed to update business');
 
-			const updatedBusiness = await updateResponse.json();
+			const updatedBusiness = updateResult.data;
 
 			document.cookie = 'hasBusiness=true; path=/;';
 
@@ -178,6 +173,15 @@ function SetUp({ step }) {
 
 	return (
 		<div className='set-up-container'>
+			{showError ? (
+				<ErrorMessage
+					message={message}
+					destination={0}
+					onClose={() => setShowError(false)}
+				/>
+			) : (
+				<></>
+			)}
 			<div className={`progress-bar ${getProgressBarClass()}`}>
 				Step {step}/3
 			</div>

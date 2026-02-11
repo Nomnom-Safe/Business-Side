@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MenuCard.scss';
-import axios from 'axios';
+import api from '../../../api';
 
 export default function MenuCard({
 	title,
@@ -36,15 +36,16 @@ export default function MenuCard({
 	const saveTitleToDb = async () => {
 		try {
 			const businessId = localStorage.getItem('businessId');
-			const res = await axios.put(
-				`http://localhost:5000/api/menus/update-title-description`,
-				{
-					businessId,
-					title: localTitle,
-					description: localDescription,
-				},
-			);
-			console.log('Menu updated successfully:', res.data);
+			const result = await api.menus.updateTitleDescription({
+				businessId,
+				title: localTitle,
+				description: localDescription,
+			});
+			if (result.ok) {
+				console.log('Menu updated successfully:', result.data);
+			} else {
+				console.error('Error updating menu title:', result.message);
+			}
 		} catch (err) {
 			console.error('Error updating menu title:', err);
 		}

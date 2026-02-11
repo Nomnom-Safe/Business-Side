@@ -7,6 +7,7 @@ import logoutIcon from '../../../assets/icons/logout.png';
 // ARCHIVED: Admin Features - Not part of MVP (single user per business)
 // import userMaintenanceIcon from '../../../assets/icons/user-maintenance.png';
 import getCookie from '../../../utils/cookies';
+import api from '../../../api';
 import './ProfileIcon.scss';
 
 export default function ProfileIcon() {
@@ -43,15 +44,9 @@ export default function ProfileIcon() {
 		event.preventDefault();
 
 		try {
-			const response = await fetch('http://localhost:5000/api/auth/logout', {
-				method: 'POST',
-				credentials: 'include',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
+			const result = await api.auth.logout();
 
-			if (response.ok) {
+			if (result.ok) {
 				setIsOpen(false);
 				setConfirmation(true);
 			} else {

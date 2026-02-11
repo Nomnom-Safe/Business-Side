@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GetConfirmationMessage from '../../common/ConfirmationMessage/ConfirmationMessage.jsx';
 import './EditBusinessInfo.scss';
+import api from '../../../api';
 
 const EditBusinessInfo = () => {
 	const [businessInfo, setBusinessInfo] = useState({
@@ -30,12 +31,10 @@ const EditBusinessInfo = () => {
 			}
 
 			try {
-				const response = await fetch(
-					`http://localhost:5000/api/businesses/${businessId}`,
-				);
-				if (!response.ok) throw new Error('Failed to fetch business info');
+				const result = await api.businesses.getById(businessId);
+				if (!result.ok || !result.data) throw new Error('Failed to fetch business info');
 
-				const data = await response.json();
+				const data = result.data;
 
 				setBusinessInfo({
 					id: data.id,
@@ -79,16 +78,9 @@ const EditBusinessInfo = () => {
 				website: businessInfo.website,
 			};
 
-			const response = await fetch(
-				`http://localhost:5000/api/businesses/${businessId}`,
-				{
-					method: 'PUT',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify(updatedData),
-				},
-			);
+			const result = await api.businesses.update(businessId, updatedData);
 
-			if (!response.ok) throw new Error('Failed to update business');
+			if (!result.ok) throw new Error('Failed to update business');
 
 			setShowConfirmation(true);
 		} catch (error) {

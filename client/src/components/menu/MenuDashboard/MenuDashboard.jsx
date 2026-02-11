@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import MenuCard from '../MenuCard/MenuCard.jsx';
 import './MenuDashboard.scss';
+import api from '../../../api';
 
 /* Non-MVP Feature: Deleting menus. 
 	import deleteIcon from '../../../assets/icons/delete.png';
@@ -9,6 +10,7 @@ import './MenuDashboard.scss';
 
 function MenuDashboard() {
 	const [menus, setMenus] = useState([]);
+	const navigate = useNavigate();
 
 	/* Non-MVP Feature: Deleting menus.
 		const [masterMenuID, setMasterMenuID] = useState([]);
@@ -25,16 +27,19 @@ function MenuDashboard() {
 				return;
 			}
 			try {
-				const res = await axios.get(
-					`http://localhost:5000/api/businesses/${businessId}`,
-				);
-
-				if (!Array.isArray(res.data.menus)) {
-					console.error('Expected menus to be an array:', res.data.menus);
+				const result = await api.businesses.getById(businessId);
+				if (!result.ok || !result.data) {
+					console.error('Failed to fetch business menus');
 					return;
 				}
 
-				const fetchedMenus = res.data.menus.map((menu) => ({
+				if (!Array.isArray(result.data.menus)) {
+					console.error('Expected menus to be an array:', result.data.menus);
+					setMenus([]);
+					return;
+				}
+
+				const fetchedMenus = result.data.menus.map((menu) => ({
 					...menu,
 					isEditable: menu.title !== 'Master Menu',
 				}));
@@ -145,35 +150,52 @@ function MenuDashboard() {
 				<h2 className='dashboard-title'>Your Menu Dashboard</h2>
 			</div>
 
-			<div className='menu-grid'>
-				{menus.map((menu, index) => (
-					<div
-						className='menu-card-wrapper'
-						key={menu.id || index}
+			{menus.length === 0 ? (
+				<div className='no-menus-container'>
+					<p>No menu exists for this business yet.</p>
+					<button
+						type='button'
+						className='button'
+						onClick={() =>
+							navigate('/menuitems', {
+								state: { menuTitle: 'Your Menu' },
+							})
+						}
 					>
-						{/* Non-MVP Feature: Deleting menus.
-							{menu.isEditable && (
-								<img
-									src={deleteIcon}
-									alt='Delete'
-									className='delete-icon'
-									onClick={() => handleRequestDelete(index)}
-								/>
-							)}
-						*/}
-						<MenuCard
-							title='Master Menu'
-							description='Description placeholder'
-							buttonLabel='View Menu'
-							isEditable={menu.isEditable}
-							onTitleChange={(newTitle) => handleTitleChange(index, newTitle)}
-							onDescriptionChange={(newDesc) =>
-								handleDescriptionChange(index, newDesc)
-							}
-						/>
-					</div>
-				))}
-			</div>
+						Set up your menu
+					</button>
+				</div>
+			) : (
+				<div className='menu-grid'>
+					{menus.map((menu, index) => (
+						<div
+							className='menu-card-wrapper'
+							key={menu.id || index}
+						>
+							{/* Non-MVP Feature: Deleting menus.
+								{menu.isEditable && (
+									<img
+										src={deleteIcon}
+										alt='Delete'
+										className='delete-icon'
+										onClick={() => handleRequestDelete(index)}
+									/>
+								)}
+							*/}
+							<MenuCard
+								title='Master Menu'
+								description='Description placeholder'
+								buttonLabel='View Menu'
+								isEditable={menu.isEditable}
+								onTitleChange={(newTitle) => handleTitleChange(index, newTitle)}
+								onDescriptionChange={(newDesc) =>
+									handleDescriptionChange(index, newDesc)
+								}
+							/>
+						</div>
+					))}
+				</div>
+			)}
 
 			{/* Non-MVP Feature: Deleting menus.
 				{showConfirm && (

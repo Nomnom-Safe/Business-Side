@@ -2,13 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import MenuItemPanel from '../MenuItemPanel/MenuItemPanel.jsx';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import '../../../styles/global.scss';
+import api from '../../../api';
+import ErrorMessage from '../../common/ErrorMessage/ErrorMessage.jsx';
+import GetConfirmationMessage from '../../common/ConfirmationMessage/ConfirmationMessage.jsx';
 
 const MenuItemsPage = () => {
 	const [menuItems, setMenuItems] = useState([]);
 	const [searchTerm, setSearchTerm] = useState('');
-	const [fetchedMenu, setFetchedMenu] = useState([]);
+	const [fetchedMenu, setFetchedMenu] = useState(null);
+	const [message, setMessage] = useState('');
+	const [showError, setShowError] = useState(false);
+	const [showConfirmation, setShowConfirmation] = useState(false);
 	const location = useLocation();
 	const menuTitle = location.state?.menuTitle || 'Untitled Menu';
 	const navigate = useNavigate();
@@ -17,12 +22,25 @@ const MenuItemsPage = () => {
 	const fetchMenu = async () => {
 		try {
 			const businessId = localStorage.getItem('businessId');
-			const res = await axios.get(
-				`http://localhost:5000/api/menuitems/menu?businessId=${businessId}`,
-			);
-			setFetchedMenu(res.data);
+			const result = await api.menuItems.getMenuForBusiness(businessId);
+			if (result.ok && result.data) {
+				setFetchedMenu(result.data);
+				if (result.data.id) {
+					localStorage.setItem('currentMenuId', result.data.id);
+				}
+			} else {
+				// No menu exists yet for this business – synthesize a local representation
+				const syntheticMenuId = `menu_${businessId}`;
+				localStorage.setItem('currentMenuId', syntheticMenuId);
+				setFetchedMenu({
+					id: syntheticMenuId,
+					title: 'Your Menu',
+				});
+			}
 		} catch (err) {
 			console.error('Error fetching menu:', err);
+			setMessage('Failed to load menu.');
+			setShowError(true);
 		}
 	};
 
@@ -31,15 +49,21 @@ const MenuItemsPage = () => {
 		if (!fetchedMenu || !fetchedMenu.id) return;
 
 		try {
-			const itemRes = await axios.get(
-				`http://localhost:5000/api/menuitems?menuID=${fetchedMenu.id}`,
-			);
-			const fetchedMenuItems = itemRes.data.map((menuItem) => ({
+			const result = await api.menuItems.getByMenuId(fetchedMenu.id);
+			if (!result.ok || !Array.isArray(result.data)) {
+				console.error('Error fetching menu items:', result.message);
+				setMessage(result.message || 'Failed to load menu items.');
+				setShowError(true);
+				return;
+			}
+			const fetchedMenuItems = result.data.map((menuItem) => ({
 				...menuItem,
 			}));
 			setMenuItems(fetchedMenuItems);
 		} catch (err) {
 			console.error('Error fetching menu items:', err);
+			setMessage('Failed to load menu items.');
+			setShowError(true);
 		}
 	};
 
@@ -57,15 +81,17 @@ const MenuItemsPage = () => {
 	// saves the updated menu item.
 	const handleSave = async (updatedItem) => {
 		try {
-			await axios.put(
-				`http://localhost:5000/api/menuitems/${updatedItem.id}`,
-				updatedItem,
-			);
-			alert('Menu item updated successfully!');
+			const result = await api.menuItems.updateItem(updatedItem.id, updatedItem);
+			if (!result.ok) {
+				throw new Error(result.message || 'Failed to update item');
+			}
+			setMessage('Menu item updated successfully!');
+			setShowConfirmation(true);
 			fetchMenuItems();
 		} catch (err) {
 			console.error('Error saving item:', err);
-			alert('Failed to update item.');
+			setMessage('Failed to update item.');
+			setShowError(true);
 		}
 	};
 
@@ -99,6 +125,24 @@ const MenuItemsPage = () => {
 	return (
 		<div className='center'>
 			<div className='menu-items-container'>
+				{showConfirmation ? (
+					<GetConfirmationMessage
+						message={message}
+						destination={0}
+					/>
+				) : (
+					<></>
+				)}
+
+				{showError ? (
+					<ErrorMessage
+						message={message}
+						destination={0}
+						onClose={() => setShowError(false)}
+					/>
+				) : (
+					<></>
+				)}
 				{/* Top section: buttons + menu name */}
 				<div className='menu-header-row'>
 					<div style={{ flex: 1 }}>
@@ -113,7 +157,7 @@ const MenuItemsPage = () => {
 						className='menu-name'
 						style={{ flex: 1, textAlign: 'center' }}
 					>
-						{menuTitle}
+						{(fetchedMenu && fetchedMenu.title) || menuTitle}
 					</div>
 					{/* ARCHIVED: Menu Item Swapping - Not part of MVP (single menu) */}
 					{/* <div style={{ flex: 1, textAlign: 'right' }}>
@@ -140,15 +184,19 @@ const MenuItemsPage = () => {
 				{/* Menu items list */}
 				<div className='menu-item-list'>
 					<h2>Menu Items</h2>
-					{filteredItems.map((item) => (
-						<MenuItemPanel
-							key={item.id}
-							item={item}
-							menuID={fetchedMenu.id}
-							onSave={handleSave}
-							onDelete={handleDelete}
-						/>
-					))}
+					{filteredItems.length === 0 ? (
+						<p>No items in this menu yet.</p>
+					) : (
+						filteredItems.map((item) => (
+							<MenuItemPanel
+								key={item.id}
+								item={item}
+								menuID={fetchedMenu?.id}
+								onSave={handleSave}
+								onDelete={handleDelete}
+							/>
+						))
+					)}
 				</div>
 			</div>
 		</div>

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { FaPencilAlt, FaTrash, FaSave } from 'react-icons/fa';
-import axios from 'axios';
 import '../../../styles/global.scss';
 import {
 	getAllergenLabels,
 	resolveLabelsToIDs,
 } from '../../../utils/allergenCache';
+import api from '../../../api';
+import ErrorMessage from '../../common/ErrorMessage/ErrorMessage.jsx';
+import GetConfirmationMessage from '../../common/ConfirmationMessage/ConfirmationMessage.jsx';
 
 const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +17,9 @@ const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 	const [formData, setFormData] = useState({ ...item });
 	const [allergenLabels, setAllergenLabels] = useState([]);
 	const [editableAllergenLabels, setEditableAllergenLabels] = useState('');
+	const [message, setMessage] = useState('');
+	const [showError, setShowError] = useState(false);
+	const [showConfirmation, setShowConfirmation] = useState(false);
 
 	const masterMenuID = localStorage.getItem('masterMenu_ID');
 
@@ -39,7 +44,8 @@ const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 
 	const handleSave = async () => {
 		if (!formData.name || formData.name.trim() === '') {
-			alert('Please enter a name for the menu item.');
+			setMessage('Please enter a name for the menu item.');
+			setShowError(true);
 			return;
 		}
 		const resolvedIDs = await resolveLabelsToIDs(formData.allergens);
@@ -66,22 +72,26 @@ const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 		try {
 			// if current menuID is masterMenuID, Delete the entire menuItem
 			if (menuID === masterMenuID) {
-				await axios.delete(
-					`http://localhost:5000/api/menuitems/${menuItemToDelete}`,
-				);
+				const result = await api.menuItems.deleteItem(menuItemToDelete);
+
+				if (!result.ok) {
+					throw new Error(result.message || 'Failed to delete menu item');
+				}
 
 				if (onDelete) {
 					onDelete(menuItemToDelete);
 				}
-				alert('Menu item deleted successfully!');
+				setMessage('Menu item deleted successfully!');
+				setShowConfirmation(true);
 
 				setMenuItemToDelete(null);
 				setShowConfirm(false);
 			} else {
 				// remove current menuID from menuItem's menuIDs array
-				alert(
+				setMessage(
 					'Remove menu item from non Master Menu by moving it in in Integrate Menu.',
 				);
+				setShowError(true);
 			}
 		} catch (err) {
 			console.error('Error deleting menu item:', err);
@@ -120,6 +130,24 @@ const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 
 	return (
 		<div className='menu-item-panel collapsible-panel'>
+			{showConfirmation ? (
+				<GetConfirmationMessage
+					message={message}
+					destination={0}
+				/>
+			) : (
+				<></>
+			)}
+
+			{showError ? (
+				<ErrorMessage
+					message={message}
+					destination={0}
+					onClose={() => setShowError(false)}
+				/>
+			) : (
+				<></>
+			)}
 			<div
 				className='panel-header'
 				onClick={toggleOpen}
