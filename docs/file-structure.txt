@@ -167,9 +167,9 @@ Business-Side/
 │   │   │   ├── adminRoutes.js
 │   │   │   ├── allergenRoutes.js
 │   │   │   ├── businessRoutes.js
+│   │   │   ├── businessUserRoutes.js
 │   │   │   ├── menuItemRoutes.js
-│   │   │   ├── menuRoutes.js
-│   │   │   └── userRoutes.js
+│   │   │   └── menuRoutes.js
 │   │   ├── schemas/
 │   │   │   ├── Address.js
 │   │   │   ├── Allergen.js

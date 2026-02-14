@@ -9,8 +9,9 @@ const asyncHandler = require('../utils/asyncHandler');
 // @route   GET /api/businesses/
 // @desc    Get a list of all businesses
 // @access  Public (no auth yet)
-router.get('/', async (req, res) => {
-	try {
+router.get(
+	'/',
+	asyncHandler(async (req, res) => {
 		const businesses = await businessService.listBusinesses();
 
 		if (!businesses || businesses.length <= 0) {
@@ -22,19 +23,15 @@ router.get('/', async (req, res) => {
 		}
 
 		return res.status(200).json(businesses);
-	} catch (err) {
-		res.status(500).json({
-			error: 'Could not fetch businesses',
-			message: 'Could not fetch businesses.',
-		});
-	}
-});
+	}),
+);
 
 // @route   GET /api/businesses/:id
 // @desc    Get a business by ID and populate its menus
 // @access  Public (no auth yet)
-router.get('/:id', async (req, res) => {
-	try {
+router.get(
+	'/:id',
+	asyncHandler(async (req, res) => {
 		const business = await businessService.getBusinessWithMenus(req.params.id);
 
 		if (!business) {
@@ -54,17 +51,15 @@ router.get('/:id', async (req, res) => {
 			cuisine: business.cuisine || '',
 			menus: business.menus,
 		});
-	} catch (err) {
-		console.error('GET /:id error:', err);
-		res.status(500).json({ error: 'Could not fetch business' });
-	}
-});
+	}),
+);
 
 // @route   POST /api/businesses
 // @desc    Create a new business
 // @access  Public (no auth yet)
-router.post('/', async (req, res) => {
-	try {
+router.post(
+	'/',
+	asyncHandler(async (req, res) => {
 		const {
 			name,
 			website,
@@ -157,38 +152,15 @@ router.post('/', async (req, res) => {
 			savedBusiness.id,
 		);
 		return res.status(201).json(populated);
-	} catch (err) {
-		console.error('Caught error:', err);
-
-		// Handle duplicate key error (unique constraint violation)
-		if (err.code === 11000 || err.message.includes('duplicate key')) {
-			return res.status(400).json({
-				error: 'Business name already exists',
-				message:
-					'A business with this name already exists. Please choose a different name.',
-			});
-		}
-
-		// Handle validation errors
-		if (err.name === 'ValidationError') {
-			return res.status(400).json({
-				error: 'Validation error',
-				message: err.message || 'Invalid business data provided.',
-			});
-		}
-
-		res.status(400).json({
-			error: 'Error creating business: ' + err.message,
-			message: 'Failed to create business. Please try again.',
-		});
-	}
-});
+	}),
+);
 
 // @route   PUT /api/businesses/:id
 // @desc    Update a business
 // @access  Public (no auth yet)
-router.put('/:id', async (req, res) => {
-	try {
+router.put(
+	'/:id',
+	asyncHandler(async (req, res) => {
 		const {
 			name,
 			website,
@@ -249,24 +221,19 @@ router.put('/:id', async (req, res) => {
 		if (!updatedBusiness)
 			return res.status(404).json({ error: 'Business not found' });
 		res.json(updatedBusiness);
-	} catch (err) {
-		res.status(400).json({
-			error: 'Error updating business: ' + err.message,
-		});
-	}
-});
+	}),
+);
 
 // @route   DELETE /api/businesses/:id
 // @desc    Delete a business
 // @access  Public (no auth yet)
-router.delete('/:id', async (req, res) => {
-	try {
+router.delete(
+	'/:id',
+	asyncHandler(async (req, res) => {
 		const deleted = await businessService.deleteBusiness(req.params.id);
 		if (!deleted) return res.status(404).json({ error: 'Business not found' });
 		res.json({ message: 'Business deleted successfully' });
-	} catch (err) {
-		res.status(500).json({ error: 'Could not delete business' });
-	}
-});
+	}),
+);
 
 module.exports = router;

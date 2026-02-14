@@ -9,8 +9,9 @@ const asyncHandler = require('../utils/asyncHandler');
 // @route   POST /api/auth/signin
 // @desc    Get a user
 // @access  Public (no auth yet)
-router.post('/signin', async (req, res) => {
-	try {
+router.post(
+	'/signin',
+	asyncHandler(async (req, res) => {
 		const { email, password } = req.body;
 
 		if (!email || !password) {
@@ -76,19 +77,15 @@ router.post('/signin', async (req, res) => {
 
 		// Send success response w/ user's data
 		return res.status(200).json(foundUser);
-	} catch (err) {
-		return res.status(500).json({
-			error: 'Could not fetch user' + err.message,
-			message: 'Could not fetch user.',
-		});
-	}
-});
+	}),
+);
 
 // @route   POST /api/auth/signup
 // @desc    Create a new user
 // @access  Public (no auth yet)
-router.post('/signup', async (req, res) => {
-	try {
+router.post(
+	'/signup',
+	asyncHandler(async (req, res) => {
 		const { first_name, last_name, email, password } = req.body;
 
 		if (!first_name || !last_name || !email || !password) {
@@ -144,35 +141,29 @@ router.post('/signup', async (req, res) => {
 
 		// Send response
 		return res.status(201).json(savedUser);
-	} catch (err) {
-		res.status(401).json({
-			error: 'Error creating user: ' + err.message,
-		});
-	}
-});
+	}),
+);
 
 // @route   POST /api/auth/logout
 // @desc    Log out
 // @access  Public (no auth yet)
-router.post('/logout', async (req, res) => {
-	try {
+router.post(
+	'/logout',
+	asyncHandler(async (req, res) => {
 		// Clear cookies
 		cookies.clearAllCookies(req, res);
 
 		// Send response
 		return res.status(200).json({ message: 'Logged out successfully.' });
-	} catch (err) {
-		res.status(400).json({
-			error: 'Error logging out: ' + err.message,
-		});
-	}
-});
+	}),
+);
 
 // @route   POST /api/auth/edit-login
 // @desc    Change email or password
 // @access  Public (no auth yet)
-router.post('/edit-login', async (req, res) => {
-	try {
+router.post(
+	'/edit-login',
+	asyncHandler(async (req, res) => {
 		const { credType, currentCred, newCred } = req.body;
 		const { email: currentEmail } = req.cookies;
 
@@ -252,7 +243,9 @@ router.post('/edit-login', async (req, res) => {
 			}
 
 			// Change and save user password (hashing handled by service)
-			await userService.updateUserByEmail(currentEmail, { password: newCred });
+			await userService.updateUserByEmail(currentEmail, {
+				password: newCred,
+			});
 
 			// Send response
 			return res.status(200).json({
@@ -265,19 +258,15 @@ router.post('/edit-login', async (req, res) => {
 			error: 'Credential cannot be changed',
 			message: 'Credential cannot be changed.',
 		});
-	} catch (err) {
-		res.status(400).json({
-			error: 'Error changing login info: ' + err.message,
-			message: 'Error changing login info.',
-		});
-	}
-});
+	}),
+);
 
 // @route   POST /api/auth/set-business
 // @desc    Get a user
 // @access  Public (no auth yet)
-router.post('/set-business', async (req, res) => {
-	try {
+router.post(
+	'/set-business',
+	asyncHandler(async (req, res) => {
 		const { type, businessId } = req.body;
 		const { email } = req.cookies;
 
@@ -340,12 +329,7 @@ router.post('/set-business', async (req, res) => {
 		} else if (type === 'new') {
 			res.status(200).json({ message: 'Business template created.' });
 		}
-	} catch (err) {
-		res.status(500).json({
-			error: 'An error occurred: ' + err,
-			message: 'An error occurred.',
-		});
-	}
-});
+	}),
+);
 
 module.exports = router;

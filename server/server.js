@@ -34,7 +34,7 @@ app.use('/api/menus', menuRoutes);
 const menuItemRoutes = require('./src/routes/menuItemRoutes');
 app.use('/api/menuitems', menuItemRoutes);
 
-const auth = require('./src/routes/userRoutes');
+const auth = require('./src/routes/businessUserRoutes');
 app.use('/api/auth', auth);
 
 // Allergen routes (provide id/label mapping for client)
