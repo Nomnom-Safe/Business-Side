@@ -4,6 +4,7 @@ const cookies = require('../utils/cookies');
 const businessService = require('../services/businessService');
 const userService = require('../services/businessUserService');
 const { db } = require('../services/firestoreInit');
+const asyncHandler = require('../utils/asyncHandler');
 
 // @route   GET /api/businesses/
 // @desc    Get a list of all businesses

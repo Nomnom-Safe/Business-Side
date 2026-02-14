@@ -1,18 +1,27 @@
+// server/src/routes/allergenRoutes.js
 const express = require('express');
 const router = express.Router();
-const { db } = require('../services/firestoreInit');
+const allergenService = require('../services/allergenService');
+const asyncHandler = require('../utils/asyncHandler');
 
 // @route GET /api/allergens
 // @desc  Return all allergens as [{ id, label }, ...]
-router.get('/', async (req, res) => {
-	try {
-		const snap = await db.collection('allergens').get();
-		const items = snap.docs.map((d) => ({ id: d.id, ...(d.data() || {}) }));
+router.get(
+	'/',
+	asyncHandler(async (req, res) => {
+		const items = await allergenService.listAllergens();
 		res.status(200).json(items);
-	} catch (err) {
-		console.error('Error fetching allergens:', err);
-		res.status(500).json({ error: 'Could not fetch allergens' });
-	}
-});
+	}),
+);
+
+// @route GET /api/allergens/:id
+router.get(
+	'/:id',
+	asyncHandler(async (req, res) => {
+		const item = await allergenService.getAllergenById(req.params.id);
+		if (!item) return res.status(404).json({ error: 'Allergen not found' });
+		res.json(item);
+	}),
+);
 
 module.exports = router;

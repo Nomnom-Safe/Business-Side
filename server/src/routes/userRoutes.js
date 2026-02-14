@@ -4,6 +4,7 @@ const cookies = require('../utils/cookies');
 const bcrypt = require('bcrypt');
 const userService = require('../services/businessUserService');
 const businessService = require('../services/businessService');
+const asyncHandler = require('../utils/asyncHandler');
 
 // @route   POST /api/auth/signin
 // @desc    Get a user

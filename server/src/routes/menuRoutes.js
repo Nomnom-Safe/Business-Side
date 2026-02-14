@@ -1,20 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const menuService = require('../services/menuService');
-const businessService = require('../services/businessService');
+// const businessService = require('../services/businessService');
+const asyncHandler = require('../utils/asyncHandler');
 
 // @route   GET /api/menus
 // @desc    Get all menus
 // @access  Public (no auth yet)
-router.get('/', async (req, res) => {
-	try {
+router.get(
+	'/',
+	asyncHandler(async (req, res) => {
 		const menus = await menuService.listMenus();
-
 		res.json(menus);
-	} catch (err) {
-		res.status(500).json({ error: 'Could not fetch menu' });
-	}
-});
+	}),
+);
 
 /* Non-MVP Feature: Multiple menus.
 	// @route   POST /api/menus
