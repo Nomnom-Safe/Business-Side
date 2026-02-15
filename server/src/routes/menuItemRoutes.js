@@ -1,129 +1,36 @@
+// server/src/routes/menuItemRoutes.js
 const express = require('express');
 const router = express.Router();
-const menuItemService = require('../services/menuItemService');
-const menuService = require('../services/menuService');
+const menuItemController = require('../controllers/menuItemController');
 const asyncHandler = require('../utils/asyncHandler');
-
-//
-// MenuItems.jsx
-//
 
 // @route GET /api/menuitems/menu/:businessId
 // @desc Get menu by menuTitle
 // @access Public
-router.get(
-	'/menu/',
-	asyncHandler(async (req, res) => {
-		const { businessId } = req.query;
-
-		if (!businessId) {
-			return res.status(400).json({ error: 'businessId is required' });
-		}
-
-		// With the schema, menus are identified by business_id. Return the menu for the business.
-		const menus = await menuService.listMenus();
-		const menu = menus.find((m) => m.business_id === businessId) || null;
-		res.status(200).json(menu || []);
-	}),
-);
+router.get('/menu/', asyncHandler(menuItemController.getMenuByBusinessId));
 
 // @route GET /api/menuitems
 // @desc Get menu items by menuID (optional)
 // @access Public
-router.get(
-	'/',
-	asyncHandler(async (req, res) => {
-		const { menuID } = req.query;
-
-		let filter = {};
-		if (menuID) {
-			filter.menu_id = menuID;
-		}
-
-		const menuitems = await menuItemService.listMenuItems(filter);
-
-		res.status(200).json(menuitems || []);
-	}),
-);
+router.get('/', asyncHandler(menuItemController.listMenuItems));
 
 // @route   PUT api/menuitems
 // @desc    Edit an existing menu item
 // @access  Public (no auth yet)
-router.put(
-	'/:id',
-	asyncHandler(async (req, res) => {
-		const { id } = req.params;
-		const { name, description, allergens, menu_id } = req.body;
-
-		// Ensure the ID is provided
-		if (!id) {
-			return res.status(400).json({ error: 'Menu item ID is required' });
-		}
-
-		const updatedMenuItem = await menuItemService.updateMenuItem(id, {
-			name,
-			description,
-			allergens,
-			menu_id,
-		});
-
-		// If no menu item is found, return an error
-		if (!updatedMenuItem) {
-			return res.status(404).json({ error: 'Menu item not found' });
-		}
-		res.status(200).json(updatedMenuItem);
-	}),
-);
+router.put('/:id', asyncHandler(menuItemController.updateMenuItem));
 
 // @route   DELETE api/menuitems/:id
 // @desc    Delete a menu item by ID
 // @access  Public (no auth yet)
 // @route DELETE /api/menuitems/:id
-router.delete(
-	'/:id',
-	asyncHandler(async (req, res) => {
-		const { id } = req.params;
-		const deleted = await menuItemService.deleteMenuItem(id);
-		if (!deleted) {
-			return res.status(404).json({ error: 'Menu Item not found' });
-		}
-		res.status(200).json({ message: 'Menu item deleted successfully' });
-	}),
-);
-
-///
-/// AddMenuItem.jsx
-///
+router.delete('/:id', asyncHandler(menuItemController.deleteMenuItem));
 
 // @route   POST /api/menuitems/add-menu-item
 // @desc    Create a new menu item
 // @access  Public (no auth yet)
 // Schema requires `menu_id` to reference the menu this item belongs to.
-router.post(
-	'/add-menu-item',
-	asyncHandler(async (req, res) => {
-		const { name, description, allergens, menu_id, item_type } = req.body;
+router.post('/add-menu-item', asyncHandler(menuItemController.createMenuItem));
 
-		if (!menu_id) {
-			return res.status(400).json({ error: 'menu_id is required' });
-		}
-
-		const newMenuItem = {
-			name: name,
-			description: description,
-			allergens: allergens || [],
-			menu_id: menu_id,
-			item_type: item_type,
-		};
-
-		const savedMenuItem = await menuItemService.createMenuItem(newMenuItem);
-		res.status(201).json(savedMenuItem);
-	}),
-);
-
-///
-/// MenuItemSwap.jsx
-///
 // ARCHIVED: Menu Item Swapping - Not part of MVP (single menu)
 // @route   GET /api/menuitems/menuswap-menus
 // @desc    Get all menus for business id

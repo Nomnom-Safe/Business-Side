@@ -22,7 +22,7 @@ const MenuItemSchema = z.object({
 	id: z.string(),
 	name: z.string().min(1, 'Menu item name is required'),
 	description: z.string(),
-	menu_id: z.string(),
+	menu_id: z.string().min(1),
 	item_type: z.string(),
 	allergens: z.array(allergenIdFormatSchema).default([]),
 });
