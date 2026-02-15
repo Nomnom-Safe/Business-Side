@@ -50,8 +50,19 @@ const clearAllCookies = (req, res) => {
 	});
 };
 
+function apply(res, cookiesObj) {
+	for (const [key, value] of Object.entries(cookiesObj)) {
+		if (key === 'token') {
+			res.cookie(key, value, { ...options, httpOnly: false });
+		} else {
+			res.cookie(key, value, options);
+		}
+	}
+}
+
 module.exports = {
 	setCookies,
 	updateCookie,
 	clearAllCookies,
+	apply,
 };
