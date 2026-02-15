@@ -21,20 +21,9 @@ const allergenIdFormatSchema = z
 const MenuItemSchema = z.object({
 	id: z.string(),
 	name: z.string().min(1, 'Menu item name is required'),
-	description: z
-		.string()
-		.min(1, 'Description is required')
-		.refine(
-			(desc) => desc.trim().split(/\s+/).length <= 10,
-			'Description must be 10 words or less',
-		),
+	description: z.string(),
 	menu_id: z.string(),
-	item_type: z.enum(ITEM_TYPES, {
-		errorMap: () => ({
-			message:
-				'Item type must be one of: entree, dessert, drink, side, or appetizer',
-		}),
-	}),
+	item_type: z.string(),
 	allergens: z.array(allergenIdFormatSchema).default([]),
 });
 
@@ -59,13 +48,7 @@ function createMenuItemSchemaWithAllergens(validAllergenIds) {
 	return z.object({
 		id: z.string(),
 		name: z.string().min(1, 'Menu item name is required'),
-		description: z
-			.string()
-			.min(1, 'Description is required')
-			.refine(
-				(desc) => desc.trim().split(/\s+/).length <= 10,
-				'Description must be 10 words or less',
-			),
+		description: z.string(),
 		menu_id: z.string(),
 		item_type: z.enum(ITEM_TYPES, {
 			errorMap: () => ({

@@ -102,17 +102,18 @@ router.delete(
 router.post(
 	'/add-menu-item',
 	asyncHandler(async (req, res) => {
-		const { name, description, allergens, menu_id } = req.body;
+		const { name, description, allergens, menu_id, item_type } = req.body;
 
 		if (!menu_id) {
 			return res.status(400).json({ error: 'menu_id is required' });
 		}
 
 		const newMenuItem = {
-			name,
-			description,
+			name: name,
+			description: description,
 			allergens: allergens || [],
-			menu_id,
+			menu_id: menu_id,
+			item_type: item_type,
 		};
 
 		const savedMenuItem = await menuItemService.createMenuItem(newMenuItem);

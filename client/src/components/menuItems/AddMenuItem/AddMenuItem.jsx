@@ -44,6 +44,7 @@ const CollapsiblePanel = ({
 		const { name, value } = e.target;
 		onFormChange({
 			...formData,
+			item_type: formData.item_type || 'entree',
 			[name]: typeof value === 'string' ? value.trim() : value,
 		});
 	};
@@ -175,10 +176,7 @@ const CollapsiblePanel = ({
 										value={formData.item_type || 'entree'}
 										onChange={(e) =>
 											onFormChange({
-												...formData,
-												item_type: (e.target.value || 'entree')
-													.trim()
-													.toLowerCase(),
+												item_type: e.target.value.trim().toLowerCase(),
 											})
 										}
 									>
@@ -309,7 +307,9 @@ const AddMenuItemForm = () => {
 
 	const handlePanelChange = (index, newFormData) => {
 		setPanels((prevPanels) =>
-			prevPanels.map((panel, i) => (i === index ? newFormData : panel)),
+			prevPanels.map((panel, i) =>
+				i === index ? { ...panel, ...newFormData } : panel,
+			),
 		);
 	};
 
