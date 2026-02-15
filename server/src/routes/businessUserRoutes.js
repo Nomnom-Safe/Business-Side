@@ -1,82 +1,39 @@
 const express = require('express');
 const router = express.Router();
 const cookies = require('../utils/cookies');
-const bcrypt = require('bcrypt');
-const userService = require('../services/businessUserService');
-const businessService = require('../services/businessService');
 const asyncHandler = require('../utils/asyncHandler');
+const { getIdToken } = require('../utils/getIdToken');
+const businessMembershipService = require('../services/businessMembershipService');
+const authService = require('../services/authService');
+const {
+	SignUpSchema,
+	EditLoginSchema,
+	SetBusinessSchema,
+	SignInSchema,
+} = require('../schemas');
+const { validate } = require('../utils/validate');
 
 // @route   POST /api/auth/signin
 // @desc    Get a user
 // @access  Public (no auth yet)
 router.post(
 	'/signin',
+	validate(SignInSchema),
 	asyncHandler(async (req, res) => {
-		const { email, password } = req.body;
+		const { email, password, idToken } = req.validated;
 
-		if (!email || !password) {
-			// Email or password is missing
-			return res.status(400).json({
-				error: 'Email and password are required',
-				message: 'Email and password are required.',
-			});
-		}
+		// Delegate signin logic to the service layer
+		const { user, cookiesToSet } = await authService.signIn({
+			email,
+			password,
+			idToken,
+		});
 
-		const foundUser = await userService.getUserByEmail(email);
-
-		if (!foundUser) {
-			// Email is wrong or doesn't exist
-			return res.status(401).json({
-				error: 'Invalid email',
-				message: 'Invalid email.',
-			});
-		}
-
-		// Check that the password is correct
-		const passwordMatches = await bcrypt.compare(password, foundUser.password);
-
-		if (!passwordMatches) {
-			// Password is wrong
-			return res.status(401).json({
-				error: 'Password is incorrect',
-				message: 'Password is incorrect.',
-			});
-		}
-
-		// Extract id token from request (client may provide it after Firebase sign-in)
-		const idToken =
-			req.body.idToken ||
-			(req.get('Authorization') || '').replace('Bearer ', '') ||
-			null;
-
-		// Set cookies (include token if provided)
-		cookies.setCookies(res, foundUser, idToken ? { token: idToken } : {});
-
-		// Get business name
-		if (foundUser.business_id === '') {
-			cookies.updateCookie(res, 'hasBusiness', false);
-		} else {
-			const foundBusiness = await businessService.getBusinessById(
-				foundUser.business_id,
-			);
-
-			if (!foundBusiness) {
-				// Business does not exist
-				cookies.updateCookie(res, 'hasBusiness', false);
-				return res.status(401).json({
-					error: 'Business not found',
-					message:
-						'The business associated with your account may have been deleted.\nPlease create a new business or join a different one.',
-				});
-			}
-
-			if (foundBusiness.name === 'New Business') {
-				cookies.updateCookie(res, 'hasBusiness', false);
-			}
-		}
+		// Set cookies
+		cookies.apply(res, cookiesToSet);
 
 		// Send success response w/ user's data
-		return res.status(200).json(foundUser);
+		return res.status(200).json({ success: true, data: user });
 	}),
 );
 
@@ -85,62 +42,27 @@ router.post(
 // @access  Public (no auth yet)
 router.post(
 	'/signup',
+	validate(SignUpSchema),
 	asyncHandler(async (req, res) => {
-		const { first_name, last_name, email, password } = req.body;
+		const { first_name, last_name, email, password } = req.validated;
 
-		if (!first_name || !last_name || !email || !password) {
-			// One of the fields is missing
-			return res.status(401).json({
-				error: 'All fields are required',
-				message: 'All fields are required.',
-			});
-		}
+		// Extract id token if provided by client
+		const idToken = getIdToken(req);
 
-		// Get User document from the DB if the email already exists
-		const userExists = await userService.getUserByEmail(email);
-
-		if (userExists) {
-			// Email already exists in DB
-			return res.status(401).json({
-				error: 'An account with the provided email already exists',
-				message: 'An account with the provided email already exists.',
-			});
-		}
-
-		// Create new User document from request body
-
-		const newUser = {
+		// Delegate signup logic to authService
+		const { user, cookiesToSet } = await authService.signUp({
 			first_name,
 			last_name,
 			email,
 			password,
-			business_id: '',
-			menu_item_layout: 0,
-			admin: false,
-		};
+			idToken,
+		});
 
-		// Save new user to Firestore
-		const savedUser = await userService.createUser(newUser);
+		// Set cookies
+		cookies.apply(res, cookiesToSet);
 
-		if (!savedUser) {
-			// User was not saved
-			return res.status(401).json({
-				error: 'Error saving user',
-				message: 'Error saving user.',
-			});
-		}
-
-		// Extract id token if provided by client
-		const idToken =
-			req.body.idToken ||
-			(req.get('Authorization') || '').replace('Bearer ', '') ||
-			null;
-
-		// Set cookies (include token if provided)
-		cookies.setCookies(res, savedUser, idToken ? { token: idToken } : {});
-
-		// Send response
-		return res.status(201).json(savedUser);
+		// Send success response
+		return res.status(201).json({ success: true, data: user });
 	}),
 );
 
@@ -163,101 +85,15 @@ router.post(
 // @access  Public (no auth yet)
 router.post(
 	'/edit-login',
+	validate(EditLoginSchema),
 	asyncHandler(async (req, res) => {
-		const { credType, currentCred, newCred } = req.body;
-		const { email: currentEmail } = req.cookies;
+		const { message, user, cookiesToSet } = await authService.editLogin(
+			req.validated,
+		);
 
-		// Check if any data is missing
-		if (!credType || !newCred || !currentCred) {
-			return res.status(401).json({
-				error: 'All fields are required',
-				message: 'All fields are required.',
-			});
-		}
+		if (cookiesToSet) cookies.apply(res, cookiesToSet);
 
-		// Handle email change
-		if (credType === 'email') {
-			// Check that the new email does not already exist in the DB
-			const emailExists = await userService.getUserByEmail(newCred);
-
-			if (emailExists) {
-				// Email already exists in the DB
-				return res.status(400).json({
-					error: 'Email already exists',
-					message: 'Email already exists.',
-				});
-			}
-
-			// Update the user's email in the DB
-			const updatedUser = await userService.updateUserByEmail(currentEmail, {
-				email: newCred,
-			});
-
-			if (updatedUser && updatedUser.email !== newCred) {
-				// Email was not saved to the DB
-				return res.status(400).json({
-					error: 'Error saving email',
-					message: 'Error saving email.',
-				});
-			}
-
-			// Update the email cookie
-			cookies.updateCookie(res, 'email', newCred);
-
-			// Send success response
-			return res.status(200).json({
-				message: 'Email changed successfully.',
-			});
-		}
-
-		// Handle password change
-		if (credType === 'password') {
-			// Get User document from the DB
-			const user = await userService.getUserByEmail(currentEmail);
-
-			if (!user) {
-				// Email does not exist in the DB
-				return res.status(400).json({
-					error: 'User not found',
-					message: 'User not found.',
-				});
-			}
-
-			// Check that the current password is correct
-			const currentMatchesDb = await bcrypt.compare(currentCred, user.password);
-
-			if (!currentMatchesDb) {
-				// Current password is incorrect
-				return res.status(400).json({
-					error: 'Current password is incorrect',
-					message: 'Current password is incorrect.',
-				});
-			}
-
-			// Check that the new password is not the same as the current password
-			if (newCred === currentCred) {
-				return res.status(400).json({
-					error: `New ${credType} must be different from current ${credType}`,
-					message: `New ${credType} must be different from current ${credType}.`,
-				});
-			}
-
-			// Change and save user password (hashing handled by service)
-			await userService.updateUserByEmail(currentEmail, {
-				password: newCred,
-			});
-
-			// Send response
-			return res.status(200).json({
-				message: 'Password changed successfully.',
-			});
-		}
-
-		// Invalid credential was given
-		return res.status(400).json({
-			error: 'Credential cannot be changed',
-			message: 'Credential cannot be changed.',
-		});
+		res.status(200).json({ success: true, message, data: user });
 	}),
 );
 
@@ -266,69 +102,21 @@ router.post(
 // @access  Public (no auth yet)
 router.post(
 	'/set-business',
+	validate(SetBusinessSchema),
 	asyncHandler(async (req, res) => {
-		const { type, businessId } = req.body;
+		const { type, businessId } = req.validated;
 		const { email } = req.cookies;
 
-		if (!businessId) {
-			return res.status(400).json({
-				error: 'A business is required',
-				message: 'A business is required.',
-			});
-		}
+		const { cookiesToSet, response } =
+			await businessMembershipService.assignUserToBusiness(
+				email,
+				businessId,
+				type,
+			);
 
-		const foundBusiness = await businessService.getBusinessById(businessId);
+		cookies.apply(res, cookiesToSet);
 
-		if (!foundBusiness) {
-			return res.status(401).json({
-				error: 'Invalid business',
-				message: 'Invalid business.',
-			});
-		}
-
-		var updatedUser;
-
-		try {
-			if (type === 'existing') {
-				updatedUser = await userService.updateUserByEmail(email, {
-					business_id: businessId,
-					admin: false,
-				});
-			} else if (type === 'new') {
-				updatedUser = await userService.updateUserByEmail(email, {
-					business_id: businessId,
-					admin: true,
-				});
-			}
-		} catch (err) {
-			console.error('Error updating user:', err);
-		}
-
-		if (!updatedUser) {
-			return res.status(401).json({
-				error: 'Could not add user to the business',
-				message: 'Could not add user to the business.',
-			});
-		}
-
-		// Set cookies
-		if (type === 'existing') {
-			cookies.updateCookie(res, 'hasBusiness', true);
-			cookies.updateCookie(res, 'isAdmin', false);
-		} else if (type === 'new') {
-			cookies.updateCookie(res, 'hasBusiness', false);
-			cookies.updateCookie(res, 'isAdmin', updatedUser.admin);
-		}
-
-		if (type === 'existing') {
-			// Include business_id in response
-			res.status(200).json({
-				message: `You have been added to ${foundBusiness.name} successfully.`,
-				business_id: foundBusiness.id,
-			});
-		} else if (type === 'new') {
-			res.status(200).json({ message: 'Business template created.' });
-		}
+		res.status(200).json({ success: true, data: response });
 	}),
 );
 
