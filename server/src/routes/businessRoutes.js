@@ -55,7 +55,7 @@ router.get(
 );
 
 // @route   POST /api/businesses
-// @desc    Create a new business
+// @desc    Create a new business and auto-generate its menu
 // @access  Public (no auth yet)
 router.post(
 	'/',
@@ -74,7 +74,7 @@ router.post(
 		} = req.body;
 
 		const unnamed = name === 'New Business';
-		var existing;
+		let existing = null;
 
 		if (!unnamed && name !== '') {
 			existing = await businessService.businessNameExists(name);
@@ -114,19 +114,10 @@ router.post(
 			diets,
 			disclaimers: Array.isArray(disclaimers) ? disclaimers : [],
 			cuisine: cuisine || '',
-			// menu_id will be created and set after creating the menu
-			menu_id: null,
+			menu_id: null, // menu_id will be created and set after creating the menu
 		};
 
 		const savedBusiness = await businessService.createBusiness(newBusiness);
-
-		// Create a menu for the new business and set the business.menu_id
-		const menuService = require('../services/menuService');
-		try {
-			await menuService.createMenuForBusiness(savedBusiness.id);
-		} catch (err) {
-			console.error('Failed to create menu for new business:', err);
-		}
 
 		if (!savedBusiness) {
 			return res.status(400).json({
@@ -135,22 +126,42 @@ router.post(
 			});
 		}
 
-		const email = req.cookies.email;
-		const user = await userService.getUserByEmail(email);
+		// Create a menu for the new business and set the business.menu_id
+		const menuService = require('../services/menuService');
 
-		if (!user) {
-			return res.status(400).json({
-				error: 'Error associating new business with user',
-				message: 'Error associating new business with user.',
+		try {
+			await menuService.createMenuForBusiness(savedBusiness.id);
+		} catch (err) {
+			console.error('Failed to create menu for new business:', err);
+			return res.status(500).json({
+				error: 'Menu creation failed',
+				message: 'Business was created, but menu creation failed.',
 			});
 		}
 
-		cookies.updateCookie(res, 'isAdmin', user.admin);
+		const email = req.cookies.email;
+		let user = null;
 
-		// Return business with its menus populated
+		if (email) {
+			user = await userService.getUserByEmail(email);
+			if (user) {
+				cookies.updateCookie(res, 'isAdmin', user.admin);
+			} else {
+				console.warn(
+					'Business created but user association failed — no user found for email cookie.',
+				);
+			}
+		} else {
+			console.warn(
+				'Business created but user association skipped — no email cookie present.',
+			);
+		}
+
+		// Return business with its menu populated
 		const populated = await businessService.getBusinessWithMenus(
 			savedBusiness.id,
 		);
+
 		return res.status(201).json(populated);
 	}),
 );
