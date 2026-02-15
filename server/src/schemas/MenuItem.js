@@ -16,18 +16,10 @@ const ITEM_TYPES = ['entree', 'dessert', 'drink', 'side', 'appetizer'];
  */
 const allergenIdFormatSchema = z
 	.string()
-	.regex(
-		/^all_[a-z0-9]+$/,
-		"Allergen ID must start with 'all_' followed by alphanumeric characters",
-	);
+	.regex(/^all_/, "Allergen ID must start with 'all_'");
 
 const MenuItemSchema = z.object({
-	id: z
-		.string()
-		.regex(
-			/^item_[a-z0-9]{11}$/,
-			"Menu item ID must start with 'item_' followed by 11 lowercase alphanumeric characters",
-		),
+	id: z.string(),
 	name: z.string().min(1, 'Menu item name is required'),
 	description: z
 		.string()
@@ -36,12 +28,7 @@ const MenuItemSchema = z.object({
 			(desc) => desc.trim().split(/\s+/).length <= 10,
 			'Description must be 10 words or less',
 		),
-	menu_id: z
-		.string()
-		.regex(
-			/^menu_[a-z0-9]{11}$/,
-			"Menu ID must start with 'menu_' followed by 11 lowercase alphanumeric characters",
-		),
+	menu_id: z.string(),
 	item_type: z.enum(ITEM_TYPES, {
 		errorMap: () => ({
 			message:
@@ -70,12 +57,7 @@ function createMenuItemSchemaWithAllergens(validAllergenIds) {
 	}
 
 	return z.object({
-		id: z
-			.string()
-			.regex(
-				/^item_[a-z0-9]{11}$/,
-				"Menu item ID must start with 'item_' followed by 11 lowercase alphanumeric characters",
-			),
+		id: z.string(),
 		name: z.string().min(1, 'Menu item name is required'),
 		description: z
 			.string()
@@ -84,12 +66,7 @@ function createMenuItemSchemaWithAllergens(validAllergenIds) {
 				(desc) => desc.trim().split(/\s+/).length <= 10,
 				'Description must be 10 words or less',
 			),
-		menu_id: z
-			.string()
-			.regex(
-				/^menu_[a-z0-9]{11}$/,
-				"Menu ID must start with 'menu_' followed by 11 lowercase alphanumeric characters",
-			),
+		menu_id: z.string(),
 		item_type: z.enum(ITEM_TYPES, {
 			errorMap: () => ({
 				message:
@@ -117,7 +94,7 @@ const CreateMenuItemSchema = MenuItemSchema.omit({ id: true });
  * Schema for updating a menu item (all fields optional except ID)
  */
 const UpdateMenuItemSchema = MenuItemSchema.partial().extend({
-	id: z.string().regex(/^item_[a-z0-9]{11}$/),
+	id: z.string(),
 });
 
 module.exports = {

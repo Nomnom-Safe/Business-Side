@@ -62,12 +62,7 @@ const US_STATES = [
 ];
 
 const AddressSchema = z.object({
-	id: z
-		.string()
-		.regex(
-			/^add_[a-z0-9]{11}$/,
-			"Address ID must start with 'add_' followed by 11 lowercase alphanumeric characters",
-		),
+	id: z.string(),
 	street: z
 		.string()
 		.min(1, 'Street is required')
@@ -96,7 +91,7 @@ const CreateAddressSchema = AddressSchema.omit({ id: true });
  * Schema for updating an address (all fields optional except ID)
  */
 const UpdateAddressSchema = AddressSchema.partial().extend({
-	id: z.string().regex(/^add_[a-z0-9]{11}$/),
+	id: z.string(),
 });
 
 module.exports = {
