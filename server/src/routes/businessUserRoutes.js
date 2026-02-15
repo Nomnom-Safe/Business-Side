@@ -1,17 +1,18 @@
+// server/src/routes/businessUserRoutes.js
+
 const express = require('express');
 const router = express.Router();
-const cookies = require('../utils/cookies');
 const asyncHandler = require('../utils/asyncHandler');
-const { getIdToken } = require('../utils/getIdToken');
-const businessMembershipService = require('../services/businessMembershipService');
-const authService = require('../services/authService');
+const { validate } = require('../utils/validate');
+
 const {
 	SignUpSchema,
 	EditLoginSchema,
 	SetBusinessSchema,
 	SignInSchema,
 } = require('../schemas');
-const { validate } = require('../utils/validate');
+
+const businessUserController = require('../controllers/businessUserController');
 
 // @route   POST /api/auth/signin
 // @desc    Get a user
@@ -19,22 +20,7 @@ const { validate } = require('../utils/validate');
 router.post(
 	'/signin',
 	validate(SignInSchema),
-	asyncHandler(async (req, res) => {
-		const { email, password, idToken } = req.validated;
-
-		// Delegate signin logic to the service layer
-		const { user, cookiesToSet } = await authService.signIn({
-			email,
-			password,
-			idToken,
-		});
-
-		// Set cookies
-		cookies.apply(res, cookiesToSet);
-
-		// Send success response w/ user's data
-		return res.status(200).json({ success: true, data: user });
-	}),
+	asyncHandler(businessUserController.signIn),
 );
 
 // @route   POST /api/auth/signup
@@ -43,42 +29,13 @@ router.post(
 router.post(
 	'/signup',
 	validate(SignUpSchema),
-	asyncHandler(async (req, res) => {
-		const { first_name, last_name, email, password } = req.validated;
-
-		// Extract id token if provided by client
-		const idToken = getIdToken(req);
-
-		// Delegate signup logic to authService
-		const { user, cookiesToSet } = await authService.signUp({
-			first_name,
-			last_name,
-			email,
-			password,
-			idToken,
-		});
-
-		// Set cookies
-		cookies.apply(res, cookiesToSet);
-
-		// Send success response
-		return res.status(201).json({ success: true, data: user });
-	}),
+	asyncHandler(businessUserController.signUp),
 );
 
 // @route   POST /api/auth/logout
 // @desc    Log out
 // @access  Public (no auth yet)
-router.post(
-	'/logout',
-	asyncHandler(async (req, res) => {
-		// Clear cookies
-		cookies.clearAllCookies(req, res);
-
-		// Send response
-		return res.status(200).json({ message: 'Logged out successfully.' });
-	}),
-);
+router.post('/logout', asyncHandler(businessUserController.logout));
 
 // @route   POST /api/auth/edit-login
 // @desc    Change email or password
@@ -86,15 +43,7 @@ router.post(
 router.post(
 	'/edit-login',
 	validate(EditLoginSchema),
-	asyncHandler(async (req, res) => {
-		const { message, user, cookiesToSet } = await authService.editLogin(
-			req.validated,
-		);
-
-		if (cookiesToSet) cookies.apply(res, cookiesToSet);
-
-		res.status(200).json({ success: true, message, data: user });
-	}),
+	asyncHandler(businessUserController.editLogin),
 );
 
 // @route   POST /api/auth/set-business
@@ -103,21 +52,7 @@ router.post(
 router.post(
 	'/set-business',
 	validate(SetBusinessSchema),
-	asyncHandler(async (req, res) => {
-		const { type, businessId } = req.validated;
-		const { email } = req.cookies;
-
-		const { cookiesToSet, response } =
-			await businessMembershipService.assignUserToBusiness(
-				email,
-				businessId,
-				type,
-			);
-
-		cookies.apply(res, cookiesToSet);
-
-		res.status(200).json({ success: true, data: response });
-	}),
+	asyncHandler(businessUserController.setBusiness),
 );
 
 module.exports = router;
