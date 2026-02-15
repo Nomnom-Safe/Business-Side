@@ -161,7 +161,8 @@ Business-Side/
 │   │   ├── config/
 │   │   │   └── firebase.js
 │   │   ├── middleware/
-│   │   │   └── auth.js
+│   │   │   ├── auth.js
+│   │   │   └── errorHandler.js
 │   │   ├── routes/
 │   │   │   ├── addressRoutes.js
 │   │   │   ├── adminRoutes.js
@@ -171,6 +172,12 @@ Business-Side/
 │   │   │   ├── menuItemRoutes.js
 │   │   │   └── menuRoutes.js
 │   │   ├── schemas/
+│   │   │   ├── auth/
+│   │   │   │   ├── EditLoginSchema.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── SetBusinessSchema.js
+│   │   │   │   ├── SignInSchema.js
+│   │   │   │   └── SignUpSchema.js
 │   │   │   ├── Address.js
 │   │   │   ├── Allergen.js
 │   │   │   ├── Business.js
@@ -182,6 +189,8 @@ Business-Side/
 │   │   ├── services/
 │   │   │   ├── addressService.js
 │   │   │   ├── allergenService.js
+│   │   │   ├── authService.js
+│   │   │   ├── businessMembershipService.js
 │   │   │   ├── businessService.js
 │   │   │   ├── businessUserService.js
 │   │   │   ├── firestoreInit.js
@@ -189,7 +198,10 @@ Business-Side/
 │   │   │   └── menuService.js
 │   │   └── utils/
 │   │       ├── asyncHandler.js
-│   │       └── cookies.js
+│   │       ├── cookies.js
+│   │       ├── getIdToken.js
+│   │       ├── responseHelpers.js
+│   │       └── validate.js
 │   ├── package.json
 │   ├── README.md
 │   └── server.js

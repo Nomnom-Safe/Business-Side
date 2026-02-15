@@ -5,6 +5,7 @@ import { FaAngleDown, FaAngleRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { getAllergenLabels } from '../../../utils/allergenCache';
 
 // Collapsible Panel Component
 const CollapsiblePanel = ({
@@ -16,6 +17,7 @@ const CollapsiblePanel = ({
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedAllergens, setSelectedAllergens] = useState([]);
+	const [displayLabels, setDisplayLabels] = useState('');
 	const location = useLocation();
 	const menuID = location.state?.menuID;
 
@@ -23,12 +25,30 @@ const CollapsiblePanel = ({
 		setIsOpen(!isOpen);
 	};
 
+	// Sync local allergen state with formData when panel opens or changes
+	useEffect(() => {
+		setSelectedAllergens(formData.selectedAllergens || []);
+	}, [formData.selectedAllergens]);
+
+	// Update allergen display labels whenever selectedAllergens changes
+	useEffect(() => {
+		async function loadLabels() {
+			const labels = await getAllergenLabels(selectedAllergens);
+			setDisplayLabels(labels.join(', '));
+		}
+		loadLabels();
+	}, [selectedAllergens]);
+
+	// Sanitize all text inputs
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
-		onFormChange({ ...formData, [name]: value });
+		onFormChange({
+			...formData,
+			[name]: typeof value === 'string' ? value.trim() : value,
+		});
 	};
 
-	// Save single menuItem
+	// Save single menu item
 	const handleSave = async () => {
 		if (!formData.name || formData.name.trim() === '') {
 			alert('Please enter a name for the menu item.');
@@ -38,54 +58,40 @@ const CollapsiblePanel = ({
 		try {
 			// choose a single menu_id: prefer the route menuID, fallback to masterMenuID
 			const targetMenuId = menuID || masterMenuID;
+
+			const allergenIDs = formData.selectedAllergens;
+
 			const response = await axios.post(
 				'http://localhost:5000/api/menuitems/add-menu-item',
 				{
 					name: formData.name,
 					description: formData.description,
 					ingredients: formData.ingredients,
-					allergens: formData.selectedAllergens || [],
+					allergens: allergenIDs,
 					menu_id: targetMenuId,
-					item_type: formData.item_type || 'entree',
+					item_type: (formData.item_type || 'entree').trim().toLowerCase(),
 				},
 			);
-			if (response.ok) {
-				alert('Item saved successfully!');
-			}
+
+			alert('Item saved successfully!');
 		} catch (err) {
 			console.error('Error saving menu item:', err);
 			alert('Failed to save item.');
 		}
 	};
 
-	const handleAllergenChange = (event) => {
-		const allergenValue = event.target.value;
+	// Handle allergen checkbox changes
+	const handleAllergenChange = (event, allergenId) => {
 		let updatedAllergens;
 
 		if (event.target.checked) {
-			updatedAllergens = [...selectedAllergens, allergenValue];
+			updatedAllergens = [...selectedAllergens, allergenId];
 		} else {
-			updatedAllergens = selectedAllergens.filter((a) => a !== allergenValue);
+			updatedAllergens = selectedAllergens.filter((a) => a !== allergenId);
 		}
 
 		setSelectedAllergens(updatedAllergens);
-		onFormChange({ ...formData, selectedAllergens: updatedAllergens }); // <-- Sync it here
-	};
-
-	const getAllergenLabels = () => {
-		const allergenMap = {
-			lactose: 'Lactose (milk)',
-			gluten: 'Gluten',
-			meat: 'Meat',
-			fish: 'Fish',
-			animalProducts: 'Animal Products',
-			eggs: 'Eggs',
-			shellfish: 'Shellfish',
-			treeNuts: 'Tree Nuts',
-			peanuts: 'Peanuts',
-		};
-
-		return selectedAllergens.map((value) => allergenMap[value]).join(', ');
+		onFormChange({ ...formData, selectedAllergens: updatedAllergens });
 	};
 
 	return (
@@ -146,7 +152,7 @@ const CollapsiblePanel = ({
 									<h3>This Item Contains the Following Allergens:</h3>
 									<div className='display-allergens'>
 										{selectedAllergens.length > 0 ? (
-											getAllergenLabels()
+											displayLabels
 										) : (
 											<p className='no-allergens-message'>
 												No allergens selected
@@ -168,7 +174,12 @@ const CollapsiblePanel = ({
 										name='item_type'
 										value={formData.item_type || 'entree'}
 										onChange={(e) =>
-											onFormChange({ ...formData, item_type: e.target.value })
+											onFormChange({
+												...formData,
+												item_type: (e.target.value || 'entree')
+													.trim()
+													.toLowerCase(),
+											})
 										}
 									>
 										<option value='entree'>Entree</option>
@@ -253,16 +264,18 @@ const AddMenuItemForm = () => {
 				return;
 			}
 			// handles saving the valid panels
-			const saveRequests = validPanels.map((panel) =>
-				axios.post('http://localhost:5000/api/menuitems/add-menu-item', {
+			const saveRequests = validPanels.map(async (panel) => {
+				const allergenIDs = panel.selectedAllergens;
+
+				return axios.post('http://localhost:5000/api/menuitems/add-menu-item', {
 					name: panel.name,
 					description: panel.description,
 					ingredients: panel.ingredients,
-					allergens: panel.selectedAllergens || [],
+					allergens: allergenIDs,
 					menu_id: targetMenuId,
-					item_type: panel.item_type || 'entree',
-				}),
-			);
+					item_type: (panel.item_type || 'entree').trim().toLowerCase(),
+				});
+			});
 
 			await Promise.all(saveRequests);
 			alert('All items saved successfully!');
@@ -282,7 +295,16 @@ const AddMenuItemForm = () => {
 
 	// Loading in the panels
 	const handleAddPanel = () => {
-		setPanels([...panels, {}]);
+		setPanels([
+			...panels,
+			{
+				name: '',
+				ingredients: '',
+				description: '',
+				selectedAllergens: [],
+				item_type: 'entree',
+			},
+		]);
 	};
 
 	const handlePanelChange = (index, newFormData) => {

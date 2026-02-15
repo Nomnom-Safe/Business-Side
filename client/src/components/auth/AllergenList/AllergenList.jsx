@@ -1,35 +1,35 @@
+import { useEffect, useState } from 'react';
+import { getAllergens } from '../../../utils/allergenCache';
 import '../../../styles/global.scss';
 
 function GenerateAllergenList({
 	selectedAllergens = [],
 	onAllergenChange = () => {},
 }) {
-	const allergens = [
-		{ label: 'Lactose (milk)', value: 'lactose' },
-		{ label: 'Gluten', value: 'gluten' },
-		{ label: 'Meat', value: 'meat' },
-		{ label: 'Fish', value: 'fish' },
-		{ label: 'Animal Products', value: 'animalProducts' },
-		{ label: 'Eggs', value: 'eggs' },
-		{ label: 'Shellfish', value: 'shellfish' },
-		{ label: 'Tree Nuts', value: 'treeNuts' },
-		{ label: 'Peanuts', value: 'peanuts' },
-	];
+	const [allergens, setAllergens] = useState([]);
+
+	useEffect(() => {
+		async function load() {
+			const { arr } = await getAllergens(); // arr = [{ id, label }]
+			setAllergens(arr);
+		}
+		load();
+	}, []);
 
 	return (
 		<>
 			{allergens.map((allergen) => (
 				<label
-					key={allergen.value}
+					key={allergen.id}
 					className='allergen-label'
 				>
 					<input
 						type='checkbox'
 						name='allergens'
-						value={allergen.value}
+						value={allergen.id}
 						className='checkbox'
-						checked={selectedAllergens.includes(allergen.value)}
-						onChange={(e) => onAllergenChange(e, allergen.value)}
+						checked={selectedAllergens.includes(allergen.id)}
+						onChange={(e) => onAllergenChange(e, allergen.id)}
 					/>
 					{allergen.label}
 				</label>
