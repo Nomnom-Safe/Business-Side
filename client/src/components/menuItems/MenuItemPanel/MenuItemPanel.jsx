@@ -7,7 +7,7 @@ import {
 	resolveLabelsToIDs,
 } from '../../../utils/allergenCache';
 
-const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
+const MenuItemPanel = ({ item, /*menuID,*/ onSave, onDelete }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [showConfirm, setShowConfirm] = useState(false);
 	const [menuItemToDelete, setMenuItemToDelete] = useState(null);
@@ -16,7 +16,9 @@ const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 	const [allergenLabels, setAllergenLabels] = useState([]);
 	const [editableAllergenLabels, setEditableAllergenLabels] = useState('');
 
-	const masterMenuID = localStorage.getItem('masterMenu_ID');
+	/* Non-MVP Feature: Multi-Menu Support
+		const masterMenuID = localStorage.getItem('masterMenu_ID');
+  */
 
 	const toggleOpen = () => setIsOpen(!isOpen);
 	const toggleEdit = async () => {
@@ -64,25 +66,40 @@ const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 		}
 
 		try {
-			// if current menuID is masterMenuID, Delete the entire menuItem
-			if (menuID === masterMenuID) {
-				await axios.delete(
-					`http://localhost:5000/api/menuitems/${menuItemToDelete}`,
-				);
+			// Delete the menuItem
+			await axios.delete(
+				`http://localhost:5000/api/menuitems/${menuItemToDelete}`,
+			);
 
-				if (onDelete) {
-					onDelete(menuItemToDelete);
-				}
-				alert('Menu item deleted successfully!');
-
-				setMenuItemToDelete(null);
-				setShowConfirm(false);
-			} else {
-				// remove current menuID from menuItem's menuIDs array
-				alert(
-					'Remove menu item from non Master Menu by moving it in in Integrate Menu.',
-				);
+			if (onDelete) {
+				onDelete(menuItemToDelete);
 			}
+			alert('Menu item deleted successfully!');
+
+			setMenuItemToDelete(null);
+			setShowConfirm(false);
+
+			/* Non-MVP Feature: Multi-Menu Support
+				// if current menuID is masterMenuID, Delete the entire menuItem
+				if (menuID === masterMenuID) {
+					await axios.delete(
+						`http://localhost:5000/api/menuitems/${menuItemToDelete}`,
+					);
+
+					if (onDelete) {
+						onDelete(menuItemToDelete);
+					}
+					alert('Menu item deleted successfully!');
+
+					setMenuItemToDelete(null);
+					setShowConfirm(false);
+				} else {
+					// remove current menuID from menuItem's menuIDs array
+					alert(
+						'Remove menu item from non Master Menu by moving it in in Integrate Menu.',
+					);
+				}
+			*/
 		} catch (err) {
 			console.error('Error deleting menu item:', err);
 		}
