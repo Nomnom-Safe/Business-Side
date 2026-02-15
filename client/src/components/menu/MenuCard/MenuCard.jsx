@@ -1,71 +1,76 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MenuCard.scss';
-import axios from 'axios';
+// import axios from 'axios';
 
 export default function MenuCard({
 	title,
 	description,
 	buttonLabel,
-	isEditable,
-	onTitleChange,
-	onDescriptionChange,
+	// isEditable,
+	// onTitleChange,
+	// onDescriptionChange,
 }) {
 	const navigate = useNavigate();
 	const [localTitle, setLocalTitle] = useState(title);
-	const [localDescription, setLocalDescription] = useState(description);
+	// const [localDescription, setLocalDescription] = useState(description);
 
-	const handleTitleChange = (e) => {
-		const newTitle = e.target.value;
-		setLocalTitle(newTitle);
-		onTitleChange(newTitle);
-	};
+	/* ARCHIVE: Non-MVP Feature (updating title/description)
+		const handleTitleChange = (e) => {
+			const newTitle = e.target.value;
+			setLocalTitle(newTitle);
+			onTitleChange(newTitle);
+		};
 
-	const handleDescriptionChange = (e) => {
-		const newDesc = e.target.value;
-		setLocalDescription(newDesc);
-		onDescriptionChange(newDesc);
-	};
+		const handleDescriptionChange = (e) => {
+			const newDesc = e.target.value;
+			setLocalDescription(newDesc);
+			onDescriptionChange(newDesc);
+		};
+	*/
 
 	const toMenu = () => {
 		navigate('/menuitems', {
-			state: { menuTitle: localTitle }, // passing the editable title
+			state: { menuTitle: localTitle },
 		});
 	};
 
-	const saveTitleToDb = async () => {
-		try {
-			const businessId = localStorage.getItem('businessId');
-			const res = await axios.put(
-				`http://localhost:5000/api/menus/update-title-description`,
-				{
-					businessId,
-					title: localTitle,
-					description: localDescription,
-				},
-			);
-			console.log('Menu updated successfully:', res.data);
-		} catch (err) {
-			console.error('Error updating menu title:', err);
-		}
-	};
+	/* ARCHIVE: Non-MVP Feature (updating title/description)
+		const saveTitleToDb = async () => {
+			try {
+				const businessId = localStorage.getItem('businessId');
+				const res = await axios.put(
+					`http://localhost:5000/api/menus/update-title-description`,
+					{
+						businessId,
+						title: localTitle,
+						description: localDescription,
+					},
+				);
+				console.log('Menu updated successfully:', res.data);
+			} catch (err) {
+				console.error('Error updating menu title:', err);
+			}
+		};
 
-	const saveDescriptionToDb = saveTitleToDb;
+		const saveDescriptionToDb = saveTitleToDb;
+	*/
 
 	return (
 		<div className='menu-card'>
-			{isEditable ? (
+			{
+				/*isEditable ? (
 				<input
 					className='menu-title-input'
 					value={localTitle}
 					onChange={handleTitleChange}
 					onBlur={saveTitleToDb}
 				/>
-			) : (
-				<h3 className='menu-title'>{title}</h3>
-			)}
+			) :*/ <h3 className='menu-title'>{title}</h3>
+			}
 
-			{isEditable ? (
+			{
+				/*isEditable ? (
 				<textarea
 					className='menu-description-textarea'
 					value={localDescription}
@@ -73,9 +78,8 @@ export default function MenuCard({
 					onBlur={saveDescriptionToDb}
 					rows={3}
 				/>
-			) : (
-				<p className='menu-description'>{description}</p>
-			)}
+			) :*/ <p className='menu-description'>{description}</p>
+			}
 
 			<button
 				onClick={toMenu}
