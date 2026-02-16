@@ -57,6 +57,9 @@ Business-Side/
 │   │   │   │       ├── EditBusinessInfo.jsx
 │   │   │   │       └── EditBusinessInfo.scss
 │   │   │   ├── common/
+│   │   │   │   ├── AddressFields/
+│   │   │   │   │   ├── AddressFields.jsx
+│   │   │   │   │   └── AddressFields.scss
 │   │   │   │   ├── ConfirmationMessage/
 │   │   │   │   │   └── ConfirmationMessage.jsx
 │   │   │   │   ├── ErrorMessage/
@@ -160,6 +163,14 @@ Business-Side/
 │   ├── src/
 │   │   ├── config/
 │   │   │   └── firebase.js
+│   │   ├── controllers/
+│   │   │   ├── addressController.js
+│   │   │   ├── allergenController.js
+│   │   │   ├── businessController.helpers.js
+│   │   │   ├── businessController.js
+│   │   │   ├── businessUserController.js
+│   │   │   ├── menuController.js
+│   │   │   └── menuItemController.js
 │   │   ├── middleware/
 │   │   │   ├── auth.js
 │   │   │   └── errorHandler.js
