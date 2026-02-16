@@ -75,25 +75,31 @@ const CreateBusinessSchema = BusinessSchema.omit({ id: true }).extend({
  * Schema for updating a business (all fields optional except ID)
  * ID and optional fields accept Firestore auto-IDs and plain strings (e.g. address)
  */
-const UpdateBusinessSchema = BusinessSchema.partial()
-	.extend({
+const UpdateBusinessSchema = z
+	.object({
 		id: z.string().min(1, 'Business ID is required'),
-	})
-	.extend({
-		address_id: z
-			.union([z.string(), z.string().min(1), z.literal('')])
-			.optional()
-			.nullable(),
+
+		// Optional fields — only updated if provided
+		name: z.string().min(1).optional(),
 		website: z
 			.union([z.string().min(1), z.literal('None'), z.literal('')])
 			.optional(),
+		address_id: z
+			.union([z.string(), z.literal('')])
+			.optional()
+			.nullable(),
 		phone: z
 			.union([z.string().regex(/^\d{3}-\d{3}-\d{4}$/), z.literal('')])
 			.optional(),
 		cuisine: z.string().optional(),
+
+		// Arrays
 		hours: z.array(z.string().min(1)).optional(),
 		disclaimers: z.array(z.string().min(1)).optional(),
-	});
+		allergens: z.array(z.string()).optional(),
+		diets: z.array(z.string()).optional(),
+	})
+	.strict();
 
 module.exports = {
 	BusinessSchema,

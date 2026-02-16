@@ -47,12 +47,12 @@ async function getBusinessWithMenus(id) {
 async function createBusiness(businessObj) {
 	const valid = CreateBusinessSchema.parse(businessObj);
 	valid.menu_id = null; // Ensure menu_id initialized to null
-	
+
 	// Remove undefined fields so Firestore doesn't reject them
 	Object.keys(valid).forEach(
 		(key) => valid[key] === undefined && delete valid[key],
 	);
-	
+
 	const ref = await businessesCollection.add(valid);
 	const snap = await ref.get();
 	return { id: ref.id, ...snap.data() };
@@ -64,6 +64,10 @@ async function updateBusiness(id, updateObj) {
 	if (!snap.exists) return null;
 
 	const merged = { id, ...snap.data(), ...updateObj };
+
+	// Remove protected fields before validation
+	const protectedFields = ['menu_id'];
+	protectedFields.forEach((field) => delete merged[field]);
 
 	// Remove undefined fields so Zod doesn't validate them
 	Object.keys(merged).forEach(
