@@ -4,13 +4,14 @@ const businessService = require('../services/businessService');
 const userService = require('../services/businessUserService');
 const cookies = require('../utils/cookies');
 const menuService = require('../services/menuService');
+const addressService = require('../services/addressService');
 
 function mapBusinessResponse(business) {
 	return {
 		id: business.id,
 		name: business.name || '',
 		website: business.website || '',
-		address: business.address_id,
+		address_id: business.address_id,
 		allergens: business.allergens || [],
 		diets: business.diets || [],
 		phone: business.phone || '000-000-0000',
@@ -70,7 +71,7 @@ function validatePhone(phone) {
 async function validateAddressId(address_id) {
 	if (!address_id) return null;
 
-	const exists = await businessService.verifyAddressExists(address_id);
+	const exists = await addressService.verifyAddressExists(address_id);
 	if (!exists) {
 		return { error: 'address_id does not exist' };
 	}

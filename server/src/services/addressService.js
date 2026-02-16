@@ -1,3 +1,5 @@
+// server/src/services/addressService.js
+
 const { db } = require('./firestoreInit');
 const {
 	AddressSchema,
@@ -6,6 +8,13 @@ const {
 } = require('../schemas/Address');
 
 const addressesCollection = db.collection('addresses');
+
+async function verifyAddressExists(address_id) {
+	if (!address_id) return false;
+
+	const doc = await addressesCollection.doc(address_id).get();
+	return doc.exists;
+}
 
 async function listAddresses() {
 	const snap = await addressesCollection.get();
@@ -52,6 +61,7 @@ async function deleteAddress(id) {
 }
 
 module.exports = {
+	verifyAddressExists,
 	listAddresses,
 	getAddressById,
 	createAddress,
