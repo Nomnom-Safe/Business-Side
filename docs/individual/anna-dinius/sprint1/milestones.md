@@ -21,7 +21,7 @@ footer: NomNom Safe Milestones - Anna Dinius
 
 - **Dates:** 2/9/2026 – 2/15/2026
 - **Focus:** Lay the foundation for refactoring the `server` & `auth` directories using Software Design Principles
-- **Requirements:** [2.1-2.11](https://github.com/Nomnom-Safe/Business-Side/blob/main/docs/individual/anna-dinius/sprint1/requirements.md)
+- **Requirements:** [2.5-2.10](https://github.com/Nomnom-Safe/Business-Side/blob/main/docs/individual/anna-dinius/sprint1/requirements.md)
 
 ---
 
@@ -29,7 +29,7 @@ footer: NomNom Safe Milestones - Anna Dinius
 
 - **Dates:** 2/16/2026 – 2/22/2026
 - **Focus:** Complete the refactor and improve navigation across the app for consistency & simplicity
-- **Requirements:** [3.1-3.11](https://github.com/Nomnom-Safe/Business-Side/blob/main/docs/individual/anna-dinius/sprint1/requirements.md)
+- **Requirements:** [2.1-2.4, 2.11, 3.1-3.11](https://github.com/Nomnom-Safe/Business-Side/blob/main/docs/individual/anna-dinius/sprint1/requirements.md)
 
 ---
 
