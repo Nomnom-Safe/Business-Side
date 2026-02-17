@@ -16,7 +16,7 @@ footer: 'Week 5 Progress Report — Anna Dinius'
 >
 > - `52c90c810d78b6bb2a90d51da8701d78c1c4b51c → f543c57962c212b3283e17db2e07f0ef0eedd01f`
 >
-> See `project-statistics-detailed.md` for LoC and other project statistics.
+> See [`project-statistics-detailed.md`](https://github.com/Nomnom-Safe/Business-Side/blob/refactor/back-end/docs/individual/anna-dinius/week5/project-statistics-detailed.md) for LoC and other project statistics.
 
 ---
 
