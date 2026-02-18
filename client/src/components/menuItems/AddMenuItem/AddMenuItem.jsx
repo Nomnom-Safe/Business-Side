@@ -4,7 +4,9 @@ import AllergenList from '../../auth/AllergenList/AllergenList';
 import { FaAngleDown, FaAngleRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../api';
+import ErrorMessage from '../../common/ErrorMessage/ErrorMessage.jsx';
+import GetConfirmationMessage from '../../common/ConfirmationMessage/ConfirmationMessage.jsx';
 
 // Collapsible Panel Component
 const CollapsiblePanel = ({
@@ -13,6 +15,9 @@ const CollapsiblePanel = ({
 	onFormChange,
 	onAddPanel,
 	masterMenuID,
+	onValidationError,
+	onSaveSuccess,
+	onSaveFailure,
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedAllergens, setSelectedAllergens] = useState([]);
@@ -31,30 +36,38 @@ const CollapsiblePanel = ({
 	// Save single menuItem
 	const handleSave = async () => {
 		if (!formData.name || formData.name.trim() === '') {
-			alert('Please enter a name for the menu item.');
+			if (onValidationError) {
+				onValidationError('Please enter a name for the menu item.');
+			}
 			return;
 		}
 
 		try {
-			// choose a single menu_id: prefer the route menuID, fallback to masterMenuID
-			const targetMenuId = menuID || masterMenuID;
-			const response = await axios.post(
-				'http://localhost:5000/api/menuitems/add-menu-item',
-				{
-					name: formData.name,
-					description: formData.description,
-					ingredients: formData.ingredients,
-					allergens: formData.selectedAllergens || [],
-					menu_id: targetMenuId,
-					item_type: formData.item_type || 'entree',
-				},
-			);
-			if (response.ok) {
-				alert('Item saved successfully!');
+			// choose a single menu_id: prefer the route menuID, then a stable currentMenuId, fallback to masterMenuID
+			const storedMenuId = localStorage.getItem('currentMenuId');
+			const targetMenuId = menuID || storedMenuId || masterMenuID;
+			const result = await api.menuItems.addMenuItem({
+				name: formData.name,
+				description: formData.description,
+				ingredients: formData.ingredients,
+				allergens: formData.selectedAllergens || [],
+				menu_id: targetMenuId,
+				item_type: formData.item_type || 'entree',
+			});
+			if (result.ok) {
+				if (onSaveSuccess) {
+					onSaveSuccess('Item saved successfully!');
+				}
+			} else {
+				if (onSaveFailure) {
+					onSaveFailure('Failed to save item.');
+				}
 			}
 		} catch (err) {
 			console.error('Error saving menu item:', err);
-			alert('Failed to save item.');
+			if (onSaveFailure) {
+				onSaveFailure('Failed to save item.');
+			}
 		}
 	};
 
@@ -218,6 +231,9 @@ const AddMenuItemForm = () => {
 	const menuID = location.state?.menuID;
 	const menuTitle = location.state?.menuTitle;
 	const navigate = useNavigate();
+	const [message, setMessage] = useState('');
+	const [showError, setShowError] = useState(false);
+	const [showConfirmation, setShowConfirmation] = useState(false);
 
 	// Call the functions to pull in the menus and menu items.
 	useEffect(() => {
@@ -247,14 +263,15 @@ const AddMenuItemForm = () => {
 			);
 			// Need names on those panels! Comparing # of panels to valid panels
 			if (validPanels.length !== panels.length) {
-				alert(
+				setMessage(
 					'One or more items are missing names. Please enter a name for each item before saving.',
 				);
+				setShowError(true);
 				return;
 			}
 			// handles saving the valid panels
 			const saveRequests = validPanels.map((panel) =>
-				axios.post('http://localhost:5000/api/menuitems/add-menu-item', {
+				api.menuItems.addMenuItem({
 					name: panel.name,
 					description: panel.description,
 					ingredients: panel.ingredients,
@@ -264,11 +281,19 @@ const AddMenuItemForm = () => {
 				}),
 			);
 
-			await Promise.all(saveRequests);
-			alert('All items saved successfully!');
+			const results = await Promise.all(saveRequests);
+			const anyFailed = results.some((r) => !r.ok);
+			if (anyFailed) {
+				setMessage('Failed to save one or more items.');
+				setShowError(true);
+			} else {
+				setMessage('All items saved successfully!');
+				setShowConfirmation(true);
+			}
 		} catch (err) {
 			console.error('Error saving items:', err);
-			alert('Failed to save all items.');
+			setMessage('Failed to save all items.');
+			setShowError(true);
 		}
 
 		// refresh the page.
@@ -327,6 +352,25 @@ const AddMenuItemForm = () => {
 				</div>
 			</div>
 			<div className='center add-center-flex'>
+				{showConfirmation ? (
+					<GetConfirmationMessage
+						message={message}
+						destination={0}
+					/>
+				) : (
+					<></>
+				)}
+
+				{showError ? (
+					<ErrorMessage
+						message={message}
+						destination={0}
+						onClose={() => setShowError(false)}
+					/>
+				) : (
+					<></>
+				)}
+
 				{/* Render Collapsible Panels */}
 				{panels.map((panelData, index) => (
 					<CollapsiblePanel
@@ -338,6 +382,18 @@ const AddMenuItemForm = () => {
 						}
 						onAddPanel={handleAddPanel}
 						masterMenuID={masterMenuID}
+						onValidationError={(msg) => {
+							setMessage(msg);
+							setShowError(true);
+						}}
+						onSaveSuccess={(msg) => {
+							setMessage(msg);
+							setShowConfirmation(true);
+						}}
+						onSaveFailure={(msg) => {
+							setMessage(msg);
+							setShowError(true);
+						}}
 					/>
 				))}
 			</div>

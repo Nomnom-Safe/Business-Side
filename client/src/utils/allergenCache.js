@@ -1,10 +1,14 @@
+import api from '../api';
+
 let cache = null;
 let fetchInProgress = null;
 
 async function fetchAllergensFromServer() {
-	const res = await fetch('http://localhost:5000/api/allergens');
-	if (!res.ok) throw new Error('Failed to fetch allergens');
-	const arr = await res.json();
+	const result = await api.allergens.list();
+	if (!result.ok || !Array.isArray(result.data)) {
+		throw new Error('Failed to fetch allergens');
+	}
+	const arr = result.data;
 	const map = {};
 	arr.forEach((a) => {
 		map[a.id] = a.label || a.label === 0 ? a.label : a.id;

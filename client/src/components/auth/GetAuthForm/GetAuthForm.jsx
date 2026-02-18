@@ -6,6 +6,7 @@ import GetPasswordField from '../Password/Password.jsx';
 import ErrorMessage from '../../common/ErrorMessage/ErrorMessage.jsx';
 import format from '../../../utils/formValidation.js';
 import getCookie from '../../../utils/cookies.jsx';
+import api from '../../../api';
 
 function GetAuthForm({ formName }) {
 	const navigate = useNavigate();
@@ -55,21 +56,13 @@ function GetAuthForm({ formName }) {
 		};
 
 		try {
-			const response = await fetch('http://localhost:5000/api/auth/signup', {
-				method: 'POST',
-				credentials: 'include',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(formData),
-			});
-			const result = await response.json();
+			const result = await api.auth.signUp(formData);
 
-			if (response.ok) {
+			if (result.ok) {
 				localStorage.setItem('justSignedUp', 'true');
 				navigate('/choose-business');
 			} else {
-				setMessage(result.message);
+				setMessage(result.message || 'Sign up failed.');
 				setShowError(true);
 			}
 		} catch (err) {
@@ -85,18 +78,13 @@ function GetAuthForm({ formName }) {
 		};
 
 		try {
-			const response = await fetch('http://localhost:5000/api/auth/signin', {
-				method: 'POST',
-				credentials: 'include',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(formData),
-			});
-			const result = await response.json();
+			const result = await api.auth.signIn(formData);
 
-			if (response.ok) {
+			if (result.ok) {
+				const data = result.data || {};
 				// Store business_id if it exists
-				if (result.business_id) {
-					localStorage.setItem('businessId', result.business_id);
+				if (data.business_id) {
+					localStorage.setItem('businessId', data.business_id);
 				}
 
 				if (getCookie('hasBusiness') === 'false') {
@@ -105,7 +93,7 @@ function GetAuthForm({ formName }) {
 					navigate('/dashboard');
 				}
 			} else {
-				setMessage(result.message);
+				setMessage(result.message || 'Sign in failed.');
 				setShowError(true);
 			}
 		} catch (err) {

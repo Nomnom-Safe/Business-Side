@@ -5,6 +5,7 @@ import Select from 'react-select';
 import { useState } from 'react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../../../api';
 
 function ChooseBusiness() {
 	const navigate = useNavigate();
@@ -18,18 +19,10 @@ function ChooseBusiness() {
 	React.useEffect(() => {
 		const getBusinessNames = async () => {
 			try {
-				const response = await fetch('http://localhost:5000/api/businesses/', {
-					method: 'GET',
-					credentials: 'include',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				});
+				const result = await api.businesses.list();
 
-				const result = await response.json();
-
-				if (response.ok) {
-					const businesses = result
+				if (result.ok && Array.isArray(result.data)) {
+					const businesses = result.data
 						.filter((business) => business.name !== 'New Business')
 						.map((business) => ({
 							value: business.id,
@@ -38,9 +31,9 @@ function ChooseBusiness() {
 
 					setData(businesses);
 				} else {
-					setMessage(result.message);
+					setMessage(result.message || 'Failed to load businesses.');
 					setShowError(true);
-					console.error('Error: response not ok:', response.error);
+					console.error('Error: response not ok');
 				}
 			} catch (err) {
 				console.error('Error: ', err.message);
@@ -64,24 +57,13 @@ function ChooseBusiness() {
 			};
 
 			try {
-				const response = await fetch(
-					'http://localhost:5000/api/auth/set-business',
-					{
-						method: 'POST',
-						credentials: 'include',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify(formData),
-					},
-				);
-				const result = await response.json();
+				const result = await api.auth.setBusiness(formData);
 
-				if (response.ok) {
+				if (result.ok) {
 					if (option === 'existing') {
-						localStorage.setItem('businessId', result.business_id);
+						localStorage.setItem('businessId', result.data.business_id);
 
-						setMessage(result.message);
+						setMessage(result.message || 'Business selected successfully.');
 						setShowConfirmation(true);
 					} else {
 						setMessage('Something went wrong.');
@@ -97,56 +79,36 @@ function ChooseBusiness() {
 		} else if (option === 'new') {
 			// Create new business and master menu immediately
 			try {
-				const createBusinessResponse = await fetch(
-					'http://localhost:5000/api/businesses',
-					{
-						method: 'POST',
-						credentials: 'include',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({
-							name: `New Business - ${Date.now()}`,
-							website: '',
-							address: '',
-							allergens: [],
-							diets: [],
-						}),
-					},
-				);
+				const createResult = await api.businesses.create({
+					name: `New Business - ${Date.now()}`,
+					website: '',
+					address: '',
+					allergens: [],
+					diets: [],
+				});
 
-				const result = await createBusinessResponse.json();
-				if (!createBusinessResponse.ok) {
-					setMessage(result.message || 'Failed to create business');
+				if (!createResult.ok) {
+					setMessage(createResult.message || 'Failed to create business');
 					setShowError(true);
 					return;
 				}
 				
-				const businessId = result.id;
+				const businessId = createResult.data.id;
 				localStorage.setItem('businessId', businessId);
 				
 				// Menu is automatically created by the backend when creating a business
 				// No need to create it separately here
 				
 				// Associate business with user
-				const assignResponse = await fetch(
-					'http://localhost:5000/api/auth/set-business',
-					{
-						method: 'POST',
-						credentials: 'include',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify({
-							type: 'new',
-							businessId: businessId,
-						}),
-					},
-				);
+				const assignResult = await api.auth.setBusiness({
+					type: 'new',
+					businessId: businessId,
+				});
 
-				if (!assignResponse.ok) {
-					const result = await assignResponse.json();
-					setMessage(result.message || 'Failed to assign business to user');
+				if (!assignResult.ok) {
+					setMessage(
+						assignResult.message || 'Failed to assign business to user',
+					);
 					setShowError(true);
 					return;
 				}

@@ -7,6 +7,7 @@ import getCookie from '../../../utils/cookies.jsx';
 import format from '../../../utils/formValidation.js';
 import './EditLoginInfo.scss';
 import { useNavigate } from 'react-router-dom';
+import api from '../../../api';
 
 function EditLoginInfo() {
 	const [option, setOption] = useState('');
@@ -76,25 +77,13 @@ function EditLoginInfo() {
 			};
 
 			try {
-				const response = await fetch(
-					'http://localhost:5000/api/auth/edit-login',
-					{
-						method: 'POST',
-						credentials: 'include',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						body: JSON.stringify(formData),
-					},
-				);
+				const result = await api.auth.editLogin(formData);
 
-				const result = await response.json();
-
-				if (response.ok) {
-					setMessage(result.message);
+				if (result.ok) {
+					setMessage(result.message || 'Login information changed successfully.');
 					setShowConfirmation(true);
 				} else {
-					setMessage(result.message);
+					setMessage(result.message || 'Failed to update login information.');
 					setShowError(true);
 				}
 			} catch (err) {
