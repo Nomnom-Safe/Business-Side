@@ -1,5 +1,5 @@
 import './Step2.scss';
-import GenerateAllergenList from '../../auth/AllergenList/AllergenList';
+import GenerateAllergenList from '../../common/GenerateAllergenList/GenerateAllergenList';
 import GenerateDietList from '../../auth/DietList/DietList';
 import { useState, useEffect } from 'react';
 

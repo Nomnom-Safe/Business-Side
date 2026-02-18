@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import '../../../styles/global.scss';
-import AllergenList from '../../auth/AllergenList/AllergenList';
+import GenerateAllergenList from '../../common/GenerateAllergenList/GenerateAllergenList.jsx';
 import { FaAngleDown, FaAngleRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
@@ -178,7 +178,7 @@ const CollapsiblePanel = ({
 
 									<p>Most Common Allergens</p>
 									<div className='allergen-add'>
-										<AllergenList
+										<GenerateAllergenList
 											selectedAllergens={selectedAllergens}
 											onAllergenChange={handleAllergenChange}
 										/>

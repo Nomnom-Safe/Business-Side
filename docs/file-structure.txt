@@ -8,6 +8,10 @@ Business-Side/
 │   ├── public/
 │   │   └── index.html
 │   ├── src/
+│   │   ├── api/
+│   │   │   ├── client.js
+│   │   │   ├── config.js
+│   │   │   └── index.js
 │   │   ├── assets/
 │   │   │   ├── icons/
 │   │   │   │   ├── avatar.png
@@ -31,8 +35,6 @@ Business-Side/
 │   │   │   │       ├── UserMaintenance.jsx
 │   │   │   │       └── UserMaintenance.scss
 │   │   │   ├── auth/
-│   │   │   │   ├── AllergenList/
-│   │   │   │   │   └── AllergenList.jsx
 │   │   │   │   ├── ChangeEmail/
 │   │   │   │   │   ├── ChangeEmail.jsx
 │   │   │   │   │   └── ChangeEmail.scss
@@ -64,6 +66,9 @@ Business-Side/
 │   │   │   │   │   └── ConfirmationMessage.jsx
 │   │   │   │   ├── ErrorMessage/
 │   │   │   │   │   └── ErrorMessage.jsx
+│   │   │   │   ├── GenerateAllergenList/
+│   │   │   │   │   ├── AllergenCheckbox.jsx
+│   │   │   │   │   └── GenerateAllergenList.jsx
 │   │   │   │   ├── Header/
 │   │   │   │   │   ├── Header.jsx
 │   │   │   │   │   └── Header.scss
@@ -107,6 +112,8 @@ Business-Side/
 │   │   │       └── Step3/
 │   │   │           ├── Step3.jsx
 │   │   │           └── Step3.scss
+│   │   ├── hooks/
+│   │   │   └── useAllergens.js
 │   │   ├── styles/
 │   │   │   └── global.scss
 │   │   ├── utils/
@@ -117,6 +124,30 @@ Business-Side/
 │   │   ├── App.test.js
 │   │   └── index.jsx
 │   └── package.json
+├── Design Patterns/
+│   ├── AbstractFactory.md
+│   ├── adapter.md
+│   ├── bridge.md
+│   ├── builder.md
+│   ├── ChainOfResponsibility.md
+│   ├── Command.md
+│   ├── Composite.md
+│   ├── Decorator.md
+│   ├── Disucssing GoF DPs.md
+│   ├── Facade.md
+│   ├── FactoryMethod.md
+│   ├── Flyweight.md
+│   ├── Iterator.md
+│   ├── Mediator.md
+│   ├── Memento.md
+│   ├── Observer.md
+│   ├── Prototype.md
+│   ├── Proxy.md
+│   ├── Singleton.md
+│   ├── State.md
+│   ├── Strategy.md
+│   ├── TemplateMethod.md
+│   └── Visitor.md
 ├── docs/
 │   ├── individual/
 │   │   ├── anna-dinius/
@@ -129,14 +160,21 @@ Business-Side/
 │   │   │   │   ├── week4-presentation.md
 │   │   │   │   ├── week4-presentation.pdf
 │   │   │   │   └── week4-progress-report.md
+│   │   │   ├── week5/
+│   │   │   │   ├── project-statistics-detailed.md
+│   │   │   │   ├── week5-presentation.md
+│   │   │   │   ├── week5-presentation.pdf
+│   │   │   │   └── week5-progress-report.md
 │   │   │   ├── ppp-dinius.md
 │   │   │   └── ppp-dinius.pdf
 │   │   └── jeff-perdue/
 │   │       ├── weekly_presentations/
 │   │       │   ├── sprint1_week_4_recap.md
-│   │       │   └── sprint1_week_4_recap.pdf
+│   │       │   ├── sprint1_week_4_recap.pdf
+│   │       │   └── sprint_1_week_5_recap.md
 │   │       ├── ppp.md
-│   │       └── ppp.pdf
+│   │       ├── ppp.pdf
+│   │       └── week5_plan.md
 │   ├── modules/
 │   │   ├── AdminModule.md
 │   │   ├── AuthenticationModule.md
@@ -217,6 +255,7 @@ Business-Side/
 │   ├── README.md
 │   └── server.js
 ├── archiving_explainer.md
+├── front_end_refactor_explainer.md
 ├── package.json
 ├── README.md
 └── troubleshooting_explainer_2_9_26.md
