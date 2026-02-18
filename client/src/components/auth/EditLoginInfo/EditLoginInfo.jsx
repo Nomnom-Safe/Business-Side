@@ -29,12 +29,13 @@ function EditLoginInfo() {
 
 	const save = async (event) => {
 		event.preventDefault();
-		var proceed = false;
+		let proceed = false;
 		const form = event.target;
 		const cookieEmail = getCookie('email');
-		var newCred;
-		var confirmNewCred;
-		var currentCred;
+
+		let newCred;
+		let confirmNewCred;
+		let currentCred;
 
 		if (option === 'email') {
 			newCred = form.newEmail.value;
@@ -71,9 +72,11 @@ function EditLoginInfo() {
 
 		if (proceed) {
 			const formData = {
-				credType: option,
-				currentCred: currentCred,
-				newCred: newCred,
+				email: cookieEmail,
+				newLoginDetails:
+					option === 'email'
+						? { email: newCred }
+						: { password: newCred, currentPassword: currentCred },
 			};
 
 			try {

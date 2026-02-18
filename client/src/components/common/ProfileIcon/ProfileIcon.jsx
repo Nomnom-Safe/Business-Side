@@ -12,7 +12,8 @@ import './ProfileIcon.scss';
 
 export default function ProfileIcon() {
 	const navigate = useNavigate();
-	const isAdmin = getCookie('isAdmin') === 'true';
+	// ARCHIVED: Admin Features - Not part of MVP (single user per business)
+	// const isAdmin = getCookie('isAdmin') === 'true';
 	const hasBusiness = getCookie('hasBusiness') === 'true';
 
 	// Define states
@@ -95,8 +96,8 @@ export default function ProfileIcon() {
 							<span>{getCookie('email')}</span>
 						</div>
 
-					{/* ARCHIVED: Admin Features - Not part of MVP (single user per business) */}
-					{/* {isAdmin && hasBusiness ? (
+						{/* ARCHIVED: Admin Features - Not part of MVP (single user per business) */}
+						{/* {isAdmin && hasBusiness ? (
 						<div
 							onClick={toUserMaintenance}
 							className='dropdown-item'

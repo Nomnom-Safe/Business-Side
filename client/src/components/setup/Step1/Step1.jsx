@@ -1,33 +1,31 @@
+// client/src/components/setup/Step1/Step1.jsx
+
 import { useState, useEffect } from 'react';
+import AddressFields from '../../common/AddressFields/AddressFields';
 import './Step1.scss';
 
 function Step1({ updateFormData }) {
 	const [localData, setLocalData] = useState({
 		name: '',
 		website: '',
-		streetAddress1: '',
-		streetAddress2: '',
-		city: '',
-		state: '',
-		zipCode: '',
+		address: { street: '', city: '', state: '', zipCode: '' },
 	});
 
 	useEffect(() => {
-		const formattedAddress = `${localData.streetAddress1 || ''} ${
-			localData.streetAddress2 || ''
-		}, ${localData.city || ''}, ${localData.state || ''} ${
-			localData.zipCode || ''
-		}`;
 		updateFormData({
 			name: localData.name,
 			website: localData.website,
-			address: formattedAddress.trim(),
+			address: localData.address,
 		});
 	}, [localData]);
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setLocalData((prev) => ({ ...prev, [name]: value }));
+	};
+
+	const handleAddressChange = (updatedAddress) => {
+		setLocalData((prev) => ({ ...prev, address: updatedAddress }));
 	};
 
 	return (
@@ -71,58 +69,10 @@ function Step1({ updateFormData }) {
 						Please enter your business's address:
 					</span>
 
-					<div className='address-container'>
-						<div>
-							<input
-								type='text'
-								name='streetAddress1'
-								placeholder='Street Address*'
-								className='street-address'
-								onChange={handleChange}
-							/>
-						</div>
-
-						<div>
-							<input
-								type='text'
-								name='streetAddress2'
-								placeholder='Street Address 2'
-								className='street-address'
-								onChange={handleChange}
-							/>
-						</div>
-
-						<div className='city-state-zip'>
-							<input
-								type='text'
-								name='city'
-								placeholder='City*'
-								maxLength={50}
-								className='city'
-								onChange={handleChange}
-							/>
-
-							<input
-								type='text'
-								name='state'
-								placeholder='State*'
-								maxLength={2}
-								className='state'
-								onChange={handleChange}
-							/>
-
-							<input
-								type='number'
-								name='zipCode'
-								placeholder='ZIP*'
-								min='00500'
-								max='99999'
-								defaultValue=''
-								className='zip'
-								onChange={handleChange}
-							/>
-						</div>
-					</div>
+					<AddressFields
+						addressData={localData.address}
+						onAddressChange={handleAddressChange}
+					/>
 				</div>
 
 				<div className='notes'>

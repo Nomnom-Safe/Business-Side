@@ -1,72 +1,78 @@
 const express = require('express');
 const router = express.Router();
-const menuService = require('../services/menuService');
-const businessService = require('../services/businessService');
+const asyncHandler = require('../utils/asyncHandler');
+const menuController = require('../controllers/menuController');
 
 // @route   GET /api/menus
 // @desc    Get all menus
 // @access  Public (no auth yet)
-router.get('/', async (req, res) => {
-	try {
-		const menus = await menuService.listMenus();
-
-		res.json(menus);
-	} catch (err) {
-		res.status(500).json({ error: 'Could not fetch menu' });
-	}
-});
+router.get('/', asyncHandler(menuController.listMenus));
 
 /* Non-MVP Feature: Multiple menus.
 	// @route   POST /api/menus
 	// @desc    Create a new menu
 	// @access  Public (no auth yet)
-	router.post('/', async (req, res) => {
-		try {
-			// Expect payload: { businessId }
-			const { businessId } = req.body;
+	router.post('/', asyncHandler(async (req, res) => {
+		// Expect payload: { businessId }
+		const { businessId } = req.body;
 
-			if (!businessId) {
-				return res.status(400).json({ error: 'businessId is required' });
+		if (!businessId) {
+			return res.status(400).json({ error: 'businessId is required' });
+		}
+
+		const savedMenu = await menuService.createMenuForBusiness(businessId);
+
+		res.status(201).json(savedMenu);
+	}));
+*/
+
+/* Non-MVP Feature: Update menu title/description.
+	// @route   PUT /api/menus/update-title-description
+	// @desc    Update a menu's title and description
+	// @access  Public (no auth yet)
+	router.put('/update-title-description', async (req, res) => {
+		try {
+			const { businessId, title, description } = req.body;
+
+			// Find the most recent menu for this business (since they are editing latest one)
+			const business = await Business.findById(businessId).populate('menus');
+
+			if (!business) {
+				return res.status(404).json({ error: 'Business not found' });
 			}
 
-			const savedMenu = await menuService.createMenuForBusiness(businessId);
+			const lastMenuId = business.menus[business.menus.length - 1];
 
-			res.status(201).json(savedMenu);
+			if (!lastMenuId) {
+				return res.status(404).json({ error: 'No menus found for business' });
+			}
+
+			const updatedMenu = await Menu.findByIdAndUpdate(
+				lastMenuId,
+				{ title, description },
+				{ new: true },
+			);
+
+			res.status(200).json(updatedMenu);
 		} catch (err) {
-			res.status(400).json({ error: 'Error creating menu: ' + err.message });
+			res.status(400).json({ error: 'Error updating menu: ' + err.message });
 		}
 	});
 */
-
-// @route   PUT /api/menus/update-title-description
-// @desc    Update a menu's title and description
-// @access  Public (no auth yet)
-router.put('/update-title-description', async (req, res) => {
-	// With the new Firestore schema menus do not have title/description.
-	// Keep this endpoint for compatibility but return 400 to indicate unsupported operation.
-	return res.status(400).json({
-		error:
-			'Updating title/description is not supported with the new menu schema.',
-	});
-});
 
 /* Non-MVP Feature: Delete menu.
 	// @route   DELETE /api/menus/:id
 	// @desc    Delete a menu by ID
 	// @access  Public (no auth yet)
-	router.delete('/:id', async (req, res) => {
-		try {
-			const menuId = req.params.id;
+	router.delete('/:id', asyncHandler(async (req, res) => {
+		const menuId = req.params.id;
 
-			const deleted = await menuService.deleteMenu(menuId);
+		const deleted = await menuService.deleteMenu(menuId);
 
-			if (!deleted) return res.status(404).json({ error: 'Menu not found' });
+		if (!deleted) return res.status(404).json({ error: 'Menu not found' });
 
-			res.json({ message: 'Menu deleted and business updated successfully' });
-		} catch (err) {
-			res.status(500).json({ error: 'Could not delete menu: ' + err.message });
-		}
-	});
+		res.json({ message: 'Menu deleted and business updated successfully' });
+	}));
 */
 
 module.exports = router;

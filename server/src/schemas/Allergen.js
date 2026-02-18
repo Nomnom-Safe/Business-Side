@@ -8,12 +8,7 @@ const { z } = require('zod');
  */
 
 const AllergenSchema = z.object({
-	id: z
-		.string()
-		.regex(
-			/^all_[a-z0-9]{11}$/,
-			"Allergen ID must start with 'all_' followed by 11 lowercase alphanumeric characters",
-		),
+	id: z.string().regex(/^all_/, "Allergen ID must start with 'all_'"),
 	label: z
 		.string()
 		.min(1, 'Allergen label is required')
@@ -33,7 +28,7 @@ const CreateAllergenSchema = AllergenSchema.omit({ id: true });
  * Schema for updating an allergen (all fields optional except ID)
  */
 const UpdateAllergenSchema = AllergenSchema.partial().extend({
-	id: z.string().regex(/^all_[a-z0-9]{11}$/),
+	id: z.string().regex(/^all_/),
 });
 
 module.exports = {

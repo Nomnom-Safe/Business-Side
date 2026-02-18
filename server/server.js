@@ -1,3 +1,5 @@
+const errorHandler = require('./src/middleware/errorHandler');
+
 // Load environment variables
 require('dotenv').config();
 
@@ -34,7 +36,7 @@ app.use('/api/menus', menuRoutes);
 const menuItemRoutes = require('./src/routes/menuItemRoutes');
 app.use('/api/menuitems', menuItemRoutes);
 
-const auth = require('./src/routes/userRoutes');
+const auth = require('./src/routes/businessUserRoutes');
 app.use('/api/auth', auth);
 
 // Allergen routes (provide id/label mapping for client)
@@ -62,6 +64,8 @@ app.get('/', (req, res) => {
 app.use((req, res, next) => {
 	res.status(404).json({ error: 'Route not found' });
 });
+
+app.use(errorHandler);
 
 // Start the server and listen on the specified port
 const PORT = process.env.PORT || 5000;

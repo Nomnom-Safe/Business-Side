@@ -1,0 +1,38 @@
+// client/src/components/common/AddressFields/AddressFields.scss
+
+.address {
+	&-container {
+		display: grid;
+		gap: 30px;
+	}
+}
+
+.street-address {
+	width: 100%;
+	max-width: 400px;
+}
+
+.city {
+	flex: 1 0 100px;
+
+	&-state-zip {
+		display: flex;
+		column-gap: 15px;
+		max-width: 400px;
+		width: 100%;
+	}
+}
+
+.state {
+	flex: 0 0 60px;
+}
+
+.zip {
+	flex: 0 0 80px;
+
+	&::-webkit-inner-spin-button,
+	&::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+}

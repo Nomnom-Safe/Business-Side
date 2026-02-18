@@ -44,6 +44,13 @@ const {
 	UpdateAllergenSchema,
 } = require('./Allergen');
 
+const {
+	SignUpSchema,
+	EditLoginSchema,
+	SetBusinessSchema,
+	SignInSchema,
+} = require('./auth');
+
 module.exports = {
 	// Business schemas
 	BusinessSchema,
@@ -78,4 +85,10 @@ module.exports = {
 	AllergenSchema,
 	CreateAllergenSchema,
 	UpdateAllergenSchema,
+
+	// Auth schemas
+	SignUpSchema,
+	EditLoginSchema,
+	SetBusinessSchema,
+	SignInSchema,
 };

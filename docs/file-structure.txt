@@ -57,6 +57,9 @@ Business-Side/
 │   │   │   │       ├── EditBusinessInfo.jsx
 │   │   │   │       └── EditBusinessInfo.scss
 │   │   │   ├── common/
+│   │   │   │   ├── AddressFields/
+│   │   │   │   │   ├── AddressFields.jsx
+│   │   │   │   │   └── AddressFields.scss
 │   │   │   │   ├── ConfirmationMessage/
 │   │   │   │   │   └── ConfirmationMessage.jsx
 │   │   │   │   ├── ErrorMessage/
@@ -129,6 +132,9 @@ Business-Side/
 │   │   │   ├── ppp-dinius.md
 │   │   │   └── ppp-dinius.pdf
 │   │   └── jeff-perdue/
+│   │       ├── weekly_presentations/
+│   │       │   ├── sprint1_week_4_recap.md
+│   │       │   └── sprint1_week_4_recap.pdf
 │   │       ├── ppp.md
 │   │       └── ppp.pdf
 │   ├── modules/
@@ -157,17 +163,32 @@ Business-Side/
 │   ├── src/
 │   │   ├── config/
 │   │   │   └── firebase.js
+│   │   ├── controllers/
+│   │   │   ├── addressController.js
+│   │   │   ├── allergenController.js
+│   │   │   ├── businessController.helpers.js
+│   │   │   ├── businessController.js
+│   │   │   ├── businessUserController.js
+│   │   │   ├── menuController.js
+│   │   │   └── menuItemController.js
 │   │   ├── middleware/
-│   │   │   └── auth.js
+│   │   │   ├── auth.js
+│   │   │   └── errorHandler.js
 │   │   ├── routes/
 │   │   │   ├── addressRoutes.js
 │   │   │   ├── adminRoutes.js
 │   │   │   ├── allergenRoutes.js
 │   │   │   ├── businessRoutes.js
+│   │   │   ├── businessUserRoutes.js
 │   │   │   ├── menuItemRoutes.js
-│   │   │   ├── menuRoutes.js
-│   │   │   └── userRoutes.js
+│   │   │   └── menuRoutes.js
 │   │   ├── schemas/
+│   │   │   ├── auth/
+│   │   │   │   ├── EditLoginSchema.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── SetBusinessSchema.js
+│   │   │   │   ├── SignInSchema.js
+│   │   │   │   └── SignUpSchema.js
 │   │   │   ├── Address.js
 │   │   │   ├── Allergen.js
 │   │   │   ├── Business.js
@@ -178,13 +199,20 @@ Business-Side/
 │   │   │   └── README.md
 │   │   ├── services/
 │   │   │   ├── addressService.js
+│   │   │   ├── allergenService.js
+│   │   │   ├── authService.js
+│   │   │   ├── businessMembershipService.js
 │   │   │   ├── businessService.js
 │   │   │   ├── businessUserService.js
 │   │   │   ├── firestoreInit.js
 │   │   │   ├── menuItemService.js
 │   │   │   └── menuService.js
 │   │   └── utils/
-│   │       └── cookies.js
+│   │       ├── asyncHandler.js
+│   │       ├── cookies.js
+│   │       ├── getIdToken.js
+│   │       ├── responseHelpers.js
+│   │       └── validate.js
 │   ├── package.json
 │   ├── README.md
 │   └── server.js

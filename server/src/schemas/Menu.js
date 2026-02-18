@@ -8,18 +8,8 @@ const { z } = require('zod');
  */
 
 const MenuSchema = z.object({
-	id: z
-		.string()
-		.regex(
-			/^menu_[a-z0-9]{11}$/,
-			"Menu ID must start with 'menu_' followed by 11 lowercase alphanumeric characters",
-		),
-	business_id: z
-		.string()
-		.regex(
-			/^bid_[a-z0-9]{11}$/,
-			"Business ID must start with 'bid_' followed by 11 lowercase alphanumeric characters",
-		),
+	id: z.string(),
+	business_id: z.string(),
 });
 
 /**
@@ -31,7 +21,7 @@ const CreateMenuSchema = MenuSchema.omit({ id: true });
  * Schema for updating a menu (all fields optional except ID)
  */
 const UpdateMenuSchema = MenuSchema.partial().extend({
-	id: z.string().regex(/^menu_[a-z0-9]{11}$/),
+	id: z.string(),
 });
 
 module.exports = {

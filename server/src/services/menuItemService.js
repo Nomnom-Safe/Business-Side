@@ -1,5 +1,6 @@
 const { db } = require('./firestoreInit');
 const {
+	MenuItemSchema,
 	CreateMenuItemSchema,
 	UpdateMenuItemSchema,
 	createMenuItemSchemaWithAllergens,
@@ -14,17 +15,19 @@ async function listMenuItems(filter = {}) {
 		const snap = await menuItemsCollection
 			.where('menu_id', '==', filter.menu_id)
 			.get();
-		return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+		return snap.docs.map((d) =>
+			MenuItemSchema.parse({ id: d.id, ...d.data() }),
+		);
 	}
 
 	const snap = await menuItemsCollection.get();
-	return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+	return snap.docs.map((d) => MenuItemSchema.parse({ id: d.id, ...d.data() }));
 }
 
 async function getMenuItemById(id) {
 	const doc = await menuItemsCollection.doc(id).get();
 	if (!doc.exists) return null;
-	return { id: doc.id, ...doc.data() };
+	return MenuItemSchema.parse({ id: doc.id, ...doc.data() });
 }
 
 async function createMenuItem(itemObj) {
@@ -49,7 +52,7 @@ async function createMenuItem(itemObj) {
 
 	const ref = await menuItemsCollection.add(valid);
 	const snap = await ref.get();
-	return { id: ref.id, ...snap.data() };
+	return MenuItemSchema.parse({ id: ref.id, ...snap.data() });
 }
 
 async function updateMenuItem(id, updateObj) {
@@ -72,7 +75,7 @@ async function updateMenuItem(id, updateObj) {
 	}
 
 	// Optional: strict allergen validation
-	if (updateObj.allergens) {
+	if (Array.isArray(updateObj.allergens)) {
 		const allergenSnap = await allergensCollection.get();
 		const validIds = allergenSnap.docs.map((a) => a.id);
 
@@ -85,7 +88,7 @@ async function updateMenuItem(id, updateObj) {
 	await docRef.update(updateObj);
 
 	const updated = await docRef.get();
-	return { id: updated.id, ...updated.data() };
+	return MenuItemSchema.parse({ id: updated.id, ...updated.data() });
 }
 
 async function deleteMenuItem(id) {

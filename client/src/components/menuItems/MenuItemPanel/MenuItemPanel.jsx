@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaPencilAlt, FaTrash, FaSave } from 'react-icons/fa';
 import '../../../styles/global.scss';
 import {
@@ -9,7 +9,7 @@ import api from '../../../api';
 import ErrorMessage from '../../common/ErrorMessage/ErrorMessage.jsx';
 import GetConfirmationMessage from '../../common/ConfirmationMessage/ConfirmationMessage.jsx';
 
-const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
+const MenuItemPanel = ({ item, /*menuID,*/ onSave, onDelete }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [showConfirm, setShowConfirm] = useState(false);
 	const [menuItemToDelete, setMenuItemToDelete] = useState(null);
@@ -21,7 +21,9 @@ const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 	const [showError, setShowError] = useState(false);
 	const [showConfirmation, setShowConfirmation] = useState(false);
 
-	const masterMenuID = localStorage.getItem('masterMenu_ID');
+	/* Non-MVP Feature: Multi-Menu Support
+		const masterMenuID = localStorage.getItem('masterMenu_ID');
+  */
 
 	const toggleOpen = () => setIsOpen(!isOpen);
 	const toggleEdit = async () => {
@@ -70,29 +72,50 @@ const MenuItemPanel = ({ item, menuID, onSave, onDelete }) => {
 		}
 
 		try {
-			// if current menuID is masterMenuID, Delete the entire menuItem
-			if (menuID === masterMenuID) {
-				const result = await api.menuItems.deleteItem(menuItemToDelete);
+			/* Non-MVP Feature: Multi-Menu Support
+				// if current menuID is masterMenuID, Delete the entire menuItem
+				if (menuID === masterMenuID) {
+					const result = await api.menuItems.deleteItem(menuItemToDelete);
 
-				if (!result.ok) {
-					throw new Error(result.message || 'Failed to delete menu item');
+					if (!result.ok) {
+						throw new Error(result.message || 'Failed to delete menu item');
+					}
+
+					if (onDelete) {
+						onDelete(menuItemToDelete);
+					}
+					setMessage('Menu item deleted successfully!');
+					setShowConfirmation(true);
+
+					setMenuItemToDelete(null);
+					setShowConfirm(false);
+				} else {
+					// remove current menuID from menuItem's menuIDs array
+					setMessage(
+						'Remove menu item from non Master Menu by moving it in in Integrate Menu.',
+					);
+					setShowError(true);
 				}
+			*/
 
-				if (onDelete) {
-					onDelete(menuItemToDelete);
-				}
-				setMessage('Menu item deleted successfully!');
-				setShowConfirmation(true);
+			// Delete the menuItem
+			const result = await api.menuItems.deleteItem(menuItemToDelete);
 
-				setMenuItemToDelete(null);
-				setShowConfirm(false);
-			} else {
-				// remove current menuID from menuItem's menuIDs array
-				setMessage(
-					'Remove menu item from non Master Menu by moving it in in Integrate Menu.',
-				);
-				setShowError(true);
+			if (!result.ok) {
+				throw new Error(result.message || 'Failed to delete menu item');
 			}
+
+			if (onDelete) {
+				onDelete(menuItemToDelete);
+			}
+
+			alert('Menu item deleted successfully!');
+
+			setMessage('Menu item deleted successfully!');
+			setShowConfirmation(true);
+
+			setMenuItemToDelete(null);
+			setShowConfirm(false);
 		} catch (err) {
 			console.error('Error deleting menu item:', err);
 		}

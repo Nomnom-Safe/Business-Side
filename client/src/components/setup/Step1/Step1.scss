@@ -1,3 +1,5 @@
+// client/src/components/setup/Step1/Step1.scss
+
 /* Elements -------------------------------------------*/
 h1 {
 	color: var(--dark-turq);
@@ -20,47 +22,17 @@ ul {
 	}
 }
 
-.name-website,
-.address {
+.name-website {
 	&-container {
 		display: grid;
 		gap: 30px;
 	}
 }
 
-.street-address {
-	width: 100%;
-}
-
-.city {
-	flex: 1 0 100px;
-
-	&-state-zip {
-		display: flex;
-		column-gap: 15px;
-	}
-}
-
-.city-state-zip,
-.street-address,
 .website,
 .business-name {
 	max-width: 400px;
 	width: 100%;
-}
-
-.state {
-	flex: 0 0 60px;
-}
-
-.zip {
-	flex: 0 0 80px;
-
-	&::-webkit-inner-spin-button,
-	&::-webkit-outer-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
 }
 
 .notes {

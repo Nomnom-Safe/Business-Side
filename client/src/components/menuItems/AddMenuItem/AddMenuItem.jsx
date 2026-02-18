@@ -7,6 +7,8 @@ import { useLocation } from 'react-router-dom';
 import api from '../../../api';
 import ErrorMessage from '../../common/ErrorMessage/ErrorMessage.jsx';
 import GetConfirmationMessage from '../../common/ConfirmationMessage/ConfirmationMessage.jsx';
+import axios from 'axios';
+import { getAllergenLabels } from '../../../utils/allergenCache';
 
 // Collapsible Panel Component
 const CollapsiblePanel = ({
@@ -21,6 +23,7 @@ const CollapsiblePanel = ({
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedAllergens, setSelectedAllergens] = useState([]);
+	const [displayLabels, setDisplayLabels] = useState('');
 	const location = useLocation();
 	const menuID = location.state?.menuID;
 
@@ -28,12 +31,31 @@ const CollapsiblePanel = ({
 		setIsOpen(!isOpen);
 	};
 
+	// Sync local allergen state with formData when panel opens or changes
+	useEffect(() => {
+		setSelectedAllergens(formData.selectedAllergens || []);
+	}, [formData.selectedAllergens]);
+
+	// Update allergen display labels whenever selectedAllergens changes
+	useEffect(() => {
+		async function loadLabels() {
+			const labels = await getAllergenLabels(selectedAllergens);
+			setDisplayLabels(labels.join(', '));
+		}
+		loadLabels();
+	}, [selectedAllergens]);
+
+	// Sanitize all text inputs
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
-		onFormChange({ ...formData, [name]: value });
+		onFormChange({
+			...formData,
+			item_type: formData.item_type || 'entree',
+			[name]: typeof value === 'string' ? value.trim() : value,
+		});
 	};
 
-	// Save single menuItem
+	// Save single menu item
 	const handleSave = async () => {
 		if (!formData.name || formData.name.trim() === '') {
 			if (onValidationError) {
@@ -46,15 +68,16 @@ const CollapsiblePanel = ({
 			// choose a single menu_id: prefer the route menuID, then a stable currentMenuId, fallback to masterMenuID
 			const storedMenuId = localStorage.getItem('currentMenuId');
 			const targetMenuId = menuID || storedMenuId || masterMenuID;
-			const result = await api.menuItems.addMenuItem({
+			const allergenIDs = formData.selectedAllergens;
+			const response = await api.menuItems.addMenuItem({
 				name: formData.name,
 				description: formData.description,
 				ingredients: formData.ingredients,
-				allergens: formData.selectedAllergens || [],
+				allergens: allergenIDs,
 				menu_id: targetMenuId,
-				item_type: formData.item_type || 'entree',
+				item_type: (formData.item_type || 'entree').trim().toLowerCase(),
 			});
-			if (result.ok) {
+			if (response.ok) {
 				if (onSaveSuccess) {
 					onSaveSuccess('Item saved successfully!');
 				}
@@ -63,6 +86,8 @@ const CollapsiblePanel = ({
 					onSaveFailure('Failed to save item.');
 				}
 			}
+
+			alert('Item saved successfully!'); //
 		} catch (err) {
 			console.error('Error saving menu item:', err);
 			if (onSaveFailure) {
@@ -71,34 +96,18 @@ const CollapsiblePanel = ({
 		}
 	};
 
-	const handleAllergenChange = (event) => {
-		const allergenValue = event.target.value;
+	// Handle allergen checkbox changes
+	const handleAllergenChange = (event, allergenId) => {
 		let updatedAllergens;
 
 		if (event.target.checked) {
-			updatedAllergens = [...selectedAllergens, allergenValue];
+			updatedAllergens = [...selectedAllergens, allergenId];
 		} else {
-			updatedAllergens = selectedAllergens.filter((a) => a !== allergenValue);
+			updatedAllergens = selectedAllergens.filter((a) => a !== allergenId);
 		}
 
 		setSelectedAllergens(updatedAllergens);
-		onFormChange({ ...formData, selectedAllergens: updatedAllergens }); // <-- Sync it here
-	};
-
-	const getAllergenLabels = () => {
-		const allergenMap = {
-			lactose: 'Lactose (milk)',
-			gluten: 'Gluten',
-			meat: 'Meat',
-			fish: 'Fish',
-			animalProducts: 'Animal Products',
-			eggs: 'Eggs',
-			shellfish: 'Shellfish',
-			treeNuts: 'Tree Nuts',
-			peanuts: 'Peanuts',
-		};
-
-		return selectedAllergens.map((value) => allergenMap[value]).join(', ');
+		onFormChange({ ...formData, selectedAllergens: updatedAllergens });
 	};
 
 	return (
@@ -159,7 +168,7 @@ const CollapsiblePanel = ({
 									<h3>This Item Contains the Following Allergens:</h3>
 									<div className='display-allergens'>
 										{selectedAllergens.length > 0 ? (
-											getAllergenLabels()
+											displayLabels
 										) : (
 											<p className='no-allergens-message'>
 												No allergens selected
@@ -181,7 +190,9 @@ const CollapsiblePanel = ({
 										name='item_type'
 										value={formData.item_type || 'entree'}
 										onChange={(e) =>
-											onFormChange({ ...formData, item_type: e.target.value })
+											onFormChange({
+												item_type: e.target.value.trim().toLowerCase(),
+											})
 										}
 									>
 										<option value='entree'>Entree</option>
@@ -269,17 +280,20 @@ const AddMenuItemForm = () => {
 				setShowError(true);
 				return;
 			}
-			// handles saving the valid panels
-			const saveRequests = validPanels.map((panel) =>
+
+			// Handles saving the valid panels
+			const saveRequests = validPanels.map((panel) => {
+				const allergenIDs = panel.selectedAllergens;
+
 				api.menuItems.addMenuItem({
 					name: panel.name,
 					description: panel.description,
 					ingredients: panel.ingredients,
-					allergens: panel.selectedAllergens || [],
+					allergens: allergenIDs,
 					menu_id: targetMenuId,
-					item_type: panel.item_type || 'entree',
-				}),
-			);
+					item_type: (panel.item_type || 'entree').trim().toLowerCase(),
+				});
+			});
 
 			const results = await Promise.all(saveRequests);
 			const anyFailed = results.some((r) => !r.ok);
@@ -307,12 +321,23 @@ const AddMenuItemForm = () => {
 
 	// Loading in the panels
 	const handleAddPanel = () => {
-		setPanels([...panels, {}]);
+		setPanels([
+			...panels,
+			{
+				name: '',
+				ingredients: '',
+				description: '',
+				selectedAllergens: [],
+				item_type: 'entree',
+			},
+		]);
 	};
 
 	const handlePanelChange = (index, newFormData) => {
 		setPanels((prevPanels) =>
-			prevPanels.map((panel, i) => (i === index ? newFormData : panel)),
+			prevPanels.map((panel, i) =>
+				i === index ? { ...panel, ...newFormData } : panel,
+			),
 		);
 	};
 
