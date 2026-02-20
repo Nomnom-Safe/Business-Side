@@ -8,6 +8,16 @@ const menuController = require('../controllers/menuController');
 // @access  Public (no auth yet)
 router.get('/', asyncHandler(menuController.listMenus));
 
+// @route   POST /api/menus/ensure
+// @desc    Get menu for business, or create one if missing (idempotent)
+// @access  Public (no auth yet)
+router.post('/ensure', asyncHandler(menuController.ensureMenuForBusiness));
+
+// @route   PUT /api/menus/:id
+// @desc    Update menu (e.g. title)
+// @access  Public (no auth yet)
+router.put('/:id', asyncHandler(menuController.updateMenu));
+
 /* Non-MVP Feature: Multiple menus.
 	// @route   POST /api/menus
 	// @desc    Create a new menu

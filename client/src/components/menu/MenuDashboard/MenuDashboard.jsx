@@ -183,14 +183,11 @@ function MenuDashboard() {
 								)}
 							*/}
 							<MenuCard
-								title='Master Menu'
-								description='Description placeholder'
+								menuId={menu.id}
+								title={menu.title || 'Your Menu'}
+								description={menu.description ?? ''}
 								buttonLabel='View Menu'
-								isEditable={menu.isEditable}
-								onTitleChange={(newTitle) => handleTitleChange(index, newTitle)}
-								onDescriptionChange={(newDesc) =>
-									handleDescriptionChange(index, newDesc)
-								}
+								onTitleSaved={(newTitle) => handleTitleChange(index, newTitle)}
 							/>
 						</div>
 					))}

@@ -3,7 +3,11 @@
 const express = require('express');
 const router = express.Router();
 const businessController = require('../controllers/businessController');
+const categoryRoutes = require('./categoryRoutes');
 const asyncHandler = require('../utils/asyncHandler');
+
+// Nested: /api/businesses/:businessId/categories
+router.use('/:businessId/categories', categoryRoutes);
 
 // @route   GET /api/businesses/
 // @desc    Get a list of all businesses

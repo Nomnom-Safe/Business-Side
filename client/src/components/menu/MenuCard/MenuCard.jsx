@@ -1,90 +1,131 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaPencilAlt } from 'react-icons/fa';
 import './MenuCard.scss';
-// import api from '../../../api';
+import api from '../../../api';
+import { useToast } from '../../../context/ToastContext';
 
 export default function MenuCard({
+	menuId,
 	title,
 	description,
 	buttonLabel,
-	// isEditable,
-	// onTitleChange,
-	// onDescriptionChange,
+	onTitleSaved,
 }) {
 	const navigate = useNavigate();
-	const [localTitle, setLocalTitle] = useState(title);
+	const { showSuccess, showError } = useToast();
+	const [isEditingTitle, setIsEditingTitle] = useState(false);
+	const [editValue, setEditValue] = useState(title || 'Your Menu');
+	const inputRef = useRef(null);
 
-	/* ARCHIVE: Non-MVP Feature (updating title/description)
-		const [localDescription, setLocalDescription] = useState(description);
+	const displayTitle = title || 'Your Menu';
 
-		const handleTitleChange = (e) => {
-			const newTitle = e.target.value;
-			setLocalTitle(newTitle);
-			onTitleChange(newTitle);
-		};
+	useEffect(() => {
+		setEditValue(displayTitle);
+	}, [displayTitle]);
 
-		const handleDescriptionChange = (e) => {
-			const newDesc = e.target.value;
-			setLocalDescription(newDesc);
-			onDescriptionChange(newDesc);
-		};
-	*/
+	useEffect(() => {
+		if (isEditingTitle && inputRef.current) {
+			inputRef.current.focus();
+			inputRef.current.select();
+		}
+	}, [isEditingTitle]);
 
-	const toMenu = () => {
-		navigate('/menuitems', {
-			state: { menuTitle: localTitle },
-		});
+	const handleStartEdit = () => {
+		if (!menuId) return;
+		setEditValue(displayTitle);
+		setIsEditingTitle(true);
 	};
 
-	/* ARCHIVE: Non-MVP Feature (updating title/description)
-	const saveTitleToDb = async () => {
+	const handleSaveTitle = async () => {
+		if (!menuId || !editValue.trim()) {
+			setIsEditingTitle(false);
+			setEditValue(displayTitle);
+			return;
+		}
+		const newTitle = editValue.trim();
 		try {
-			const businessId = localStorage.getItem('businessId');
-			const result = await api.menus.updateTitleDescription({
-				businessId,
-				title: localTitle,
-				description: localDescription,
-			});
-			if (result.ok) {
-				console.log('Menu updated successfully:', result.data);
+			const result = await api.menus.update(menuId, { title: newTitle });
+			if (result.ok && result.data) {
+				onTitleSaved?.(result.data.title ?? newTitle);
+				showSuccess('Menu name updated.');
 			} else {
-				console.error('Error updating menu title:', result.message);
+				showError('Failed to update menu name.');
 			}
 		} catch (err) {
 			console.error('Error updating menu title:', err);
+			showError('Failed to update menu name.');
+		}
+		setIsEditingTitle(false);
+	};
+
+	const handleCancelEdit = () => {
+		setEditValue(displayTitle);
+		setIsEditingTitle(false);
+	};
+
+	const handleKeyDown = (e) => {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			handleSaveTitle();
+		}
+		if (e.key === 'Escape') {
+			handleCancelEdit();
 		}
 	};
-	*/
+
+	const toMenu = () => {
+		navigate('/menuitems', {
+			state: { menuTitle: displayTitle },
+		});
+	};
+
+	const canEdit = Boolean(menuId);
 
 	return (
-		<div className='menu-card'>
-			{
-				/*isEditable ? (
-				<input
-					className='menu-title-input'
-					value={localTitle}
-					onChange={handleTitleChange}
-					onBlur={saveTitleToDb}
-				/>
-			) :*/ <h3 className='menu-title'>{title}</h3>
-			}
+		<div className="menu-card">
+			<div className="menu-card__title-row">
+				{isEditingTitle ? (
+					<input
+						ref={inputRef}
+						type="text"
+						className="menu-title-input"
+						value={editValue}
+						onChange={(e) => setEditValue(e.target.value)}
+						onBlur={handleSaveTitle}
+						onKeyDown={handleKeyDown}
+						aria-label="Menu name"
+					/>
+				) : (
+					<>
+						<h3
+							className={`menu-title ${canEdit ? 'menu-title--editable' : ''}`}
+							onClick={canEdit ? handleStartEdit : undefined}
+						>
+							{displayTitle}
+						</h3>
+						{canEdit && (
+							<button
+								type="button"
+								className="menu-card__edit-btn"
+								onClick={(e) => {
+									e.stopPropagation();
+									handleStartEdit();
+								}}
+								aria-label="Edit menu name"
+							>
+								<FaPencilAlt size={14} />
+							</button>
+						)}
+					</>
+				)}
+			</div>
 
-			{
-				/*isEditable ? (
-				<textarea
-					className='menu-description-textarea'
-					value={localDescription}
-					onChange={handleDescriptionChange}
-					onBlur={saveDescriptionToDb}
-					rows={3}
-				/>
-			) :*/ <p className='menu-description'>{description}</p>
-			}
+			{description ? (
+				<p className="menu-description">{description}</p>
+			) : null}
 
-			<button
-				onClick={toMenu}
-				className='view-menu-button'
-			>
+			<button type="button" onClick={toMenu} className="view-menu-button">
 				{buttonLabel}
 			</button>
 		</div>

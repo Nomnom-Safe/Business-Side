@@ -63,6 +63,18 @@ export const businessesApi = {
 };
 
 export const menusApi = {
+	update: async (menuId, payload) =>
+		jsonRequest(`/api/menus/${menuId}`, {
+			method: 'PUT',
+			body: payload,
+		}),
+
+	ensureForBusiness: async (businessId) =>
+		jsonRequest('/api/menus/ensure', {
+			method: 'POST',
+			body: { businessId },
+		}),
+
 	updateTitleDescription: async (payload) =>
 		jsonRequest('/api/menus/update-title-description', {
 			method: 'PUT',
@@ -106,12 +118,37 @@ export const allergensApi = {
 		}),
 };
 
+export const categoriesApi = {
+	list: async (businessId) =>
+		jsonRequest(`/api/businesses/${businessId}/categories`, {
+			method: 'GET',
+		}),
+
+	create: async (businessId, payload) =>
+		jsonRequest(`/api/businesses/${businessId}/categories`, {
+			method: 'POST',
+			body: payload,
+		}),
+
+	update: async (businessId, categoryId, payload) =>
+		jsonRequest(`/api/businesses/${businessId}/categories/${categoryId}`, {
+			method: 'PUT',
+			body: payload,
+		}),
+
+	delete: async (businessId, categoryId) =>
+		jsonRequest(`/api/businesses/${businessId}/categories/${categoryId}`, {
+			method: 'DELETE',
+		}),
+};
+
 const api = {
 	auth: authApi,
 	businesses: businessesApi,
 	menus: menusApi,
 	menuItems: menuItemsApi,
 	allergens: allergensApi,
+	categories: categoriesApi,
 };
 
 export default api;

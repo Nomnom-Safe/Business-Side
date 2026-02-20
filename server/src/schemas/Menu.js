@@ -10,6 +10,7 @@ const { z } = require('zod');
 const MenuSchema = z.object({
 	id: z.string(),
 	business_id: z.string(),
+	title: z.string().optional().default('Your Menu'),
 });
 
 /**

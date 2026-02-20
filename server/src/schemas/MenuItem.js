@@ -22,9 +22,14 @@ const MenuItemSchema = z.object({
 	id: z.string(),
 	name: z.string().min(1, 'Menu item name is required'),
 	description: z.string(),
+	ingredients: z.string().optional().default(''),
 	menu_id: z.string().min(1),
 	item_type: z.string(),
+	item_types: z.array(z.string()).optional(),
 	allergens: z.array(allergenIdFormatSchema).default([]),
+	price: z.number().positive().optional().nullable(),
+	price_description: z.string().optional().default(''),
+	is_available: z.boolean().default(true),
 });
 
 /**
@@ -49,6 +54,7 @@ function createMenuItemSchemaWithAllergens(validAllergenIds) {
 		id: z.string(),
 		name: z.string().min(1, 'Menu item name is required'),
 		description: z.string(),
+		ingredients: z.string().optional().default(''),
 		menu_id: z.string(),
 		item_type: z.enum(ITEM_TYPES, {
 			errorMap: () => ({
@@ -56,6 +62,7 @@ function createMenuItemSchemaWithAllergens(validAllergenIds) {
 					'Item type must be one of: entree, dessert, drink, side, or appetizer',
 			}),
 		}),
+		item_types: z.array(z.string()).optional(),
 		allergens: z
 			.array(
 				z.enum(validAllergenIds, {
@@ -65,6 +72,9 @@ function createMenuItemSchemaWithAllergens(validAllergenIds) {
 				}),
 			)
 			.default([]),
+		price: z.number().positive().optional().nullable(),
+		price_description: z.string().optional().default(''),
+		is_available: z.boolean().default(true),
 	});
 }
 

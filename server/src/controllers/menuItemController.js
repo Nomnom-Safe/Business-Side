@@ -12,7 +12,14 @@ async function getMenuByBusinessId(req, res) {
 	const menus = await menuService.listMenus();
 	const menu = menus.find((m) => m.business_id === businessId) || null;
 
-	res.status(200).json(menu || []);
+	if (!menu) {
+		return res.status(200).json(null);
+	}
+
+	res.status(200).json({
+		...menu,
+		title: menu.title || 'Your Menu',
+	});
 }
 
 async function listMenuItems(req, res) {
@@ -37,7 +44,7 @@ async function getMenuItemById(req, res) {
 }
 
 async function createMenuItem(req, res) {
-	const { name, description, allergens, menu_id, item_type } = req.body;
+	const { name, description, ingredients, allergens, menu_id, item_type, item_types, price, price_description, is_available } = req.body;
 
 	if (!menu_id) {
 		return res.status(400).json({ error: 'menu_id is required' });
@@ -45,10 +52,15 @@ async function createMenuItem(req, res) {
 
 	const newItem = {
 		name,
-		description,
+		description: description ?? '',
+		ingredients: ingredients ?? '',
 		allergens: allergens || [],
 		menu_id,
-		item_type,
+		item_type: item_type || 'entree',
+		...(Array.isArray(item_types) && item_types.length > 0 && { item_types }),
+		...(price !== undefined && { price }),
+		...(price_description !== undefined && { price_description }),
+		...(is_available !== undefined && { is_available }),
 	};
 
 	const saved = await menuItemService.createMenuItem(newItem);

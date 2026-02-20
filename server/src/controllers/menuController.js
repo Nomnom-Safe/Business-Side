@@ -24,6 +24,29 @@ async function createMenuForBusiness(req, res) {
 	res.status(201).json(menu);
 }
 
+async function ensureMenuForBusiness(req, res) {
+	const businessId = req.body.businessId ?? req.query.businessId;
+
+	if (!businessId) {
+		return res.status(400).json({ error: 'businessId is required' });
+	}
+
+	const menu = await menuService.ensureMenuForBusiness(businessId);
+	res.status(200).json(menu);
+}
+
+async function updateMenu(req, res) {
+	const { id } = req.params;
+	const { title } = req.body;
+
+	const menu = await menuService.updateMenu(id, { title });
+	if (!menu) {
+		return res.status(404).json({ error: 'Menu not found' });
+	}
+
+	res.status(200).json(menu);
+}
+
 async function deleteMenu(req, res) {
 	const { id } = req.params;
 
@@ -39,5 +62,7 @@ module.exports = {
 	listMenus,
 	getMenuById,
 	createMenuForBusiness,
+	ensureMenuForBusiness,
+	updateMenu,
 	deleteMenu,
 };

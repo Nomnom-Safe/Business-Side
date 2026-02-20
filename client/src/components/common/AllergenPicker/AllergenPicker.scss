@@ -1,0 +1,143 @@
+.allergen-picker {
+	width: 100%;
+
+	&__selected {
+		margin-bottom: 12px;
+	}
+
+	&__selected-label {
+		font-size: 13px;
+		color: var(--gray);
+		margin-bottom: 6px;
+		display: block;
+	}
+
+	&__tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+
+	&__tag {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 6px 10px;
+		background-color: var(--salmon);
+		color: var(--hard-white);
+		border-radius: var(--corners-round);
+		font-size: 13px;
+		font-weight: 500;
+	}
+
+	&__tag-remove {
+		background: none;
+		border: none;
+		color: var(--hard-white);
+		cursor: pointer;
+		padding: 0;
+		display: flex;
+		align-items: center;
+		opacity: 0.8;
+		transition: opacity 0.2s;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	&__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+		gap: 8px;
+		padding: 12px;
+		border: 1px solid #ddd;
+		border-radius: var(--corners-round);
+		background-color: #fafafa;
+		overflow: visible;
+	}
+
+	&__option {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 10px;
+		min-width: 0;
+		border-radius: var(--corners-round);
+		cursor: pointer;
+		transition: all 0.2s;
+		background-color: var(--hard-white);
+		border: 1px solid transparent;
+
+		&:hover {
+			background-color: #f0f0f0;
+		}
+
+		&--selected {
+			background-color: #fff5f4;
+			border-color: var(--salmon);
+		}
+	}
+
+	&__tooltip {
+		position: absolute;
+		left: 50%;
+		bottom: 100%;
+		transform: translateX(-50%);
+		margin-bottom: 6px;
+		padding: 6px 10px;
+		background: var(--dark-turq);
+		color: var(--hard-white);
+		font-size: 13px;
+		font-weight: 500;
+		white-space: nowrap;
+		border-radius: var(--corners-round);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+		z-index: 10;
+		pointer-events: none;
+	}
+
+	&__checkbox {
+		flex-shrink: 0;
+		width: 16px;
+		height: 16px;
+		min-width: 16px;
+		min-height: 16px;
+		cursor: pointer;
+		accent-color: var(--salmon);
+	}
+
+	&__option-label {
+		flex: 1;
+		min-width: 0;
+		font-size: 14px;
+		color: var(--hard-black);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	&__empty {
+		font-size: 13px;
+		color: var(--gray);
+		font-style: italic;
+		margin-top: 8px;
+	}
+
+	&--compact {
+		.allergen-picker__grid {
+			padding: 8px;
+			gap: 6px;
+		}
+
+		.allergen-picker__option {
+			padding: 6px 8px;
+		}
+
+		.allergen-picker__tag {
+			padding: 4px 8px;
+			font-size: 12px;
+		}
+	}
+}

@@ -15,10 +15,12 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // ARCHIVED: Admin Features - Not part of MVP (single user per business)
 // import UserMaintenance from './components/admin/UserMaintenance/UserMaintenance.jsx';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx';
+import { ToastProvider } from './context/ToastContext';
 
 function App() {
 	return (
 		<Router>
+			<ToastProvider>
 			<Header />
 
 			<div className='content'>
@@ -118,6 +120,7 @@ function App() {
 					/>
 				</Routes>
 			</div>
+			</ToastProvider>
 		</Router>
 	);
 }

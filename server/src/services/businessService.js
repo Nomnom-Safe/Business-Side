@@ -26,11 +26,12 @@ async function getBusinessWithMenus(id) {
 	const business = await getBusinessById(id);
 	if (!business) return null;
 
-	const menusSnap = await menusCollection.where('business_id', '==', id).get();
-
-	const menus = await Promise.all(
-		menusSnap.docs.map(async (mDoc) => {
-			const menu = { id: mDoc.id, ...mDoc.data() };
+	// MVP: one menu per business — return only the menu referenced by business.menu_id
+	const menus = [];
+	if (business.menu_id) {
+		const menuDoc = await menusCollection.doc(business.menu_id).get();
+		if (menuDoc.exists) {
+			const menu = { id: menuDoc.id, ...menuDoc.data() };
 			const itemsSnap = await menuItemsCollection
 				.where('menu_id', '==', menu.id)
 				.get();
@@ -38,9 +39,9 @@ async function getBusinessWithMenus(id) {
 				id: i.id,
 				...i.data(),
 			}));
-			return menu;
-		}),
-	);
+			menus.push(menu);
+		}
+	}
 	return { ...business, menus };
 }
 
