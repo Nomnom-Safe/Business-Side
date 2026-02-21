@@ -1,3 +1,5 @@
+// client/src/components/auth/AuthFormSwitcher/AuthFormSwitcher.scss
+
 /* Classes --------------------------------------------*/
 
 .welcome {
@@ -49,6 +51,9 @@
 	color: var(--dark-turq);
 	text-decoration: none;
 	font-weight: bold;
+	background: none;
+	border: none;
+	padding: 0;
 
 	&:visited {
 		color: var(--dark-turq);

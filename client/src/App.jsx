@@ -1,14 +1,16 @@
+// client/src/App.jsx
+
 import Header from './components/common/Header/Header.jsx';
-import SignInUp from './components/auth/SignInUp/SignInUp.jsx';
+import AuthFormSwitcher from './components/auth/AuthFormSwitcher/AuthFormSwitcher.jsx';
 import SetUp from './components/setup/SetUp/SetUp.jsx';
 import MenuDashboard from './components/menu/MenuDashboard/MenuDashboard.jsx';
 import EditBusinessInfo from './components/business/EditBusinessInfo/EditBusinessInfo.jsx';
 import EditLoginInfo from './components/auth/EditLoginInfo/EditLoginInfo.jsx';
-// import FilterPanel from './components/menu/FilterPanel';
 import AddMenuItem from './components/menuItems/AddMenuItem/AddMenuItem.jsx';
 import MenuItemsPage from './components/menuItems/MenuItemsPage/MenuItemsPage.jsx';
 // ARCHIVED: Menu Item Swapping - Not part of MVP (single menu)
 // import MenuItemPicklist from './components/menuItems/MenuItemSwap/MenuItemSwap.jsx';
+// import FilterPanel from './components/menu/FilterPanel';
 import ChooseBusiness from './components/setup/ChooseBusiness/ChooseBusiness.jsx';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -28,8 +30,8 @@ function App() {
 						path='/'
 						element={
 							<ProtectedRoute
-								route={'signInUp'}
-								component={SignInUp()}
+								route={'authFormSwitcher'}
+								component={AuthFormSwitcher()}
 							/>
 						}
 					/>

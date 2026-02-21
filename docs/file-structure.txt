@@ -35,6 +35,10 @@ Business-Side/
 │   │   │   │       ├── UserMaintenance.jsx
 │   │   │   │       └── UserMaintenance.scss
 │   │   │   ├── auth/
+│   │   │   │   ├── AuthFormSwitcher/
+│   │   │   │   │   ├── AuthFormSwitcher.jsx
+│   │   │   │   │   ├── AuthFormSwitcher.scss
+│   │   │   │   │   └── SwapPrompt.jsx
 │   │   │   │   ├── ChangeEmail/
 │   │   │   │   │   ├── ChangeEmail.jsx
 │   │   │   │   │   └── ChangeEmail.scss
@@ -54,12 +58,9 @@ Business-Side/
 │   │   │   │   │   │   └── SignUpForm.scss
 │   │   │   │   │   ├── authForm.scss
 │   │   │   │   │   └── GetAuthForm.jsx
-│   │   │   │   ├── PasswordFormField/
-│   │   │   │   │   ├── PasswordFormField.jsx
-│   │   │   │   │   └── PasswordFormField.scss
-│   │   │   │   └── SignInUp/
-│   │   │   │       ├── SignInUp.jsx
-│   │   │   │       └── SignInUp.scss
+│   │   │   │   └── PasswordFormField/
+│   │   │   │       ├── PasswordFormField.jsx
+│   │   │   │       └── PasswordFormField.scss
 │   │   │   ├── business/
 │   │   │   │   └── EditBusinessInfo/
 │   │   │   │       ├── EditBusinessInfo.jsx
@@ -123,7 +124,8 @@ Business-Side/
 │   │   │           └── Step3.scss
 │   │   ├── hooks/
 │   │   │   ├── useAllergens.js
-│   │   │   └── useAuthActions.js
+│   │   │   ├── useAuthActions.js
+│   │   │   └── useAuthFormSwitcher.js
 │   │   ├── styles/
 │   │   │   └── global.scss
 │   │   ├── utils/
