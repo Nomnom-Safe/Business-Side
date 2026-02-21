@@ -1,10 +1,11 @@
+// client/src/utils/formValidation.js
+
 const format = {};
 
 format.validateEmail = (email) => {
 	if (!email) return false;
 	const normalized = email.toLowerCase();
-	const regex =
-		/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+	const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 	return regex.test(normalized);
 };
@@ -46,4 +47,3 @@ format.isValidUrl = (value) => {
 };
 
 export default format;
-

@@ -1,0 +1,20 @@
+// client/src/components/auth/GetAuthForm/authForm.scss
+
+.auth {
+	&-form {
+		width: 50%;
+		max-width: 325px;
+		padding: 45px;
+		border: var(--border);
+		border-radius: var(--corners-round);
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+
+		&-title {
+			margin-top: 0px;
+			text-align: center;
+			color: var(--dark-turq);
+		}
+	}
+}

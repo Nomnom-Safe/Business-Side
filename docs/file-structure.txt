@@ -46,8 +46,14 @@ Business-Side/
 │   │   │   │   │   ├── EditLoginInfo.jsx
 │   │   │   │   │   └── EditLoginInfo.scss
 │   │   │   │   ├── GetAuthForm/
-│   │   │   │   │   ├── GetAuthForm.jsx
-│   │   │   │   │   └── GetAuthForm.scss
+│   │   │   │   │   ├── SignInForm/
+│   │   │   │   │   │   ├── SignInForm.jsx
+│   │   │   │   │   │   └── SignInForm.scss
+│   │   │   │   │   ├── SignUpForm/
+│   │   │   │   │   │   ├── SignUpForm.jsx
+│   │   │   │   │   │   └── SignUpForm.scss
+│   │   │   │   │   ├── authForm.scss
+│   │   │   │   │   └── GetAuthForm.jsx
 │   │   │   │   ├── Password/
 │   │   │   │   │   ├── Password.jsx
 │   │   │   │   │   └── Password.scss
@@ -66,6 +72,9 @@ Business-Side/
 │   │   │   │   │   └── ConfirmationMessage.jsx
 │   │   │   │   ├── ErrorMessage/
 │   │   │   │   │   └── ErrorMessage.jsx
+│   │   │   │   ├── FormField/
+│   │   │   │   │   ├── FormField.jsx
+│   │   │   │   │   └── FormField.scss
 │   │   │   │   ├── GenerateAllergenList/
 │   │   │   │   │   ├── AllergenCheckbox.jsx
 │   │   │   │   │   └── GenerateAllergenList.jsx
@@ -113,11 +122,13 @@ Business-Side/
 │   │   │           ├── Step3.jsx
 │   │   │           └── Step3.scss
 │   │   ├── hooks/
-│   │   │   └── useAllergens.js
+│   │   │   ├── useAllergens.js
+│   │   │   └── useAuthActions.js
 │   │   ├── styles/
 │   │   │   └── global.scss
 │   │   ├── utils/
 │   │   │   ├── allergenCache.js
+│   │   │   ├── authValidation.js
 │   │   │   ├── cookies.jsx
 │   │   │   └── formValidation.js
 │   │   ├── App.jsx

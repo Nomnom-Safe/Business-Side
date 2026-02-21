@@ -1,0 +1,10 @@
+// client/src/components/common/FormField/FormField.scss
+
+.form-field-container {
+	display: grid;
+	gap: 5px;
+}
+
+.required {
+	color: red;
+}
