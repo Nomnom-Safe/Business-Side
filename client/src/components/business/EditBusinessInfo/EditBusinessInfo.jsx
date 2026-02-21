@@ -1,6 +1,6 @@
 // client/src/components/business/EditBusinessInfo/EditBusinessInfo.jsx
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GetConfirmationMessage from '../../common/ConfirmationMessage/ConfirmationMessage.jsx';
 import AddressFields from '../../common/AddressFields/AddressFields';
@@ -63,11 +63,9 @@ const EditBusinessInfo = () => {
 
 				// Fetch address separately
 				if (business.address_id) {
-					const addressRes = await fetch(
-						`http://localhost:5000/api/addresses/${business.address_id}`,
-					);
-					if (addressRes.ok) {
-						const addr = await addressRes.json();
+					const addressRes = await api.addresses.getById(business.address_id);
+					if (addressRes.ok && addressRes.data) {
+						const addr = addressRes.data;
 						setAddressInfo({
 							street: addr.street || '',
 							city: addr.city || '',
@@ -105,34 +103,22 @@ const EditBusinessInfo = () => {
 
 			// If no address_id exists, create a new address doc
 			if (!addressId) {
-				const createRes = await fetch(`http://localhost:5000/api/addresses`, {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify(addressInfo),
-				});
+				const createRes = await api.addresses.create(addressInfo);
 
-				if (!createRes.ok) throw new Error('Failed to create address');
+				if (!createRes.ok || !createRes.data)
+					throw new Error('Failed to create address');
 
-				const created = await createRes.json();
-				addressId = created.id;
+				addressId = createRes.data.id;
 
 				setBusinessInfo((prev) => ({ ...prev, address_id: addressId }));
 			} else {
 				// Update existing address
-				const updateRes = await fetch(
-					`http://localhost:5000/api/addresses/${addressId}`,
-					{
-						method: 'PUT',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({
-							id: addressId,
-							street: addressInfo.street,
-							city: addressInfo.city,
-							state: addressInfo.state,
-							zipCode: addressInfo.zipCode,
-						}),
-					},
-				);
+				const updateRes = await api.addresses.update(addressId, {
+					street: addressInfo.street,
+					city: addressInfo.city,
+					state: addressInfo.state,
+					zipCode: addressInfo.zipCode,
+				});
 
 				if (!updateRes.ok) throw new Error('Failed to update address');
 			}
