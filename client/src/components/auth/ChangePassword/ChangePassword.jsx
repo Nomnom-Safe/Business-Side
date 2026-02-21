@@ -1,24 +1,24 @@
-import GetPasswordField from '../Password/Password';
+import PasswordFormField from '../PasswordFormField/PasswordFormField';
 
 function ChangePassword() {
 	return (
 		<>
 			<div>
-				<GetPasswordField
+				<PasswordFormField
 					name='currentPassword'
 					placeholder='Current Password'
 				/>
 			</div>
 
 			<div>
-				<GetPasswordField
+				<PasswordFormField
 					name='newPassword'
 					placeholder='New Password'
 				/>
 			</div>
 
 			<div>
-				<GetPasswordField
+				<PasswordFormField
 					name='confirmNewPassword'
 					placeholder='Confirm New Password'
 				/>

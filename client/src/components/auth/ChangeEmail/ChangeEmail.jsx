@@ -1,52 +1,40 @@
+// client/src/components/auth/ChangeEmail/ChangeEmail.jsx
+
 import './ChangeEmail.scss';
+import FormField from '../../common/FormField/FormField.jsx';
 
 function ChangeEmail() {
 	return (
 		<>
-			<div className='form-field-container'>
-				<label htmlFor='currentEmail'>
-					Current Email <span className='required'>*</span>
-				</label>
+			<FormField
+				label='Current Email'
+				name='currentEmail'
+				type='email'
+				placeholder='Current Email'
+				required={true}
+				maxLength={50}
+				className='email'
+			/>
 
-				<input
-					type='email'
-					name='currentEmail'
-					required
-					maxLength={50}
-					placeholder='Current Email'
-					className='current-email'
-				/>
-			</div>
+			<FormField
+				label='New Email'
+				name='newEmail'
+				type='email'
+				placeholder='New Email'
+				required={true}
+				maxLength={50}
+				className='email'
+			/>
 
-			<div className='form-field-container'>
-				<label htmlFor='newEmail'>
-					New Email <span className='required'>*</span>
-				</label>
-
-				<input
-					type='email'
-					name='newEmail'
-					required
-					maxLength={50}
-					placeholder='New Email'
-					className='new-email'
-				/>
-			</div>
-
-			<div className='form-field-container'>
-				<label htmlFor='confirmNewEmail'>
-					Confirm New Email <span className='required'>*</span>
-				</label>
-
-				<input
-					type='email'
-					name='confirmNewEmail'
-					required
-					maxLength={50}
-					placeholder='Confirm New Email'
-					className='new-email'
-				/>
-			</div>
+			<FormField
+				label='Confirm New Email'
+				name='confirmNewEmail'
+				type='email'
+				placeholder='Confirm New Email'
+				required={true}
+				maxLength={50}
+				className='email'
+			/>
 		</>
 	);
 }

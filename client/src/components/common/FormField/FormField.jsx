@@ -8,7 +8,11 @@ function FormField({
 	name,
 	placeholder,
 	required = true,
-	className = '',
+	inputWrapperClassName = 'form-field-input-wrapper',
+	inputClassName = '',
+	type = 'text',
+	children,
+	...rest
 }) {
 	return (
 		<div className='form-field-container'>
@@ -16,14 +20,20 @@ function FormField({
 				{label} {required && <span className='required'>*</span>}
 			</label>
 
-			<input
-				type='text'
-				name={name}
-				id={name}
-				placeholder={placeholder}
-				required={required}
-				className={className}
-			/>
+			<div className={inputWrapperClassName}>
+				<input
+					type={type}
+					name={name}
+					id={name}
+					placeholder={placeholder}
+					required={required}
+					className={inputClassName}
+					{...rest}
+				/>
+
+				{/* Optional custom UI (icons, buttons, etc.) */}
+				{children}
+			</div>
 		</div>
 	);
 }
@@ -33,7 +43,10 @@ FormField.propTypes = {
 	name: PropTypes.string.isRequired,
 	placeholder: PropTypes.string.isRequired,
 	required: PropTypes.bool,
-	className: PropTypes.string,
+	inputWrapperClassName: PropTypes.string,
+	inputClassName: PropTypes.string,
+	type: PropTypes.string,
+	children: PropTypes.node,
 };
 
 export default FormField;

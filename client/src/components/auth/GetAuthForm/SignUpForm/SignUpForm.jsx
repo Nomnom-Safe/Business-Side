@@ -4,7 +4,7 @@ import { useState } from 'react';
 import './SignUpForm.scss';
 
 import FormField from '../../../common/FormField/FormField.jsx';
-import GetPasswordField from '../../Password/Password.jsx';
+import PasswordFormField from '../../PasswordFormField/PasswordFormField.jsx';
 import ErrorMessage from '../../../common/ErrorMessage/ErrorMessage.jsx';
 
 import { useAuthActions } from '../../../../hooks/useAuthActions.js';
@@ -83,12 +83,12 @@ function SignUpForm() {
 				className={'name'}
 			/>
 
-			<GetPasswordField
+			<PasswordFormField
 				name='password'
 				placeholder='Password'
 			/>
 
-			<GetPasswordField
+			<PasswordFormField
 				name='confirmPassword'
 				placeholder='Confirm Password'
 			/>

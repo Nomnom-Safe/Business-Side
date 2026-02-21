@@ -54,9 +54,9 @@ Business-Side/
 │   │   │   │   │   │   └── SignUpForm.scss
 │   │   │   │   │   ├── authForm.scss
 │   │   │   │   │   └── GetAuthForm.jsx
-│   │   │   │   ├── Password/
-│   │   │   │   │   ├── Password.jsx
-│   │   │   │   │   └── Password.scss
+│   │   │   │   ├── PasswordFormField/
+│   │   │   │   │   ├── PasswordFormField.jsx
+│   │   │   │   │   └── PasswordFormField.scss
 │   │   │   │   └── SignInUp/
 │   │   │   │       ├── SignInUp.jsx
 │   │   │   │       └── SignInUp.scss
