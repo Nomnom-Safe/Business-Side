@@ -5,9 +5,67 @@ const userService = require('../services/businessUserService');
 const cookies = require('../utils/cookies');
 const menuService = require('../services/menuService');
 const addressService = require('../services/addressService');
+const { US_STATES } = require('../schemas/Address');
 
-function mapBusinessResponse(business) {
-	return {
+/**
+ * Parse a legacy free-text address string into { street, city, state, zipCode }.
+ * Returns null if value does not look like legacy (e.g. no comma, or looks like doc ID).
+ */
+function parseLegacyAddressString(value) {
+	if (!value || typeof value !== 'string') return null;
+	const trimmed = value.trim();
+	if (!trimmed) return null;
+	// Doc IDs are typically alphanumeric with optional prefix (e.g. add_xxx); avoid treating as legacy
+	if (/^[a-zA-Z0-9_-]+$/.test(trimmed) && trimmed.length < 50) return null;
+	if (!trimmed.includes(',')) return null;
+
+	const parts = trimmed.split(',').map((p) => p.trim()).filter(Boolean);
+	if (parts.length < 2) return null;
+
+	const street = parts[0] || '';
+	const city = parts.length >= 2 ? parts[1] : '';
+	let state = '';
+	let zipCode = '';
+	if (parts.length >= 3) {
+		const lastPart = parts[parts.length - 1];
+		const stateZipMatch = lastPart.match(/^([A-Za-z]{2})\s+(\d{5}(-\d{4})?)$/);
+		if (stateZipMatch) {
+			const abbr = stateZipMatch[1].toUpperCase();
+			if (US_STATES.includes(abbr)) {
+				state = abbr;
+				zipCode = stateZipMatch[2];
+			}
+		}
+	}
+
+	return { street, city, state, zipCode };
+}
+
+/**
+ * Resolve business address: fetch by address_id or parse legacy free-text in address_id.
+ * Returns { id?, street, city, state, zipCode } or null.
+ */
+async function getResolvedAddress(business) {
+	if (!business || !business.address_id) return null;
+
+	const addr = await addressService.getAddressById(business.address_id);
+	if (addr) {
+		return {
+			id: addr.id,
+			street: addr.street || '',
+			city: addr.city || '',
+			state: addr.state || '',
+			zipCode: addr.zipCode || '',
+		};
+	}
+
+	const parsed = parseLegacyAddressString(business.address_id);
+	if (parsed) return parsed;
+	return null;
+}
+
+function mapBusinessResponse(business, resolvedAddress) {
+	const out = {
 		id: business.id,
 		name: business.name || '',
 		website: business.website || '',
@@ -20,6 +78,16 @@ function mapBusinessResponse(business) {
 		cuisine: business.cuisine || '',
 		menus: business.menus,
 	};
+	if (resolvedAddress) {
+		out.address = {
+			street: resolvedAddress.street || '',
+			city: resolvedAddress.city || '',
+			state: resolvedAddress.state || '',
+			zipCode: resolvedAddress.zipCode || '',
+		};
+		if (resolvedAddress.id) out.address.id = resolvedAddress.id;
+	}
+	return out;
 }
 
 async function fetchBusinessOrError(id) {
@@ -156,4 +224,5 @@ module.exports = {
 	deleteBusinessById,
 	fetchBusinessOrError,
 	mapBusinessResponse,
+	getResolvedAddress,
 };

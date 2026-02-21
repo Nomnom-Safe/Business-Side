@@ -61,8 +61,15 @@ const EditBusinessInfo = () => {
 					cuisine: business.cuisine || '',
 				});
 
-				// Fetch address separately
-				if (business.address_id) {
+				// Use resolved address from API when present; otherwise fetch by address_id
+				if (business.address && typeof business.address === 'object') {
+					setAddressInfo({
+						street: business.address.street || '',
+						city: business.address.city || '',
+						state: business.address.state || '',
+						zipCode: business.address.zipCode || '',
+					});
+				} else if (business.address_id) {
 					const addressRes = await api.addresses.getById(business.address_id);
 					if (addressRes.ok && addressRes.data) {
 						const addr = addressRes.data;
@@ -100,9 +107,11 @@ const EditBusinessInfo = () => {
 
 		try {
 			let addressId = businessInfo.address_id;
+			// Treat legacy free-text in address_id (e.g. contains comma) as no address doc: create one and normalize
+			const isLegacyAddressId =
+				addressId && typeof addressId === 'string' && addressId.includes(',');
 
-			// If no address_id exists, create a new address doc
-			if (!addressId) {
+			if (!addressId || isLegacyAddressId) {
 				const createRes = await api.addresses.create(addressInfo);
 
 				if (!createRes.ok || !createRes.data)
