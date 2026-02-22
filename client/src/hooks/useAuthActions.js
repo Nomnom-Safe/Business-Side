@@ -57,10 +57,16 @@ export function useAuthActions() {
 			const result = await api.auth.signIn(payload);
 
 			if (result.ok) {
-				const data = result.data || {};
+				// API returns { success: true, data: user }
+				// Safely extract the user payload and update/clear localStorage to avoid stale ids
+				const resp = result.data || {};
+				const user = resp.data || resp;
+				const businessId = user?.business_id;
 
-				if (data.business_id) {
-					localStorage.setItem('businessId', data.business_id);
+				if (businessId) {
+					localStorage.setItem('businessId', user.business_id);
+				} else {
+					localStorage.removeItem('businessId');
 				}
 
 				// Centralized business logic
