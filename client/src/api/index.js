@@ -142,6 +142,35 @@ export const categoriesApi = {
 		}),
 };
 
+export const addressesApi = {
+	list: async () =>
+		jsonRequest('/api/addresses', {
+			method: 'GET',
+		}),
+
+	getById: async (id) =>
+		jsonRequest(`/api/addresses/${id}`, {
+			method: 'GET',
+		}),
+
+	create: async (payload) =>
+		jsonRequest('/api/addresses', {
+			method: 'POST',
+			body: payload,
+		}),
+
+	update: async (id, payload) =>
+		jsonRequest(`/api/addresses/${id}`, {
+			method: 'PUT',
+			body: payload,
+		}),
+
+	delete: async (id) =>
+		jsonRequest(`/api/addresses/${id}`, {
+			method: 'DELETE',
+		}),
+};
+
 const api = {
 	auth: authApi,
 	businesses: businessesApi,
@@ -149,7 +178,7 @@ const api = {
 	menuItems: menuItemsApi,
 	allergens: allergensApi,
 	categories: categoriesApi,
+	addresses: addressesApi,
 };
 
 export default api;
-

@@ -35,6 +35,10 @@ Business-Side/
 │   │   │   │       ├── UserMaintenance.jsx
 │   │   │   │       └── UserMaintenance.scss
 │   │   │   ├── auth/
+│   │   │   │   ├── AuthFormSwitcher/
+│   │   │   │   │   ├── AuthFormSwitcher.jsx
+│   │   │   │   │   ├── AuthFormSwitcher.scss
+│   │   │   │   │   └── SwapPrompt.jsx
 │   │   │   │   ├── ChangeEmail/
 │   │   │   │   │   ├── ChangeEmail.jsx
 │   │   │   │   │   └── ChangeEmail.scss
@@ -46,14 +50,17 @@ Business-Side/
 │   │   │   │   │   ├── EditLoginInfo.jsx
 │   │   │   │   │   └── EditLoginInfo.scss
 │   │   │   │   ├── GetAuthForm/
-│   │   │   │   │   ├── GetAuthForm.jsx
-│   │   │   │   │   └── GetAuthForm.scss
-│   │   │   │   ├── Password/
-│   │   │   │   │   ├── Password.jsx
-│   │   │   │   │   └── Password.scss
-│   │   │   │   └── SignInUp/
-│   │   │   │       ├── SignInUp.jsx
-│   │   │   │       └── SignInUp.scss
+│   │   │   │   │   ├── SignInForm/
+│   │   │   │   │   │   ├── SignInForm.jsx
+│   │   │   │   │   │   └── SignInForm.scss
+│   │   │   │   │   ├── SignUpForm/
+│   │   │   │   │   │   ├── SignUpForm.jsx
+│   │   │   │   │   │   └── SignUpForm.scss
+│   │   │   │   │   ├── authForm.scss
+│   │   │   │   │   └── GetAuthForm.jsx
+│   │   │   │   └── PasswordFormField/
+│   │   │   │       ├── PasswordFormField.jsx
+│   │   │   │       └── PasswordFormField.scss
 │   │   │   ├── business/
 │   │   │   │   └── EditBusinessInfo/
 │   │   │   │       ├── EditBusinessInfo.jsx
@@ -66,6 +73,9 @@ Business-Side/
 │   │   │   │   │   └── ConfirmationMessage.jsx
 │   │   │   │   ├── ErrorMessage/
 │   │   │   │   │   └── ErrorMessage.jsx
+│   │   │   │   ├── FormField/
+│   │   │   │   │   ├── FormField.jsx
+│   │   │   │   │   └── FormField.scss
 │   │   │   │   ├── GenerateAllergenList/
 │   │   │   │   │   ├── AllergenCheckbox.jsx
 │   │   │   │   │   └── GenerateAllergenList.jsx
@@ -113,11 +123,15 @@ Business-Side/
 │   │   │           ├── Step3.jsx
 │   │   │           └── Step3.scss
 │   │   ├── hooks/
-│   │   │   └── useAllergens.js
+│   │   │   ├── useAllergens.js
+│   │   │   ├── useAuthActions.js
+│   │   │   ├── useAuthFormSwitcher.js
+│   │   │   └── useEditLoginInfo.js
 │   │   ├── styles/
 │   │   │   └── global.scss
 │   │   ├── utils/
 │   │   │   ├── allergenCache.js
+│   │   │   ├── authValidation.js
 │   │   │   ├── cookies.jsx
 │   │   │   └── formValidation.js
 │   │   ├── App.jsx
@@ -255,6 +269,7 @@ Business-Side/
 │   ├── README.md
 │   └── server.js
 ├── archiving_explainer.md
+├── edit_business_address_fix_explainer.md
 ├── front_end_refactor_explainer.md
 ├── package.json
 ├── README.md

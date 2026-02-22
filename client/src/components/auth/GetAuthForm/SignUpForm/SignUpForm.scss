@@ -1,0 +1,17 @@
+// client/src/components/auth/GetAuthForm/SignUpForm/SignUpForm.scss
+
+@use '../authForm.scss';
+
+.sign {
+	&-up {
+		&-btn {
+			margin-bottom: 0px;
+			margin-top: 0px;
+		}
+	}
+}
+
+.name,
+.email {
+	width: 100%;
+}

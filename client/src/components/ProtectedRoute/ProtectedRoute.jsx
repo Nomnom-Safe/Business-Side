@@ -1,4 +1,5 @@
-import React from 'react';
+// client/src/components/ProtectedRoute/ProtectedRoute.jsx
+
 import { Navigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import getCookie from '../../utils/cookies';
@@ -12,7 +13,7 @@ function allowChooseBusinessGuard(context) {
 }
 
 function preventSignedInAccessingAuthGuard(context) {
-	if (context.route === 'signInUp') {
+	if (context.route === 'authFormSwitcher') {
 		return { type: 'redirect', to: '/dashboard' };
 	}
 	return null;
@@ -28,7 +29,11 @@ function adminGuard(context) {
 function setupGuard(context) {
 	// Prevents users from accessing setup pages if they are associated with a business,
 	// unless they have just signed up and are still completing setup
-	if (context.route === 'setup' && context.hasBusiness && !context.justSignedUp) {
+	if (
+		context.route === 'setup' &&
+		context.hasBusiness &&
+		!context.justSignedUp
+	) {
 		return { type: 'redirect', to: '/dashboard' };
 	}
 	return null;
@@ -68,7 +73,7 @@ function ProtectedRoute({ component, route, admin }) {
 
 	// Guard chain for the not-authorized case (short-circuits all other checks)
 	if (!isAuthorized) {
-		if (route !== 'signInUp') {
+		if (route !== 'authFormSwitcher') {
 			// Redirect to sign-in page
 			return (
 				<Navigate
@@ -113,4 +118,3 @@ ProtectedRoute.propTypes = {
 };
 
 export default ProtectedRoute;
-

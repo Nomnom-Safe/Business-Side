@@ -1,0 +1,11 @@
+// client/src/components/auth/GetAuthForm/SignInForm/SignInForm.scss
+
+@use '../authForm.scss';
+
+.sign {
+	&-in {
+		&-btn {
+			background-color: var(--salmon);
+		}
+	}
+}

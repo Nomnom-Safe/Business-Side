@@ -15,6 +15,7 @@ const {
 	updateUserAdminCookieIfLoggedIn,
 	buildBusinessUpdatePayload,
 	mapBusinessResponse,
+	getResolvedAddress,
 	fetchBusinessOrError,
 	deleteBusinessById,
 } = require('./businessController.helpers');
@@ -49,7 +50,8 @@ async function getBusinessById(req, res) {
 		return res.status(404).json(business);
 	}
 
-	return res.status(200).json(mapBusinessResponse(business));
+	const resolvedAddress = await getResolvedAddress(business);
+	return res.status(200).json(mapBusinessResponse(business, resolvedAddress));
 }
 
 /**
