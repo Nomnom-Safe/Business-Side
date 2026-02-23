@@ -14,11 +14,12 @@ Business-Side/
 │   │   │   └── index.js
 │   │   ├── assets/
 │   │   │   ├── icons/
+│   │   │   │   ├── account.png
 │   │   │   │   ├── avatar.png
 │   │   │   │   ├── delete.png
 │   │   │   │   ├── demote-admin.png
-│   │   │   │   ├── edit_business.png
-│   │   │   │   ├── edit_login.png
+│   │   │   │   ├── edit.png
+│   │   │   │   ├── info.png
 │   │   │   │   ├── logout.png
 │   │   │   │   ├── promote-admin.png
 │   │   │   │   ├── remove-user.png
@@ -27,6 +28,24 @@ Business-Side/
 │   │   │       ├── menu-placeholder-left.jpg
 │   │   │       └── menu-placeholder-right.jpg
 │   │   ├── components/
+│   │   │   ├── account/
+│   │   │   │   ├── AccountDetails/
+│   │   │   │   │   ├── DetailRow/
+│   │   │   │   │   │   ├── DetailRow.jsx
+│   │   │   │   │   │   └── DetailRow.scss
+│   │   │   │   │   ├── AccountDetails.jsx
+│   │   │   │   │   └── AccountDetails.scss
+│   │   │   │   ├── ChangeEmail/
+│   │   │   │   │   ├── ChangeEmail.jsx
+│   │   │   │   │   └── ChangeEmail.scss
+│   │   │   │   ├── ChangePassword/
+│   │   │   │   │   └── ChangePassword.jsx
+│   │   │   │   ├── EditAccount/
+│   │   │   │   │   ├── EditAccount.jsx
+│   │   │   │   │   └── EditAccount.scss
+│   │   │   │   └── EditSection/
+│   │   │   │       ├── EditSection.jsx
+│   │   │   │       └── EditSection.scss
 │   │   │   ├── admin/
 │   │   │   │   ├── AdminTable/
 │   │   │   │   │   ├── AdminTable.jsx
@@ -39,28 +58,17 @@ Business-Side/
 │   │   │   │   │   ├── AuthFormSwitcher.jsx
 │   │   │   │   │   ├── AuthFormSwitcher.scss
 │   │   │   │   │   └── SwapPrompt.jsx
-│   │   │   │   ├── ChangeEmail/
-│   │   │   │   │   ├── ChangeEmail.jsx
-│   │   │   │   │   └── ChangeEmail.scss
-│   │   │   │   ├── ChangePassword/
-│   │   │   │   │   └── ChangePassword.jsx
 │   │   │   │   ├── DietList/
 │   │   │   │   │   └── DietList.jsx
-│   │   │   │   ├── EditLoginInfo/
-│   │   │   │   │   ├── EditLoginInfo.jsx
-│   │   │   │   │   └── EditLoginInfo.scss
-│   │   │   │   ├── GetAuthForm/
-│   │   │   │   │   ├── SignInForm/
-│   │   │   │   │   │   ├── SignInForm.jsx
-│   │   │   │   │   │   └── SignInForm.scss
-│   │   │   │   │   ├── SignUpForm/
-│   │   │   │   │   │   ├── SignUpForm.jsx
-│   │   │   │   │   │   └── SignUpForm.scss
-│   │   │   │   │   ├── authForm.scss
-│   │   │   │   │   └── GetAuthForm.jsx
-│   │   │   │   └── PasswordFormField/
-│   │   │   │       ├── PasswordFormField.jsx
-│   │   │   │       └── PasswordFormField.scss
+│   │   │   │   └── GetAuthForm/
+│   │   │   │       ├── SignInForm/
+│   │   │   │       │   ├── SignInForm.jsx
+│   │   │   │       │   └── SignInForm.scss
+│   │   │   │       ├── SignUpForm/
+│   │   │   │       │   ├── SignUpForm.jsx
+│   │   │   │       │   └── SignUpForm.scss
+│   │   │   │       ├── authForm.scss
+│   │   │   │       └── GetAuthForm.jsx
 │   │   │   ├── business/
 │   │   │   │   └── EditBusinessInfo/
 │   │   │   │       ├── EditBusinessInfo.jsx
@@ -69,6 +77,10 @@ Business-Side/
 │   │   │   │   ├── AddressFields/
 │   │   │   │   │   ├── AddressFields.jsx
 │   │   │   │   │   └── AddressFields.scss
+│   │   │   │   ├── AllergenPicker/
+│   │   │   │   │   ├── AllergenPicker.jsx
+│   │   │   │   │   ├── AllergenPicker.scss
+│   │   │   │   │   └── index.js
 │   │   │   │   ├── ConfirmationMessage/
 │   │   │   │   │   └── ConfirmationMessage.jsx
 │   │   │   │   ├── ErrorMessage/
@@ -82,9 +94,38 @@ Business-Side/
 │   │   │   │   ├── Header/
 │   │   │   │   │   ├── Header.jsx
 │   │   │   │   │   └── Header.scss
-│   │   │   │   └── ProfileIcon/
-│   │   │   │       ├── ProfileIcon.jsx
-│   │   │   │       └── ProfileIcon.scss
+│   │   │   │   ├── LoadingSpinner/
+│   │   │   │   │   ├── LoadingSpinner.jsx
+│   │   │   │   │   └── LoadingSpinner.scss
+│   │   │   │   ├── ManageCategoriesModal/
+│   │   │   │   │   ├── index.js
+│   │   │   │   │   ├── ManageCategoriesModal.jsx
+│   │   │   │   │   └── ManageCategoriesModal.scss
+│   │   │   │   ├── Modal/
+│   │   │   │   │   ├── index.js
+│   │   │   │   │   ├── Modal.jsx
+│   │   │   │   │   └── Modal.scss
+│   │   │   │   ├── Nav/
+│   │   │   │   │   ├── breadcrumbLabels.js
+│   │   │   │   │   ├── Nav.jsx
+│   │   │   │   │   └── Nav.scss
+│   │   │   │   ├── PageLayout/
+│   │   │   │   │   ├── PageLayout.jsx
+│   │   │   │   │   └── PageLayout.scss
+│   │   │   │   ├── PasswordFormField/
+│   │   │   │   │   ├── PasswordFormField.jsx
+│   │   │   │   │   └── PasswordFormField.scss
+│   │   │   │   ├── ProfileIcon/
+│   │   │   │   │   ├── ProfileIcon.jsx
+│   │   │   │   │   └── ProfileIcon.scss
+│   │   │   │   ├── SaveButton/
+│   │   │   │   │   ├── SaveButton.jsx
+│   │   │   │   │   └── SaveButton.scss
+│   │   │   │   └── Toast/
+│   │   │   │       ├── index.js
+│   │   │   │       ├── Toast.jsx
+│   │   │   │       ├── Toast.scss
+│   │   │   │       └── ToastContainer.jsx
 │   │   │   ├── menu/
 │   │   │   │   ├── MenuCard/
 │   │   │   │   │   ├── MenuCard.jsx
@@ -94,13 +135,16 @@ Business-Side/
 │   │   │   │       └── MenuDashboard.scss
 │   │   │   ├── menuItems/
 │   │   │   │   ├── AddMenuItem/
-│   │   │   │   │   └── AddMenuItem.jsx
+│   │   │   │   │   ├── AddMenuItem.jsx
+│   │   │   │   │   └── AddMenuItem.scss
 │   │   │   │   ├── Checkbox/
 │   │   │   │   │   └── Checkbox.jsx
 │   │   │   │   ├── MenuItemPanel/
-│   │   │   │   │   └── MenuItemPanel.jsx
+│   │   │   │   │   ├── MenuItemPanel.jsx
+│   │   │   │   │   └── MenuItemPanel.scss
 │   │   │   │   ├── MenuItemsPage/
-│   │   │   │   │   └── MenuItemsPage.jsx
+│   │   │   │   │   ├── MenuItemsPage.jsx
+│   │   │   │   │   └── MenuItemsPage.scss
 │   │   │   │   └── MenuItemSwap/
 │   │   │   │       ├── MenuItemSwap.jsx
 │   │   │   │       └── MenuItemSwap.scss
@@ -122,18 +166,25 @@ Business-Side/
 │   │   │       └── Step3/
 │   │   │           ├── Step3.jsx
 │   │   │           └── Step3.scss
+│   │   ├── context/
+│   │   │   └── ToastContext.jsx
 │   │   ├── hooks/
+│   │   │   ├── useAccountDetails.js
 │   │   │   ├── useAllergens.js
 │   │   │   ├── useAuthActions.js
 │   │   │   ├── useAuthFormSwitcher.js
-│   │   │   └── useEditLoginInfo.js
+│   │   │   ├── useBreadcrumbs.js
+│   │   │   ├── useEditLoginInfo.js
+│   │   │   └── useEditName.js
 │   │   ├── styles/
 │   │   │   └── global.scss
 │   │   ├── utils/
 │   │   │   ├── allergenCache.js
 │   │   │   ├── authValidation.js
 │   │   │   ├── cookies.jsx
-│   │   │   └── formValidation.js
+│   │   │   ├── formValidation.js
+│   │   │   ├── parseFullName.js
+│   │   │   └── splitName.js
 │   │   ├── App.jsx
 │   │   ├── App.test.js
 │   │   └── index.jsx
@@ -185,7 +236,10 @@ Business-Side/
 │   │       ├── weekly_presentations/
 │   │       │   ├── sprint1_week_4_recap.md
 │   │       │   ├── sprint1_week_4_recap.pdf
-│   │       │   └── sprint_1_week_5_recap.md
+│   │       │   ├── sprint1_week_6_recap.md
+│   │       │   ├── sprint1_week_6_recap.pdf
+│   │       │   ├── sprint_1_week_5_recap.md
+│   │       │   └── sprint_1_week_5_recap.pdf
 │   │       ├── ppp.md
 │   │       ├── ppp.pdf
 │   │       └── week5_plan.md
@@ -221,6 +275,7 @@ Business-Side/
 │   │   │   ├── businessController.helpers.js
 │   │   │   ├── businessController.js
 │   │   │   ├── businessUserController.js
+│   │   │   ├── categoryController.js
 │   │   │   ├── menuController.js
 │   │   │   └── menuItemController.js
 │   │   ├── middleware/
@@ -232,6 +287,7 @@ Business-Side/
 │   │   │   ├── allergenRoutes.js
 │   │   │   ├── businessRoutes.js
 │   │   │   ├── businessUserRoutes.js
+│   │   │   ├── categoryRoutes.js
 │   │   │   ├── menuItemRoutes.js
 │   │   │   └── menuRoutes.js
 │   │   ├── schemas/
@@ -256,6 +312,7 @@ Business-Side/
 │   │   │   ├── businessMembershipService.js
 │   │   │   ├── businessService.js
 │   │   │   ├── businessUserService.js
+│   │   │   ├── categoryService.js
 │   │   │   ├── firestoreInit.js
 │   │   │   ├── menuItemService.js
 │   │   │   └── menuService.js
