@@ -1,0 +1,30 @@
+// client/src/components/account/EditAccount/EditAccount.scss
+
+.edit-account {
+	width: 100%;
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+
+	&__section {
+		background: var(--hard-white);
+		border: 1px solid #eee;
+		border-radius: var(--corners-round);
+		padding: 16px;
+	}
+
+	&__name-form {
+		display: flex;
+		gap: 12px;
+		align-items: center;
+	}
+
+	&__form {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+}

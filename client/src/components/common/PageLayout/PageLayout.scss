@@ -1,0 +1,47 @@
+.page-wrapper {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.page-layout {
+	display: flex;
+	flex-direction: column; /* nav above main by default (breadcrumbs) */
+	align-items: stretch;
+	width: 100%;
+	box-sizing: border-box;
+	min-height: calc(100vh - 60px);
+	overflow-x: hidden;
+}
+
+.page-layout__nav {
+	width: 100%;
+	padding: 0; /* let breadcrumb control its own padding */
+	box-sizing: border-box;
+}
+
+.page-layout__main {
+	flex: 1 1 auto;
+	padding: 24px;
+	max-width: 1200px;
+	margin: 0 auto;
+	width: 100%;
+	box-sizing: border-box;
+	overflow-x: hidden;
+}
+
+@media (max-width: 900px) {
+	.page-layout {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.page-layout__nav {
+		width: 100%;
+		flex: none;
+		padding: 12px 16px;
+	}
+
+	.page-layout__main {
+		padding: 16px;
+	}
+}

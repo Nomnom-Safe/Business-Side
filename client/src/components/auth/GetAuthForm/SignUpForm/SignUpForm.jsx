@@ -4,7 +4,7 @@ import { useState } from 'react';
 import './SignUpForm.scss';
 
 import FormField from '../../../common/FormField/FormField.jsx';
-import PasswordFormField from '../../PasswordFormField/PasswordFormField.jsx';
+import PasswordFormField from 'client/src/components/common/PasswordFormField/PasswordFormField.jsx';
 import ErrorMessage from '../../../common/ErrorMessage/ErrorMessage.jsx';
 
 import { useAuthActions } from '../../../../hooks/useAuthActions.js';

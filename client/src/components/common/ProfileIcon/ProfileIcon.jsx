@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import avatar from '../../../assets/icons/avatar.png';
-import editLoginIcon from '../../../assets/icons/edit_login.png';
-import editBusinessIcon from '../../../assets/icons/edit_business.png';
+import editIcon from '../../../assets/icons/edit.png';
 import logoutIcon from '../../../assets/icons/logout.png';
+import accountIcon from '../../../assets/icons/account.png';
 // ARCHIVED: Admin Features - Not part of MVP (single user per business)
 // import userMaintenanceIcon from '../../../assets/icons/user-maintenance.png';
 import getCookie from '../../../utils/cookies';
@@ -29,10 +29,10 @@ export default function ProfileIcon() {
 	// 	navigate('/user-maintenance');
 	// };
 
-	const toEditLoginInfo = (event) => {
+	const toAccountDetails = (event) => {
 		event.preventDefault();
 		setIsOpen(false);
-		navigate('/edit-login-info');
+		navigate('/account');
 	};
 
 	const toEditBusinessInfo = (event) => {
@@ -96,33 +96,34 @@ export default function ProfileIcon() {
 							<span>{getCookie('email')}</span>
 						</div>
 
-						{/* ARCHIVED: Admin Features - Not part of MVP (single user per business) */}
-						{/* {isAdmin && hasBusiness ? (
-						<div
-							onClick={toUserMaintenance}
-							className='dropdown-item'
-						>
-							<img
-								src={userMaintenanceIcon}
-								alt='User Maintenance Icon'
-							/>
-							<span>User Maintenance</span>
-						</div>
-					) : (
-						<></>
-					)} */}
+						{/* ARCHIVED: Admin Features - Not part of MVP (single user per business) 
+							{isAdmin && hasBusiness ? (
+								<div
+									onClick={toUserMaintenance}
+									className='dropdown-item'
+								>
+									<img
+										src={userMaintenanceIcon}
+										alt='User Maintenance Icon'
+									/>
+									<span>User Maintenance</span>
+								</div>
+							) : (
+								<></>
+							)}
+						*/}
 
 						{hasBusiness ? (
 							<>
 								<div
-									onClick={toEditLoginInfo}
+									onClick={toAccountDetails}
 									className='dropdown-item'
 								>
 									<img
-										src={editLoginIcon}
-										alt='Edit Login'
+										src={accountIcon}
+										alt='Account Details'
 									/>
-									<span>Edit Login Info</span>
+									<span>Account Details</span>
 								</div>
 
 								<div
@@ -130,7 +131,7 @@ export default function ProfileIcon() {
 									className='dropdown-item'
 								>
 									<img
-										src={editBusinessIcon}
+										src={editIcon}
 										alt='Edit Business'
 									/>
 									<span>Edit Business Info</span>

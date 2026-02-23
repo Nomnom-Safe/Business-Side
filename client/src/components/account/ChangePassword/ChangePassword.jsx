@@ -1,4 +1,6 @@
-import PasswordFormField from '../PasswordFormField/PasswordFormField';
+// client/src/components/account/ChangePassword/ChangePassword.jsx
+
+import PasswordFormField from 'client/src/components/common/PasswordFormField/PasswordFormField.jsx';
 
 function ChangePassword() {
 	return (

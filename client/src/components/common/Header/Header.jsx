@@ -1,3 +1,5 @@
+// client/src/components/common/Header/Header.jsx
+
 import '../../../styles/global.scss';
 import './Header.scss';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +10,7 @@ function Header() {
 	const navigate = useNavigate();
 	const isAuthorized = getCookie('isAuthorized');
 
-	const toHome = (event) => {
+	const toDashboard = (event) => {
 		event.preventDefault();
 
 		if (isAuthorized === 'true') {
@@ -22,7 +24,7 @@ function Header() {
 		<header className='header'>
 			<div className='header-left'>
 				<h1
-					onClick={toHome}
+					onClick={toDashboard}
 					className='header-title'
 				>
 					NomNom Safe

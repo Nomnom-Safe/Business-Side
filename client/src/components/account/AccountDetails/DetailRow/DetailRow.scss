@@ -1,0 +1,23 @@
+// client/src/components/account/AccountDetails/DetailRow/DetailRow.scss
+
+.detail-row {
+	display: flex;
+	align-items: center;
+	margin-bottom: 0.75rem; // consistent vertical rhythm
+	gap: 12px;
+
+	&__label {
+		font-weight: 600;
+		color: var(--gray);
+		min-width: 120px; // keeps rows aligned
+		display: inline-block;
+		margin-right: 1rem;
+		font-size: 0.95rem;
+	}
+
+	&__value {
+		color: var(--hard-black);
+		font-weight: 500;
+		word-break: break-word; // prevents layout breaking on long emails
+	}
+}

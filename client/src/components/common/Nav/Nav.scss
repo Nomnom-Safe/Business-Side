@@ -1,0 +1,64 @@
+// client/src/components/common/Nav/Nav.scss
+
+.breadcrumbs {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 12px 24px;
+	background: transparent;
+}
+
+.breadcrumbs__list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+}
+
+.breadcrumbs__item {
+	display: inline-flex;
+	align-items: center;
+	white-space: nowrap;
+}
+
+.breadcrumbs__item + .breadcrumbs__item::before {
+	content: '›';
+	margin: 0 8px;
+	color: var(--gray);
+}
+
+.breadcrumbs__link {
+	color: var(--dark-turq);
+	text-decoration: none;
+	padding: 6px 10px;
+	border-radius: var(--corners-round);
+	transition:
+		background-color 0.15s,
+		color 0.15s;
+}
+
+.breadcrumbs__link:hover {
+	background: rgba(0, 128, 128, 0.06);
+}
+
+.breadcrumbs__label {
+	color: var(--hard-black);
+	padding: 6px 10px;
+	border-radius: var(--corners-round);
+	font-weight: 600;
+}
+
+@media (max-width: 600px) {
+	.breadcrumbs {
+		padding: 8px 12px;
+	}
+
+	.breadcrumbs__link,
+	.breadcrumbs__label {
+		padding: 6px 8px;
+		font-size: 14px;
+	}
+}
