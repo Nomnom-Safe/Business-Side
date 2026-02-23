@@ -6,6 +6,7 @@ import AllergenPicker from '../../common/AllergenPicker';
 import ManageCategoriesModal from '../../common/ManageCategoriesModal';
 import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../../../api';
+import LoadingSpinner from '../../common/LoadingSpinner/LoadingSpinner.jsx';
 import { useToast } from '../../../context/ToastContext';
 
 const STORAGE_KEY_LAST_CATEGORY = 'addMenuItem_lastCategory';
@@ -34,8 +35,13 @@ const AddMenuItemForm = () => {
 	const [masterMenuID, setMasterMenuID] = useState('');
 	const [formData, setFormData] = useState(initialFormState);
 	const [isSaving, setIsSaving] = useState(false);
-	const [sectionsOpen, setSectionsOpen] = useState({ basics: true, details: true, allergens: true });
+	const [sectionsOpen, setSectionsOpen] = useState({
+		basics: true,
+		details: true,
+		allergens: true,
+	});
 	const [categories, setCategories] = useState([]);
+	const [isLoadingCategories, setIsLoadingCategories] = useState(false);
 	const [showManageCategories, setShowManageCategories] = useState(false);
 	const businessId = localStorage.getItem('businessId');
 	const location = useLocation();
@@ -47,9 +53,13 @@ const AddMenuItemForm = () => {
 	// Fetch custom categories for this business
 	useEffect(() => {
 		if (!businessId) return;
-		api.categories.list(businessId).then((result) => {
-			if (result.ok && Array.isArray(result.data)) setCategories(result.data);
-		});
+		setIsLoadingCategories(true);
+		api.categories
+			.list(businessId)
+			.then((result) => {
+				if (result.ok && Array.isArray(result.data)) setCategories(result.data);
+			})
+			.finally(() => setIsLoadingCategories(false));
 	}, [businessId, showManageCategories]);
 
 	// Pre-fill from duplicate or last category
@@ -57,14 +67,20 @@ const AddMenuItemForm = () => {
 		const storedMasterID = localStorage.getItem('masterMenu_ID');
 		if (storedMasterID) setMasterMenuID(storedMasterID);
 		if (duplicateItem && duplicateItem.id) {
-			const types = Array.isArray(duplicateItem.item_types) && duplicateItem.item_types.length > 0
-				? [...duplicateItem.item_types]
-				: [duplicateItem.item_type || 'entree'];
+			const types =
+				Array.isArray(duplicateItem.item_types) &&
+				duplicateItem.item_types.length > 0
+					? [...duplicateItem.item_types]
+					: [duplicateItem.item_type || 'entree'];
 			setFormData({
-				name: (duplicateItem.name || '').trim() ? `${duplicateItem.name} (copy)` : '',
+				name: (duplicateItem.name || '').trim()
+					? `${duplicateItem.name} (copy)`
+					: '',
 				ingredients: duplicateItem.ingredients || '',
 				description: duplicateItem.description || '',
-				selectedAllergens: Array.isArray(duplicateItem.allergens) ? [...duplicateItem.allergens] : [],
+				selectedAllergens: Array.isArray(duplicateItem.allergens)
+					? [...duplicateItem.allergens]
+					: [],
 				item_types: types,
 				price: duplicateItem.price != null ? String(duplicateItem.price) : '',
 				price_description: duplicateItem.price_description || '',
@@ -120,11 +136,13 @@ const AddMenuItemForm = () => {
 			const storedMenuId = localStorage.getItem('currentMenuId');
 			const targetMenuId = menuID || storedMenuId || masterMenuID;
 
-			const priceValue = formData.price !== '' ? parseFloat(formData.price) : null;
-			
-			const itemTypes = Array.isArray(formData.item_types) && formData.item_types.length > 0
-				? formData.item_types
-				: ['entree'];
+			const priceValue =
+				formData.price !== '' ? parseFloat(formData.price) : null;
+
+			const itemTypes =
+				Array.isArray(formData.item_types) && formData.item_types.length > 0
+					? formData.item_types
+					: ['entree'];
 			const response = await api.menuItems.addMenuItem({
 				name: formData.name.trim(),
 				description: formData.description.trim(),
@@ -205,73 +223,105 @@ const AddMenuItemForm = () => {
 	}, []);
 
 	return (
-		<div className="add-menu-item">
-			<div className="add-menu-item__header">
-				<button className="button gray-btn" onClick={toMenu}>
+		<div className='add-menu-item'>
+			{isLoadingCategories ? (
+				<div className='add-menu-item__loading'>
+					<LoadingSpinner text='Loading categories...' />
+				</div>
+			) : null}
+			<div className='add-menu-item__header'>
+				<button
+					className='button gray-btn'
+					onClick={toMenu}
+				>
 					Cancel
 				</button>
-				<h1 className="add-menu-item__title">Add Menu Item</h1>
-				<div className="add-menu-item__header-spacer" />
+				<h1 className='add-menu-item__title'>Add Menu Item</h1>
+				<div className='add-menu-item__header-spacer' />
 			</div>
 
-			<div className="add-menu-item__form-container">
-				<form className="add-menu-item__form" onSubmit={(e) => e.preventDefault()}>
-					<div className="add-menu-item__sections">
-						<section className="add-menu-item__section">
+			<div className='add-menu-item__form-container'>
+				<form
+					className='add-menu-item__form'
+					onSubmit={(e) => e.preventDefault()}
+				>
+					<div className='add-menu-item__sections'>
+						<section className='add-menu-item__section'>
 							<button
-								type="button"
-								className="add-menu-item__section-header"
+								type='button'
+								className='add-menu-item__section-header'
 								onClick={() => toggleSection('basics')}
 								aria-expanded={sectionsOpen.basics}
 							>
-								{sectionsOpen.basics ? <FaChevronDown size={14} /> : <FaChevronRight size={14} />}
+								{sectionsOpen.basics ? (
+									<FaChevronDown size={14} />
+								) : (
+									<FaChevronRight size={14} />
+								)}
 								<span>Basics</span>
 							</button>
 							{sectionsOpen.basics && (
-								<div className="add-menu-item__form-grid add-menu-item__form-grid--single">
-									<div className="add-menu-item__left-column">
-										<div className="add-menu-item__field">
-											<label htmlFor="name" className="add-menu-item__label">
-												Name <span className="required">*</span>
+								<div className='add-menu-item__form-grid add-menu-item__form-grid--single'>
+									<div className='add-menu-item__left-column'>
+										<div className='add-menu-item__field'>
+											<label
+												htmlFor='name'
+												className='add-menu-item__label'
+											>
+												Name <span className='required'>*</span>
 											</label>
 											<input
-												type="text"
-												id="name"
-												name="name"
+												type='text'
+												id='name'
+												name='name'
 												value={formData.name}
 												onChange={handleInputChange}
-												className="add-menu-item__input"
-												placeholder="Enter item name"
+												className='add-menu-item__input'
+												placeholder='Enter item name'
 												autoFocus
 											/>
 										</div>
-										<div className="add-menu-item__field">
-											<div className="add-menu-item__category-row">
-												<label className="add-menu-item__label">Category</label>
+										<div className='add-menu-item__field'>
+											<div className='add-menu-item__category-row'>
+												<label className='add-menu-item__label'>Category</label>
 												<button
-													type="button"
-													className="add-menu-item__link-btn"
+													type='button'
+													className='add-menu-item__link-btn'
 													onClick={() => setShowManageCategories(true)}
 												>
 													Manage categories
 												</button>
 											</div>
-											<div className="add-menu-item__category-multi">
-												<div className="add-menu-item__category-chips">
+											<div className='add-menu-item__category-multi'>
+												<div className='add-menu-item__category-chips'>
 													{(formData.item_types || []).map((id) => {
-														const builtIn = ITEM_TYPES.find((t) => t.value === id);
+														const builtIn = ITEM_TYPES.find(
+															(t) => t.value === id,
+														);
 														const custom = categories.find((c) => c.id === id);
-														const label = builtIn ? builtIn.label : (custom?.label || id);
+														const label = builtIn
+															? builtIn.label
+															: custom?.label || id;
 														return (
-															<span key={id} className="add-menu-item__chip">
+															<span
+																key={id}
+																className='add-menu-item__chip'
+															>
 																{label}
 																<button
-																	type="button"
-																	className="add-menu-item__chip-remove"
+																	type='button'
+																	className='add-menu-item__chip-remove'
 																	onClick={() => {
 																		setFormData((prev) => {
-																			const next = (prev.item_types || []).filter((x) => x !== id);
-																			return { ...prev, item_types: next.length ? next : ['entree'] };
+																			const next = (
+																				prev.item_types || []
+																			).filter((x) => x !== id);
+																			return {
+																				...prev,
+																				item_types: next.length
+																					? next
+																					: ['entree'],
+																			};
 																		});
 																	}}
 																	aria-label={`Remove ${label}`}
@@ -283,8 +333,8 @@ const AddMenuItemForm = () => {
 													})}
 												</div>
 												<select
-													className="add-menu-item__select add-menu-item__category-select"
-													value=""
+													className='add-menu-item__select add-menu-item__category-select'
+													value=''
 													onChange={(e) => {
 														const id = e.target.value;
 														if (!id) return;
@@ -295,50 +345,66 @@ const AddMenuItemForm = () => {
 														});
 														e.target.value = '';
 													}}
-													aria-label="Add category"
+													aria-label='Add category'
 												>
-													<option value="">+ Add category</option>
+													<option value=''>+ Add category</option>
 													{ITEM_TYPES.map((t) => (
-														<option key={t.value} value={t.value}>{t.label}</option>
+														<option
+															key={t.value}
+															value={t.value}
+														>
+															{t.label}
+														</option>
 													))}
 													{categories.map((c) => (
-														<option key={c.id} value={c.id}>{c.label}</option>
+														<option
+															key={c.id}
+															value={c.id}
+														>
+															{c.label}
+														</option>
 													))}
 												</select>
 											</div>
 										</div>
-										<div className="add-menu-item__row">
-											<div className="add-menu-item__field add-menu-item__field--half">
-												<label htmlFor="price" className="add-menu-item__label">
+										<div className='add-menu-item__row'>
+											<div className='add-menu-item__field add-menu-item__field--half'>
+												<label
+													htmlFor='price'
+													className='add-menu-item__label'
+												>
 													Price
 												</label>
-												<div className="add-menu-item__price-input">
-													<span className="add-menu-item__price-symbol">$</span>
+												<div className='add-menu-item__price-input'>
+													<span className='add-menu-item__price-symbol'>$</span>
 													<input
-														type="number"
-														id="price"
-														name="price"
+														type='number'
+														id='price'
+														name='price'
 														value={formData.price}
 														onChange={handleInputChange}
-														className="add-menu-item__input"
-														placeholder="0.00"
-														step="0.01"
-														min="0"
+														className='add-menu-item__input'
+														placeholder='0.00'
+														step='0.01'
+														min='0'
 													/>
 												</div>
 											</div>
-											<div className="add-menu-item__field add-menu-item__field--half">
-												<label htmlFor="price_description" className="add-menu-item__label">
+											<div className='add-menu-item__field add-menu-item__field--half'>
+												<label
+													htmlFor='price_description'
+													className='add-menu-item__label'
+												>
 													Price Note
 												</label>
 												<input
-													type="text"
-													id="price_description"
-													name="price_description"
+													type='text'
+													id='price_description'
+													name='price_description'
 													value={formData.price_description}
 													onChange={handleInputChange}
-													className="add-menu-item__input"
-													placeholder="e.g., Market Price"
+													className='add-menu-item__input'
+													placeholder='e.g., Market Price'
 												/>
 											</div>
 										</div>
@@ -347,48 +413,60 @@ const AddMenuItemForm = () => {
 							)}
 						</section>
 
-						<section className="add-menu-item__section">
+						<section className='add-menu-item__section'>
 							<button
-								type="button"
-								className="add-menu-item__section-header"
+								type='button'
+								className='add-menu-item__section-header'
 								onClick={() => toggleSection('details')}
 								aria-expanded={sectionsOpen.details}
 							>
-								{sectionsOpen.details ? <FaChevronDown size={14} /> : <FaChevronRight size={14} />}
+								{sectionsOpen.details ? (
+									<FaChevronDown size={14} />
+								) : (
+									<FaChevronRight size={14} />
+								)}
 								<span>Details</span>
 							</button>
 							{sectionsOpen.details && (
-								<div className="add-menu-item__form-grid add-menu-item__form-grid--single">
-									<div className="add-menu-item__left-column">
-										<div className="add-menu-item__field">
-											<label htmlFor="description" className="add-menu-item__label">
+								<div className='add-menu-item__form-grid add-menu-item__form-grid--single'>
+									<div className='add-menu-item__left-column'>
+										<div className='add-menu-item__field'>
+											<label
+												htmlFor='description'
+												className='add-menu-item__label'
+											>
 												Description
 											</label>
 											<textarea
-												id="description"
-												name="description"
+												id='description'
+												name='description'
 												value={formData.description}
 												onChange={handleInputChange}
-												className="add-menu-item__textarea"
-												placeholder="Brief description of the item"
-												rows="3"
+												className='add-menu-item__textarea'
+												placeholder='Brief description of the item'
+												rows='3'
 											/>
 										</div>
-										<div className="add-menu-item__field">
-											<label htmlFor="ingredients" className="add-menu-item__label">
+										<div className='add-menu-item__field'>
+											<label
+												htmlFor='ingredients'
+												className='add-menu-item__label'
+											>
 												Ingredients
 											</label>
 											<textarea
-												id="ingredients"
-												name="ingredients"
+												id='ingredients'
+												name='ingredients'
 												value={formData.ingredients}
 												onChange={handleInputChange}
-												className="add-menu-item__textarea"
-												placeholder="List the ingredients"
-												rows="4"
+												className='add-menu-item__textarea'
+												placeholder='List the ingredients'
+												rows='4'
 											/>
-											<p className="add-menu-item__hint">
-												Search on the menu items page will find items by any text in name, description, or ingredients. No special format required.
+											<p className='add-menu-item__hint'>
+												Search on the menu items page will find items by any
+												text in name, description, or ingredients. No special
+												format required.
 											</p>
 										</div>
 									</div>
@@ -396,41 +474,50 @@ const AddMenuItemForm = () => {
 							)}
 						</section>
 
-						<section className="add-menu-item__section">
+						<section className='add-menu-item__section'>
 							<button
-								type="button"
-								className="add-menu-item__section-header"
+								type='button'
+								className='add-menu-item__section-header'
 								onClick={() => toggleSection('allergens')}
 								aria-expanded={sectionsOpen.allergens}
 							>
-								{sectionsOpen.allergens ? <FaChevronDown size={14} /> : <FaChevronRight size={14} />}
+								{sectionsOpen.allergens ? (
+									<FaChevronDown size={14} />
+								) : (
+									<FaChevronRight size={14} />
+								)}
 								<span>Allergens & availability</span>
 							</button>
 							{sectionsOpen.allergens && (
-								<div className="add-menu-item__form-grid add-menu-item__form-grid--single">
-									<div className="add-menu-item__right-column">
-										<div className="add-menu-item__field">
-											<label className="add-menu-item__label">Allergens</label>
+								<div className='add-menu-item__form-grid add-menu-item__form-grid--single'>
+									<div className='add-menu-item__right-column'>
+										<div className='add-menu-item__field'>
+											<label className='add-menu-item__label'>Allergens</label>
 											<AllergenPicker
 												selectedAllergens={formData.selectedAllergens}
 												onChange={handleAllergenChange}
 												showSelectedTags={true}
 											/>
 										</div>
-										<div className="add-menu-item__field">
-											<label className="add-menu-item__toggle-label">
+										<div className='add-menu-item__field'>
+											<label className='add-menu-item__toggle-label'>
 												<input
-													type="checkbox"
-													name="is_available"
+													type='checkbox'
+													name='is_available'
 													checked={formData.is_available}
-													onChange={(e) => setFormData(prev => ({ ...prev, is_available: e.target.checked }))}
-													className="add-menu-item__toggle-checkbox"
+													onChange={(e) =>
+														setFormData((prev) => ({
+															...prev,
+															is_available: e.target.checked,
+														}))
+													}
+													className='add-menu-item__toggle-checkbox'
 												/>
-												<span className="add-menu-item__toggle-text">
+												<span className='add-menu-item__toggle-text'>
 													{formData.is_available ? 'Available' : 'Unavailable'}
 												</span>
 											</label>
-											<p className="add-menu-item__toggle-hint">
+											<p className='add-menu-item__toggle-hint'>
 												Unavailable items won't appear on your public menu
 											</p>
 										</div>
@@ -440,18 +527,18 @@ const AddMenuItemForm = () => {
 						</section>
 					</div>
 
-					<div className="add-menu-item__actions add-menu-item__actions--sticky">
+					<div className='add-menu-item__actions add-menu-item__actions--sticky'>
 						<button
-							type="button"
-							className="button add-menu-item__btn-secondary"
+							type='button'
+							className='button add-menu-item__btn-secondary'
 							onClick={handleSaveAndAddAnother}
 							disabled={isSaving}
 						>
 							{isSaving ? 'Saving...' : 'Save & Add Another'}
 						</button>
 						<button
-							type="button"
-							className="button add-menu-item__btn-primary"
+							type='button'
+							className='button add-menu-item__btn-primary'
 							onClick={handleSaveAndClose}
 							disabled={isSaving}
 						>

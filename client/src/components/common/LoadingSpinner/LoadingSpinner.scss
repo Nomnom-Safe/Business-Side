@@ -1,0 +1,52 @@
+// client/src/components/common/LoadingSpinner/LoadingSpinner.scss
+
+.loading-spinner {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: 24px 0;
+
+	&__box {
+		display: inline-flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 8px;
+	}
+
+	&__icon {
+		animation: rotate 1s linear infinite;
+	}
+
+	&__icon .path {
+		stroke: var(--turq);
+		stroke-linecap: round;
+		animation: dash 1.2s ease-in-out infinite;
+	}
+
+	&__text {
+		color: var(--gray);
+		font-size: 13px;
+	}
+}
+
+@keyframes rotate {
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes dash {
+	0% {
+		stroke-dasharray: 1, 150;
+		stroke-dashoffset: 0;
+	}
+	50% {
+		stroke-dasharray: 90, 150;
+		stroke-dashoffset: -35;
+	}
+	100% {
+		stroke-dasharray: 90, 150;
+		stroke-dashoffset: -124;
+	}
+}

@@ -6,6 +6,7 @@ import GetConfirmationMessage from '../../common/ConfirmationMessage/Confirmatio
 import AddressFields from '../../common/AddressFields/AddressFields';
 import './EditBusinessInfo.scss';
 import api from '../../../api';
+import LoadingSpinner from '../../common/LoadingSpinner/LoadingSpinner.jsx';
 
 const EditBusinessInfo = () => {
 	const [businessInfo, setBusinessInfo] = useState({
@@ -20,6 +21,7 @@ const EditBusinessInfo = () => {
 		disclaimers: [],
 		cuisine: '',
 	});
+	const [isSaving, setIsSaving] = useState(false);
 
 	const [addressInfo, setAddressInfo] = useState({
 		street: '',
@@ -29,14 +31,17 @@ const EditBusinessInfo = () => {
 	});
 
 	const [showConfirmation, setShowConfirmation] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const navigate = useNavigate();
 
 	const businessId = localStorage.getItem('businessId'); // Get from localStorage
 
 	useEffect(() => {
 		const fetchBusinessInfo = async () => {
+			setIsLoading(true);
 			if (!businessId) {
 				console.error('No Business ID found.');
+				setIsLoading(false);
 				return;
 			}
 
@@ -61,6 +66,7 @@ const EditBusinessInfo = () => {
 					cuisine: business.cuisine || '',
 				});
 
+				setIsSaving(false);
 				// Use resolved address from API when present; otherwise fetch by address_id
 				if (business.address && typeof business.address === 'object') {
 					setAddressInfo({
@@ -81,8 +87,10 @@ const EditBusinessInfo = () => {
 						});
 					}
 				}
+				setIsLoading(false);
 			} catch (error) {
 				console.error('Error fetching business info:', error);
+				setIsLoading(false);
 			}
 		};
 
@@ -152,6 +160,13 @@ const EditBusinessInfo = () => {
 
 	return (
 		<form className='edit-business-info-container'>
+			{isLoading ? (
+				<>
+					<div style={{ padding: 24 }}>
+						<LoadingSpinner text='Loading business info...' />
+					</div>
+				</>
+			) : null}
 			{showConfirmation ? (
 				<GetConfirmationMessage
 					message='Business information changed successfully.'
@@ -259,8 +274,9 @@ const EditBusinessInfo = () => {
 						type='submit'
 						onClick={save}
 						className='button'
+						disabled={isSaving}
 					>
-						Save
+						{isSaving ? <LoadingSpinner size={18} /> : 'Save'}
 					</button>
 				</div>
 			</div>

@@ -2,16 +2,25 @@
 
 import './AccountDetails.scss';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import editIcon from '../../../assets/icons/edit.png';
 import DetailRow from './DetailRow/DetailRow.jsx';
 import useAccountDetails from '../../../hooks/useAccountDetails.js';
+import LoadingSpinner from '../../common/LoadingSpinner/LoadingSpinner.jsx';
 
 function AccountDetails() {
 	const navigate = useNavigate();
 	const { firstName, lastName, email } = useAccountDetails();
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		// small initial loading state while reading cookies
+		setIsLoading(false);
+	}, []);
 
 	return (
 		<div className='account-details'>
+			{isLoading ? <LoadingSpinner text='Loading account...' /> : null}
 			<div className='account-details__header'>
 				<h1>Account Details</h1>
 

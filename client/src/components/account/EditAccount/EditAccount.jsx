@@ -10,6 +10,8 @@ import SaveButton from '../../common/SaveButton/SaveButton.jsx';
 import EditSection from '../EditSection/EditSection.jsx';
 import { useEditLoginInfo } from '../../../hooks/useEditLoginInfo.js';
 import { useEditName } from '../../../hooks/useEditName.js';
+import { useState } from 'react';
+import LoadingSpinner from '../../common/LoadingSpinner/LoadingSpinner.jsx';
 
 function EditAccount() {
 	const {
@@ -23,6 +25,9 @@ function EditAccount() {
 		success: nameSuccess,
 		handleSave,
 	} = useEditName();
+	const [isSavingName, setIsSavingName] = useState(false);
+	const [isSavingEmail, setIsSavingEmail] = useState(false);
+	const [isSavingPassword, setIsSavingPassword] = useState(false);
 
 	const { message, showError, setShowError, showConfirmation, save } =
 		useEditLoginInfo();
@@ -67,7 +72,14 @@ function EditAccount() {
 				}
 			>
 				<form
-					onSubmit={handleSave}
+					onSubmit={async (e) => {
+						setIsSavingName(true);
+						try {
+							await handleSave(e);
+						} finally {
+							setIsSavingName(false);
+						}
+					}}
 					className='edit-account__name-form'
 				>
 					<FormField
@@ -80,33 +92,48 @@ function EditAccount() {
 						value={last}
 						onChange={(e) => setLast(e.target.value)}
 					/>
-					<SaveButton disabled={!nameChanged}>Save Name</SaveButton>
+					<SaveButton
+						disabled={!nameChanged}
+						loading={isSavingName}
+					>
+						Save Name
+					</SaveButton>
 				</form>
 			</EditSection>
 
 			<EditSection title='Change Email'>
 				<form
-					onSubmit={(e) => {
+					onSubmit={async (e) => {
 						e.preventDefault();
-						save('email', e.target);
+						setIsSavingEmail(true);
+						try {
+							await save('email', e.target);
+						} finally {
+							setIsSavingEmail(false);
+						}
 					}}
 					className='edit-account__form'
 				>
 					<ChangeEmail />
-					<SaveButton>Save Email</SaveButton>
+					<SaveButton loading={isSavingEmail}>Save Email</SaveButton>
 				</form>
 			</EditSection>
 
 			<EditSection title='Change Password'>
 				<form
-					onSubmit={(e) => {
+					onSubmit={async (e) => {
 						e.preventDefault();
-						save('password', e.target);
+						setIsSavingPassword(true);
+						try {
+							await save('password', e.target);
+						} finally {
+							setIsSavingPassword(false);
+						}
 					}}
 					className='edit-account__form'
 				>
 					<ChangePassword />
-					<SaveButton>Save Password</SaveButton>
+					<SaveButton loading={isSavingPassword}>Save Password</SaveButton>
 				</form>
 			</EditSection>
 		</div>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import MenuCard from '../MenuCard/MenuCard.jsx';
 import './MenuDashboard.scss';
 import api from '../../../api';
+import LoadingSpinner from '../../common/LoadingSpinner/LoadingSpinner.jsx';
 
 /* Non-MVP Feature: Deleting menus. 
 	import deleteIcon from '../../../assets/icons/delete.png';
@@ -10,6 +11,7 @@ import api from '../../../api';
 
 function MenuDashboard() {
 	const [menus, setMenus] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 	const navigate = useNavigate();
 
 	/* Non-MVP Feature: Deleting menus.
@@ -24,6 +26,7 @@ function MenuDashboard() {
 			const businessId = localStorage.getItem('businessId');
 			if (!businessId) {
 				console.warn('No businessId in localStorage');
+				setIsLoading(false);
 				return;
 			}
 			try {
@@ -45,8 +48,10 @@ function MenuDashboard() {
 				}));
 
 				setMenus(fetchedMenus);
+				setIsLoading(false);
 			} catch (err) {
 				console.error('Error fetching business menus:', err);
+				setIsLoading(false);
 			}
 		};
 		fetchMenus();
@@ -150,7 +155,9 @@ function MenuDashboard() {
 				<h2 className='dashboard-title'>Your Menu Dashboard</h2>
 			</div>
 
-			{menus.length === 0 ? (
+			{isLoading ? (
+				<LoadingSpinner text='Loading menus...' />
+			) : menus.length === 0 ? (
 				<div className='no-menus-container'>
 					<p>No menu exists for this business yet.</p>
 					<button
