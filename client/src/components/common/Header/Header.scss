@@ -1,11 +1,43 @@
+// client/src/components/common/Header/Header.scss
+
+@import '../../../styles/mixins.scss';
+@import '../../../styles/variables.scss';
+
 .header {
-	height: 60px;
+	height: 3.75rem; /* 60px → rem */
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	background-color: var(--turq);
 	color: var(--hard-white);
-	padding: 10px 25px;
+	padding: 0.625rem 1.5rem; /* 10px 25px → rem */
+
+	@include respond-to(mobile) {
+		height: 3.5rem; /* 56px - tighter on mobile */
+		padding: 0.5rem 1rem; /* 8px 16px */
+
+		&-title {
+			font-size: 1.125rem; /* ~18px - fits your h1 scale */
+		}
+	}
+
+	@include respond-to(tablet) {
+		height: 3.75rem;
+		padding: 0.625rem 1.25rem; /* 10px 20px */
+
+		&-title {
+			font-size: 1.25rem; /* ~20px - your current size */
+		}
+	}
+
+	@include respond-to(desktop) {
+		height: 4rem; /* 64px - more breathing room */
+		padding: 0 2rem; /* 32px side padding */
+
+		&-title {
+			font-size: 1.375rem; /* ~22px - scales up */
+		}
+	}
 
 	&-title {
 		margin: 0;

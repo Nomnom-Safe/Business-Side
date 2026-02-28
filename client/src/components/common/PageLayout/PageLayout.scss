@@ -1,47 +1,83 @@
-.page-wrapper {
-	width: 100%;
-	box-sizing: border-box;
-}
+// client/src/components/common/PageLayout/PageLayout.scss
 
-.page-layout {
-	display: flex;
-	flex-direction: column; /* nav above main by default (breadcrumbs) */
-	align-items: stretch;
-	width: 100%;
-	box-sizing: border-box;
-	min-height: calc(100vh - 60px);
-	overflow-x: hidden;
-}
+@import '../../../styles/mixins.scss';
+@import '../../../styles/variables.scss';
 
-.page-layout__nav {
-	width: 100%;
-	padding: 0; /* let breadcrumb control its own padding */
-	box-sizing: border-box;
-}
+.page {
+	&-wrapper {
+		width: 100%;
+		box-sizing: border-box;
+	}
 
-.page-layout__main {
-	flex: 1 1 auto;
-	padding: 24px;
-	max-width: 1200px;
-	margin: 0 auto;
-	width: 100%;
-	box-sizing: border-box;
-	overflow-x: hidden;
-}
-
-@media (max-width: 900px) {
-	.page-layout {
-		flex-direction: column;
+	&-layout {
+		display: flex;
+		flex-direction: column; /* nav above main by default (breadcrumbs) */
 		align-items: stretch;
+		width: 100%;
+		box-sizing: border-box;
+		min-height: calc(100vh - 60px);
+		overflow-x: hidden;
+
+		&__nav {
+			width: 100%;
+			padding: 0; /* let breadcrumb control its own padding */
+			box-sizing: border-box;
+		}
+
+		&__main {
+			flex: 1 1 auto;
+			padding: 24px;
+			max-width: 1200px;
+			margin: 0 auto;
+			width: 100%;
+			box-sizing: border-box;
+			overflow-x: hidden;
+		}
+	}
+}
+
+/* Mobile: ≤640px */
+@include respond-to(mobile) {
+	.page-layout {
+		min-height: calc(100vh - 56px); /* smaller header? */
 	}
 
 	.page-layout__nav {
-		width: 100%;
-		flex: none;
-		padding: 12px 16px;
+		padding: 0.75rem 1rem; /* 12px 16px */
 	}
 
 	.page-layout__main {
-		padding: 16px;
+		padding: 1rem; /* 16px */
+		max-width: 100%;
+	}
+}
+
+/* Tablet: 641px-1024px */
+@include respond-to(tablet) {
+	.page-layout__main {
+		padding: 1.25rem; /* 20px */
+		max-width: 90rem; /* 1440px or adjust */
+	}
+}
+
+/* Desktop: >1024px */
+@include respond-to(desktop) {
+	.page {
+		&-layout {
+			flex-direction: row; /* nav + main side-by-side */
+			align-items: flex-start;
+
+			&__nav {
+				flex: 0 0 auto;
+				width: auto;
+				max-width: 20rem; /* breadcrumbs don't need to be super wide */
+			}
+
+			&__main {
+				padding: 1.5rem 2rem; /* 24px 32px */
+				max-width: 75rem; /* 1200px */
+				margin-left: 1rem; /* space between nav and main */
+			}
+		}
 	}
 }
