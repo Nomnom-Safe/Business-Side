@@ -1,6 +1,7 @@
 // server/src/controllers/businessController.js
 
 const businessService = require('../services/businessService');
+const addressService = require('../services/addressService');
 const {
 	CreateBusinessSchema,
 	UpdateBusinessSchema,
@@ -57,6 +58,7 @@ async function getBusinessById(req, res) {
 /**
  * POST /api/businesses
  * Create a business and auto-generate its menu
+ * Accepts either address_id (existing) or address: { street, city, state, zipCode } (Option B: server creates address doc).
  */
 async function createBusiness(req, res) {
 	// Zod validation
@@ -64,7 +66,22 @@ async function createBusiness(req, res) {
 	if (!parsed.success) {
 		return res.status(400).json({ error: parsed.error.flatten() });
 	}
-	const data = parsed.data;
+	let data = parsed.data;
+
+	// Require either address_id or structured address
+	if (!data.address_id && !data.address) {
+		return res.status(400).json({
+			error: 'Address required',
+			message: 'Provide address_id or address (street, city, state, zipCode).',
+		});
+	}
+
+	// Option B: create address document when structured address is provided
+	if (data.address) {
+		const createdAddress = await addressService.createAddress(data.address);
+		data = { ...data, address_id: createdAddress.id };
+		delete data.address;
+	}
 
 	// Validate business name
 	const nameCheck = await validateBusinessName(data.name);
@@ -74,7 +91,7 @@ async function createBusiness(req, res) {
 	const phoneCheck = validatePhone(data.phone);
 	if (phoneCheck) return res.status(400).json(phoneCheck);
 
-	// Validate address
+	// Validate address_id exists (when provided; we may have just created it above)
 	const addressCheck = await validateAddressId(data.address_id);
 	if (addressCheck) return res.status(400).json(addressCheck);
 

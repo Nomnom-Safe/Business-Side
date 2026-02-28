@@ -1,4 +1,5 @@
 const { z } = require('zod');
+const { CreateAddressSchema } = require('./Address');
 
 /**
  * Business Schema
@@ -69,6 +70,8 @@ const CreateBusinessSchema = BusinessSchema.omit({ id: true }).extend({
 		.default(''),
 	allergens: z.array(z.string()).optional().default([]),
 	diets: z.array(z.string()).optional().default([]),
+	// Option B onboarding: structured address; server creates address doc and uses address_id
+	address: CreateAddressSchema.optional(),
 });
 
 /**

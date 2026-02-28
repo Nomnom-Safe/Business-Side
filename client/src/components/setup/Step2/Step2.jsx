@@ -3,9 +3,9 @@ import GenerateAllergenList from '../../common/GenerateAllergenList/GenerateAlle
 import GenerateDietList from '../../auth/DietList/DietList';
 import { useState, useEffect } from 'react';
 
-function Step2({ updateFormData }) {
-	const [selectedAllergens, setSelectedAllergens] = useState([]);
-	const [selectedDiets, setSelectedDiets] = useState([]);
+function Step2({ updateFormData, initialAllergens, initialDiets, businessName }) {
+	const [selectedAllergens, setSelectedAllergens] = useState(() => Array.isArray(initialAllergens) ? initialAllergens : []);
+	const [selectedDiets, setSelectedDiets] = useState(() => Array.isArray(initialDiets) ? initialDiets : []);
 
 	// Handle allergen checkbox change
 	const handleAllergenChange = (e, allergen) => {
@@ -35,15 +35,21 @@ function Step2({ updateFormData }) {
 
 	return (
 		<>
-			<h1>Your Menu</h1>
+			<h1>Help customers find you</h1>
+			{businessName && (businessName.trim()) && (
+				<p className="step2-personalization">Almost there, {businessName.trim()}.</p>
+			)}
+			<div className="step2-optional-callout">
+				This step is optional. Skip to go straight to your dashboard and add this later in Business settings.
+			</div>
 
 			<form
 				name='setUpStep2Form'
 				className='step2-form'
 			>
-				<div className='allergens'>
+				<div className='onboarding-card allergens'>
 					<span className='question'>
-						Do your menu items always contain certain allergens?
+						Which allergens are always present in your menu items? (Select all that apply.)
 					</span>
 
 					<div className='allergen-list'>
@@ -54,10 +60,9 @@ function Step2({ updateFormData }) {
 					</div>
 				</div>
 
-				<div className='diets'>
+				<div className='onboarding-card diets'>
 					<span className='question'>
-						Do you use any special preparation techniques or provide menu items
-						for any diets?
+						Which diets do you offer menu items for? (Select all that apply.)
 					</span>
 
 					<div className='diet-list'>

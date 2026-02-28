@@ -9,7 +9,6 @@ import ErrorMessage from '../../../common/ErrorMessage/ErrorMessage.jsx';
 
 import { useAuthActions } from '../../../../hooks/useAuthActions.js';
 import { validateSignUp } from '../../../../utils/authValidation.js';
-import getCookie from '../../../../utils/cookies.jsx';
 
 function SignUpForm() {
 	const { signUp } = useAuthActions();
@@ -47,15 +46,13 @@ function SignUpForm() {
 			method='POST'
 			className='auth-form'
 		>
-			{showError && (
-				<ErrorMessage
-					message={message}
-					destination={
-						getCookie('hasBusiness') === 'true' ? false : '/choose-business'
-					}
-					onClose={() => setShowError(false)}
-				/>
-			)}
+		{showError && (
+			<ErrorMessage
+				message={message}
+				destination={false}
+				onClose={() => setShowError(false)}
+			/>
+		)}
 
 			<h2 className='auth-form-title'>NomNom Safe</h2>
 
@@ -83,15 +80,18 @@ function SignUpForm() {
 				className={'name'}
 			/>
 
-			<PasswordFormField
-				name='password'
-				placeholder='Password'
-			/>
+		<PasswordFormField
+			name='password'
+			placeholder='Password'
+		/>
+		<p className='password-hint'>
+			At least 8 characters with one uppercase letter, one lowercase letter, and one number.
+		</p>
 
-			<PasswordFormField
-				name='confirmPassword'
-				placeholder='Confirm Password'
-			/>
+		<PasswordFormField
+			name='confirmPassword'
+			placeholder='Confirm Password'
+		/>
 
 			<button
 				type='submit'

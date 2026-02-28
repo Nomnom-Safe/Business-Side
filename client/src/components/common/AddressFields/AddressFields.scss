@@ -7,12 +7,29 @@
 	}
 }
 
+.street-address,
+.city,
+.state,
+.zip {
+	&:focus {
+		outline: none;
+		border-color: var(--turq);
+		box-shadow: 0 0 0 2px rgba(0, 128, 128, 0.2);
+	}
+}
+
 .street-address {
 	flex: 1 0 200px;
+	padding: 8px 12px;
+	border: 1px solid var(--hard-black, #111);
+	border-radius: var(--corners-round, 4px);
 }
 
 .city {
 	flex: 1 0 100px;
+	padding: 8px 12px;
+	border: 1px solid var(--hard-black, #111);
+	border-radius: var(--corners-round, 4px);
 
 	&-state-zip {
 		display: flex;
@@ -23,10 +40,16 @@
 
 .state {
 	flex: 0 0 60px;
+	padding: 8px 12px;
+	border: 1px solid var(--hard-black, #111);
+	border-radius: var(--corners-round, 4px);
 }
 
 .zip {
 	flex: 0 0 80px;
+	padding: 8px 12px;
+	border: 1px solid var(--hard-black, #111);
+	border-radius: var(--corners-round, 4px);
 
 	&::-webkit-inner-spin-button,
 	&::-webkit-outer-spin-button {

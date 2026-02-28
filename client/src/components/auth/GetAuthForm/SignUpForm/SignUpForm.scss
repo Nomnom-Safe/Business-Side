@@ -10,3 +10,15 @@
 		}
 	}
 }
+
+.name,
+.email {
+	width: 100%;
+}
+
+.password-hint {
+	font-size: 0.78rem;
+	color: #666;
+	margin: -6px 0 6px;
+	line-height: 1.4;
+}

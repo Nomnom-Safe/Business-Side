@@ -1,12 +1,25 @@
 .progress-bar {
 	width: 100%;
-	padding: 5px;
+	padding: 8px 12px;
 	border: 2px solid var(--hard-black);
 	border-radius: var(--corners-round);
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	background-color: var(--mint-green);
+	font-size: 1rem;
+}
+
+.onboarding-card {
+	background: #fff;
+	border: 1px solid var(--gray, #ccc);
+	border-radius: var(--corners-round);
+	padding: 1.25rem;
+	margin-bottom: 1rem;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
 }
 
 .one-third {
@@ -15,6 +28,56 @@
 		var(--mint-green) 33.33%,
 		transparent 33.33%
 	);
+}
+
+.one-half {
+	background: linear-gradient(
+		to right,
+		var(--mint-green) 50%,
+		transparent 50%
+	);
+}
+
+.two-halves {
+	background: var(--mint-green);
+}
+
+.onboarding-success {
+	text-align: center;
+	padding: 2rem 1rem;
+
+	.onboarding-success-check {
+		display: block;
+		margin: 0 auto 1rem;
+		font-size: 3rem;
+		line-height: 1;
+		color: var(--dark-turq);
+		animation: onboarding-success-pop 0.4s ease-out;
+	}
+	.onboarding-success-title {
+		font-size: 1.5rem;
+		margin: 0 0 0.5rem;
+		color: var(--dark-turq, #006);
+	}
+	.onboarding-success-copy {
+		margin: 0;
+		font-size: 1rem;
+		color: var(--hard-black, #111);
+	}
+}
+
+@keyframes onboarding-success-pop {
+	0% {
+		transform: scale(0);
+		opacity: 0;
+	}
+	60% {
+		transform: scale(1.15);
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
 }
 
 .two-thirds {

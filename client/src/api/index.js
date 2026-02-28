@@ -171,6 +171,22 @@ export const addressesApi = {
 		}),
 };
 
+export const placesApi = {
+	autocomplete: async (input, sessionToken = '') => {
+		const params = new URLSearchParams({ input });
+		if (sessionToken) params.set('sessionToken', sessionToken);
+		return jsonRequest(`/api/places/autocomplete?${params.toString()}`, {
+			method: 'GET',
+			includeCredentials: true,
+		});
+	},
+	details: async (placeId) =>
+		jsonRequest(`/api/places/details?place_id=${encodeURIComponent(placeId)}`, {
+			method: 'GET',
+			includeCredentials: true,
+		}),
+};
+
 const api = {
 	auth: authApi,
 	businesses: businessesApi,
@@ -179,6 +195,7 @@ const api = {
 	allergens: allergensApi,
 	categories: categoriesApi,
 	addresses: addressesApi,
+	places: placesApi,
 };
 
 export default api;

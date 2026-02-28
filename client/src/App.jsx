@@ -14,7 +14,7 @@ import MenuItemsPage from './components/menuItems/MenuItemsPage/MenuItemsPage.js
 // import FilterPanel from './components/menu/FilterPanel';
 import ChooseBusiness from './components/setup/ChooseBusiness/ChooseBusiness.jsx';
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 // ARCHIVED: Admin Features - Not part of MVP (single user per business)
 // import UserMaintenance from './components/admin/UserMaintenance/UserMaintenance.jsx';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.jsx';
@@ -50,33 +50,23 @@ function App() {
 						/>
 
 						<Route
-							path='/step1'
+							path='/onboarding'
 							element={
 								<ProtectedRoute
 									route={'setup'}
-									component={<SetUp step={1} />}
+									component={<SetUp />}
 								/>
 							}
+						/>
+
+						<Route
+							path='/step1'
+							element={<Navigate to="/onboarding" replace />}
 						/>
 
 						<Route
 							path='/step2'
-							element={
-								<ProtectedRoute
-									route={'setup'}
-									component={<SetUp step={2} />}
-								/>
-							}
-						/>
-
-						<Route
-							path='/step3'
-							element={
-								<ProtectedRoute
-									route={'setup'}
-									component={<SetUp step={3} />}
-								/>
-							}
+							element={<Navigate to="/onboarding" replace />}
 						/>
 
 						<Route

@@ -22,6 +22,12 @@ ul {
 	}
 }
 
+.address-section {
+	display: flex;
+	flex-direction: column;
+	row-gap: 15px;
+}
+
 .name-website {
 	&-container {
 		display: grid;
@@ -33,9 +39,123 @@ ul {
 .business-name {
 	max-width: 400px;
 	width: 100%;
+	padding: 8px 12px;
+	border: 1px solid var(--hard-black, #111);
+	border-radius: var(--corners-round, 4px);
+
+	&:focus {
+		outline: none;
+		border-color: var(--turq);
+		box-shadow: 0 0 0 2px rgba(0, 128, 128, 0.2);
+	}
+}
+
+.field-error {
+	color: var(--hard-black, #111);
+	font-size: 0.9em;
+	display: block;
+	margin-top: 4px;
+}
+
+.find-business {
+	margin-bottom: 1rem;
+
+	.find-business-hint {
+		font-size: 0.95em;
+		margin: 0.25rem 0 0.5rem;
+		color: var(--hard-black, #111);
+	}
+	.find-business-input-wrap {
+		position: relative;
+		max-width: 400px;
+	}
+	.find-business-input {
+		width: 100%;
+		padding: 8px 12px;
+		border: 1px solid var(--hard-black, #111);
+		border-radius: var(--corners-round, 4px);
+
+		&:focus {
+			outline: none;
+			border-color: var(--turq);
+			box-shadow: 0 0 0 2px rgba(0, 128, 128, 0.2);
+		}
+	}
+	.find-business-loading {
+		position: absolute;
+		right: 12px;
+		top: 50%;
+		transform: translateY(-50%);
+		font-size: 0.85em;
+		color: #666;
+	}
+	.place-suggestions {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		border: 1px solid var(--hard-black, #111);
+		border-radius: var(--corners-round, 4px);
+		background: #fff;
+		max-height: 240px;
+		overflow-y: auto;
+		z-index: 10;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	}
+	.place-suggestion {
+		padding: 10px 12px;
+		cursor: pointer;
+		border-bottom: 1px solid #eee;
+		&:last-child {
+			border-bottom: none;
+		}
+		&:hover,
+		&:focus {
+			background: var(--mint-green, #e8f5e9);
+		}
+	}
+	.find-business-attribution {
+		font-size: 0.75em;
+		color: #666;
+		margin: 0.25rem 0 0;
+	}
+}
+
+.review-edit-copy {
+	margin: 0 0 1rem;
+	font-size: 0.95em;
+}
+
+.address-hint {
+	margin: 0 0 4px;
+	font-size: 0.9em;
+	color: var(--gray, #555);
+}
+
+.notes-collapsible {
+	margin-top: 1rem;
+}
+
+.notes-toggle {
+	background: none;
+	border: none;
+	padding: 0;
+	font-size: 0.95em;
+	color: var(--turq);
+	cursor: pointer;
+	text-decoration: underline;
+	&:hover {
+		color: var(--dark-turq);
+	}
 }
 
 .notes {
+	margin-top: 0.5rem;
+	padding-top: 0.5rem;
+
 	h2 {
 		margin-top: 0px;
 	}

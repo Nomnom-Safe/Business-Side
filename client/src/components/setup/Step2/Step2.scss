@@ -3,6 +3,22 @@ h1 {
 	margin-top: 5px;
 }
 
+.step2-personalization {
+	margin: 0 0 0.5rem;
+	font-size: 1rem;
+	color: var(--gray, #555);
+}
+
+.step2-optional-callout {
+	margin: 0 0 1rem;
+	padding: 0.75rem 1rem;
+	background: rgba(0, 0, 0, 0.04);
+	border: 1px solid var(--gray, #ccc);
+	border-radius: var(--corners-round);
+	font-size: 0.95em;
+	color: var(--hard-black, #111);
+}
+
 .allergens,
 .diets {
 	display: flex;

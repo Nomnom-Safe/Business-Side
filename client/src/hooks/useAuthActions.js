@@ -9,7 +9,15 @@ export function useAuthActions() {
 
 	// Centralized error handler
 	const handleApiError = (result, onError, fallbackMessage) => {
-		const message = result?.message || fallbackMessage;
+		// Parse Zod VALIDATION_ERROR responses — extract the first field error message
+		if (result?.data?.error === 'VALIDATION_ERROR') {
+			const fieldErrors = result.data.details?.fieldErrors || {};
+			const firstFieldError = Object.values(fieldErrors).flat()[0];
+			if (firstFieldError) return onError(firstFieldError);
+			const formErrors = result.data.details?.formErrors || [];
+			if (formErrors[0]) return onError(formErrors[0]);
+		}
+		const message = result?.data?.message || result?.message || fallbackMessage;
 		onError(message);
 	};
 
@@ -38,6 +46,7 @@ export function useAuthActions() {
 			const result = await api.auth.signUp(payload);
 
 			if (result.ok) {
+				localStorage.removeItem('onboarding_tour_seen');
 				localStorage.setItem('justSignedUp', 'true');
 				navigate('/choose-business');
 			} else {

@@ -3,7 +3,7 @@
 import React from 'react';
 import './AddressFields.scss';
 
-function AddressFields({ addressData, onAddressChange }) {
+function AddressFields({ addressData, onAddressChange, validationErrors = {} }) {
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		onAddressChange({ ...addressData, [name]: value });
@@ -19,7 +19,13 @@ function AddressFields({ addressData, onAddressChange }) {
 					className='street-address'
 					value={addressData.street}
 					onChange={handleChange}
+					aria-required='true'
+					aria-invalid={!!validationErrors.street}
+					aria-describedby={validationErrors.street ? 'street-error' : undefined}
 				/>
+				{validationErrors.street && (
+					<span id='street-error' className='field-error' role='alert'>{validationErrors.street}</span>
+				)}
 			</div>
 
 			<div className='city-state-zip'>
@@ -31,7 +37,13 @@ function AddressFields({ addressData, onAddressChange }) {
 					className='city'
 					value={addressData.city}
 					onChange={handleChange}
+					aria-required='true'
+					aria-invalid={!!validationErrors.city}
+					aria-describedby={validationErrors.city ? 'city-error' : undefined}
 				/>
+				{validationErrors.city && (
+					<span id='city-error' className='field-error' role='alert'>{validationErrors.city}</span>
+				)}
 
 				<input
 					type='text'
@@ -41,7 +53,13 @@ function AddressFields({ addressData, onAddressChange }) {
 					className='state'
 					value={addressData.state}
 					onChange={handleChange}
+					aria-required='true'
+					aria-invalid={!!validationErrors.state}
+					aria-describedby={validationErrors.state ? 'state-error' : undefined}
 				/>
+				{validationErrors.state && (
+					<span id='state-error' className='field-error' role='alert'>{validationErrors.state}</span>
+				)}
 
 				<input
 					type='text'
@@ -50,7 +68,13 @@ function AddressFields({ addressData, onAddressChange }) {
 					className='zip'
 					value={addressData.zipCode}
 					onChange={handleChange}
+					aria-required='true'
+					aria-invalid={!!validationErrors.zipCode}
+					aria-describedby={validationErrors.zipCode ? 'zipCode-error' : undefined}
 				/>
+				{validationErrors.zipCode && (
+					<span id='zipCode-error' className='field-error' role='alert'>{validationErrors.zipCode}</span>
+				)}
 			</div>
 		</div>
 	);

@@ -55,6 +55,9 @@ app.use('/api/addresses', addressRoutes);
 const businessRoutes = require('./src/routes/businessRoutes');
 app.use('/api/businesses', businessRoutes);
 
+const placesRoutes = require('./src/routes/placesRoutes');
+app.use('/api/places', placesRoutes);
+
 // You can test this by visiting http://localhost:5000/
 app.get('/', (req, res) => {
 	res.send('NomNomSafe API is running');
