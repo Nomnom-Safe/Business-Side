@@ -1,25 +1,45 @@
-.progress-bar {
+.set-up-container {
+	max-width: 600px;
 	width: 100%;
-	padding: 8px 12px;
+}
+
+.progress-bar {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 8px 14px;
 	border: 2px solid var(--hard-black);
 	border-radius: var(--corners-round);
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	background-color: var(--mint-green);
-	font-size: 1rem;
+	font-size: 0.9rem;
+	margin-bottom: 1rem;
+	font-weight: 500;
 }
 
 .onboarding-card {
+	box-sizing: border-box;
 	background: #fff;
-	border: 1px solid var(--gray, #ccc);
+	border: 1px solid #ddd;
 	border-radius: var(--corners-round);
-	padding: 1.25rem;
-	margin-bottom: 1rem;
+	padding: 1.1rem 1.25rem;
+	margin-bottom: 0.75rem;
 
-	&:last-child {
-		margin-bottom: 0;
+	.question {
+		display: block;
+		font-weight: 600;
+		font-size: 0.95rem;
+		margin-bottom: 8px;
+		color: var(--hard-black, #111);
 	}
+}
+
+.buttons {
+	display: flex;
+	gap: 10px;
+	margin-top: 0.75rem;
+	flex-wrap: wrap;
 }
 
 .one-third {

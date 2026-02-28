@@ -4,17 +4,25 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import GetConfirmationMessage from '../../common/ConfirmationMessage/ConfirmationMessage.jsx';
 import AddressFields from '../../common/AddressFields/AddressFields';
+import GenerateAllergenList from '../../common/GenerateAllergenList/GenerateAllergenList';
+import GenerateDietList from '../../auth/DietList/DietList';
 import './EditBusinessInfo.scss';
 import api from '../../../api';
 import LoadingSpinner from '../../common/LoadingSpinner/LoadingSpinner.jsx';
+
+const toArray = (val) => {
+	if (Array.isArray(val)) return val;
+	if (typeof val === 'string' && val.trim()) return val.split(',').map((s) => s.trim()).filter(Boolean);
+	return [];
+};
 
 const EditBusinessInfo = () => {
 	const [businessInfo, setBusinessInfo] = useState({
 		id: '',
 		name: '',
 		address_id: '',
-		allergens: '',
-		diets: '',
+		allergens: [],
+		diets: [],
 		phone: '',
 		hours: [],
 		website: '',
@@ -22,6 +30,7 @@ const EditBusinessInfo = () => {
 		cuisine: '',
 	});
 	const [isSaving, setIsSaving] = useState(false);
+	const [saveError, setSaveError] = useState('');
 
 	const [addressInfo, setAddressInfo] = useState({
 		street: '',
@@ -34,7 +43,7 @@ const EditBusinessInfo = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const navigate = useNavigate();
 
-	const businessId = localStorage.getItem('businessId'); // Get from localStorage
+	const businessId = localStorage.getItem('businessId');
 
 	useEffect(() => {
 		const fetchBusinessInfo = async () => {
@@ -46,7 +55,6 @@ const EditBusinessInfo = () => {
 			}
 
 			try {
-				// Fetch business
 				const response = await api.businesses.getById(businessId);
 				if (!response.ok || !response.data)
 					throw new Error('Failed to fetch business info');
@@ -58,16 +66,14 @@ const EditBusinessInfo = () => {
 					name: business.name || '',
 					website: business.website || '',
 					address_id: business.address_id || '',
-					allergens: business.allergens ? business.allergens.join(', ') : '',
-					diets: business.diets ? business.diets.join(', ') : '',
+					allergens: toArray(business.allergens),
+					diets: toArray(business.diets),
 					phone: business.phone || '',
 					hours: business.hours || [],
 					disclaimers: business.disclaimers || [],
 					cuisine: business.cuisine || '',
 				});
 
-				setIsSaving(false);
-				// Use resolved address from API when present; otherwise fetch by address_id
 				if (business.address && typeof business.address === 'object') {
 					setAddressInfo({
 						street: business.address.street || '',
@@ -87,9 +93,9 @@ const EditBusinessInfo = () => {
 						});
 					}
 				}
-				setIsLoading(false);
 			} catch (error) {
 				console.error('Error fetching business info:', error);
+			} finally {
 				setIsLoading(false);
 			}
 		};
@@ -105,6 +111,20 @@ const EditBusinessInfo = () => {
 		setAddressInfo(updatedAddress);
 	};
 
+	const handleAllergenChange = (e, allergenId) => {
+		const updated = e.target.checked
+			? [...businessInfo.allergens, allergenId]
+			: businessInfo.allergens.filter((id) => id !== allergenId);
+		handleBusinessChange('allergens', updated);
+	};
+
+	const handleDietChange = (e, dietValue) => {
+		const updated = e.target.checked
+			? [...businessInfo.diets, dietValue]
+			: businessInfo.diets.filter((d) => d !== dietValue);
+		handleBusinessChange('diets', updated);
+	};
+
 	const cancel = (event) => {
 		event.preventDefault();
 		navigate('/dashboard');
@@ -112,31 +132,27 @@ const EditBusinessInfo = () => {
 
 	const save = async (event) => {
 		event.preventDefault();
+		setIsSaving(true);
+		setSaveError('');
 
 		try {
 			let addressId = businessInfo.address_id;
-			// Treat legacy free-text in address_id (e.g. contains comma) as no address doc: create one and normalize
 			const isLegacyAddressId =
 				addressId && typeof addressId === 'string' && addressId.includes(',');
 
 			if (!addressId || isLegacyAddressId) {
 				const createRes = await api.addresses.create(addressInfo);
-
 				if (!createRes.ok || !createRes.data)
 					throw new Error('Failed to create address');
-
 				addressId = createRes.data.id;
-
 				setBusinessInfo((prev) => ({ ...prev, address_id: addressId }));
 			} else {
-				// Update existing address
 				const updateRes = await api.addresses.update(addressId, {
 					street: addressInfo.street,
 					city: addressInfo.city,
 					state: addressInfo.state,
 					zipCode: addressInfo.zipCode,
 				});
-
 				if (!updateRes.ok) throw new Error('Failed to update address');
 			}
 
@@ -145,147 +161,145 @@ const EditBusinessInfo = () => {
 				name: businessInfo.name,
 				website: businessInfo.website,
 				address_id: addressId,
+				allergens: businessInfo.allergens,
+				diets: businessInfo.diets,
 			};
 
-			// Update business info
 			const response = await api.businesses.update(businessId, updatedBusiness);
-
 			if (!response.ok) throw new Error('Failed to update business');
 
 			setShowConfirmation(true);
 		} catch (error) {
 			console.error('Error updating business:', error);
+			setSaveError('Something went wrong. Please try again.');
+		} finally {
+			setIsSaving(false);
 		}
 	};
 
+	if (isLoading) {
+		return (
+			<div className="ebi-loading">
+				<LoadingSpinner text="Loading business info…" />
+			</div>
+		);
+	}
+
 	return (
-		<form className='edit-business-info-container'>
+		<div className="ebi-container">
 			{showConfirmation && (
 				<GetConfirmationMessage
-					message='Business information changed successfully.'
-					destination='/dashboard'
+					message="Business information saved successfully."
+					destination="/dashboard"
 				/>
 			)}
 
-			<h1>Edit Business Information</h1>
 
-			{isLoading ? (
-				<div style={{ padding: 24 }}>
-					<LoadingSpinner text='Loading business info...' />
-				</div>
-			) : (
-				<>
-					<div className='edit-business-info-form-fields'>
-						<div className='logo-upload'>
-							<div className='upload-box'>
-								↑<br />
-								Upload
-								<br />
-								Business
-								<br />
-								Logo
-							</div>
+			<div className="ebi-header">
+				<h1 className="ebi-title">Business Information</h1>
+				<p className="ebi-subtitle">
+					This information is displayed to your customers.
+				</p>
+			</div>
+
+			<form className="ebi-form" onSubmit={save}>
+
+				{/* ── Basic Info ───────────────────────────── */}
+				<section className="ebi-section">
+					<h2 className="ebi-section-title">Basic Info</h2>
+					<div className="ebi-field-row">
+						<div className="ebi-field">
+							<label htmlFor="ebi-name">Business Name</label>
+							<input
+								id="ebi-name"
+								type="text"
+								value={businessInfo.name}
+								onChange={(e) => handleBusinessChange('name', e.target.value)}
+								placeholder="Your business name"
+								maxLength={60}
+							/>
 						</div>
-
-						<div className='form-column business-col'>
-							<div className='form-field-container'>
-								<label>Business Name</label>
-								<input
-									type='text'
-									value={businessInfo.name}
-									onChange={(e) => handleBusinessChange('name', e.target.value)}
-								/>
-							</div>
-
-							<div className='form-field-container'>
-								<label>Website URL</label>
-								<input
-									type='text'
-									value={businessInfo.website}
-									onChange={(e) =>
-										handleBusinessChange('website', e.target.value)
-									}
-								/>
-							</div>
-
-							<div className='form-field-container'>
-								<label>Address</label>
-								<AddressFields
-									addressData={addressInfo}
-									onAddressChange={handleAddressChange}
-								/>
-							</div>
-						</div>
-
-						<div className='form-column dietary-col'>
-							<div className='form-field-container'>
-								<label>Business Disclaimer</label>
-								<input
-									type='text'
-									placeholder='(Ignored for now)'
-									disabled
-								/>
-							</div>
-
-							<div className='form-field-container'>
-								<label>Unavoidable Allergies</label>
-								<input
-									type='text'
-									placeholder='example: Tree Nuts'
-									value={businessInfo.allergens}
-									onChange={(e) =>
-										handleBusinessChange('allergens', e.target.value)
-									}
-									disabled
-								/>
-							</div>
-
-							<div className='form-field-container'>
-								<label>Special Preparations</label>
-								<input
-									type='text'
-									placeholder='example: Kosher'
-									value={businessInfo.diets}
-									onChange={(e) =>
-										handleBusinessChange('diets', e.target.value)
-									}
-									disabled
-								/>
-							</div>
+						<div className="ebi-field">
+							<label htmlFor="ebi-website">Website URL</label>
+							<input
+								id="ebi-website"
+								type="text"
+								value={businessInfo.website}
+								onChange={(e) => handleBusinessChange('website', e.target.value)}
+								placeholder="https://yourbusiness.com"
+							/>
 						</div>
 					</div>
+				</section>
 
-					<div className='save-note-container'>
-						<span className='save-note'>
-							* This information will be displayed to users of the app
+				{/* ── Address ──────────────────────────────── */}
+				<section className="ebi-section">
+					<h2 className="ebi-section-title">Address</h2>
+					<AddressFields
+						addressData={addressInfo}
+						onAddressChange={handleAddressChange}
+					/>
+				</section>
+
+				{/* ── Allergens ────────────────────────────── */}
+				<section className="ebi-section">
+					<h2 className="ebi-section-title">Always-Present Allergens</h2>
+					<p className="ebi-section-hint">
+						Select allergens that are always present somewhere in your menu.
+						Customers with these allergies will be warned.
+					</p>
+					<div className="ebi-checkbox-grid">
+						<GenerateAllergenList
+							selectedAllergens={businessInfo.allergens}
+							onAllergenChange={handleAllergenChange}
+						/>
+					</div>
+				</section>
+
+				{/* ── Dietary Options ──────────────────────── */}
+				<section className="ebi-section">
+					<h2 className="ebi-section-title">Dietary Options</h2>
+					<p className="ebi-section-hint">
+						Select the diets your menu supports. Customers filter by these to
+						find businesses like yours.
+					</p>
+					<div className="ebi-checkbox-grid ebi-checkbox-grid--diets">
+						<GenerateDietList
+							selectedDiets={businessInfo.diets}
+							onDietChange={handleDietChange}
+						/>
+					</div>
+				</section>
+
+				{/* ── Actions ──────────────────────────────── */}
+				{saveError && (
+					<p className="ebi-save-error" role="alert">{saveError}</p>
+				)}
+
+				<div className="ebi-actions">
+					<button
+						type="button"
+						onClick={cancel}
+						className="button gray-btn"
+					>
+						Cancel
+					</button>
+
+					<div className="ebi-actions-right">
+						<span className="ebi-save-note">
+							* Displayed publicly to customers
 						</span>
+						<button
+							type="submit"
+							className="button"
+							disabled={isSaving}
+						>
+							{isSaving ? <LoadingSpinner size={18} /> : 'Save Changes'}
+						</button>
 					</div>
-
-					<div className='buttons edit-business-info'>
-						<div>
-							<button
-								type='button'
-								onClick={cancel}
-								className='button gray-btn cancel-btn'
-							>
-								Cancel
-							</button>
-						</div>
-
-						<div className='save-section'>
-							<button
-								type='submit'
-								onClick={save}
-								className='button'
-								disabled={isSaving}
-							>
-								{isSaving ? <LoadingSpinner size={18} /> : 'Save'}
-							</button>
-						</div>
-					</div>
-				</>
-			)}
-		</form>
+				</div>
+			</form>
+		</div>
 	);
 };
 

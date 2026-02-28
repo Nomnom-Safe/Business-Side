@@ -1,44 +1,39 @@
 // client/src/components/setup/Step1/Step1.scss
 
-/* Elements -------------------------------------------*/
-h1 {
+/* Step 1 page title ---------------------------------- */
+.step1 h1 {
 	color: var(--dark-turq);
-	margin-top: 5px;
+	margin: 0 0 1rem;
+	font-size: 1.4rem;
 }
 
-ul {
-	font-size: 20px;
-	padding-inline-start: 25px;
+/* Notes list inside collapsible --------------------- */
+.notes ul {
+	font-size: 0.95rem;
+	padding-inline-start: 20px;
+	margin: 0;
+	line-height: 1.6;
 }
 
-/* Classes --------------------------------------------*/
+/* Business info card --------------------------------- */
 .business-info {
 	display: flex;
 	flex-direction: column;
-	row-gap: 15px;
-
-	.question:nth-of-type(2) {
-		margin-top: 20px;
-	}
+	gap: 12px;
 }
 
-.address-section {
+/* Name / Website inputs ------------------------------ */
+.name-website-container {
 	display: flex;
 	flex-direction: column;
-	row-gap: 15px;
-}
-
-.name-website {
-	&-container {
-		display: grid;
-		gap: 30px;
-	}
+	gap: 12px;
 }
 
 .website,
 .business-name {
-	max-width: 400px;
+	box-sizing: border-box;
 	width: 100%;
+	max-width: 420px;
 	padding: 8px 12px;
 	border: 1px solid var(--hard-black, #111);
 	border-radius: var(--corners-round, 4px);
@@ -50,26 +45,48 @@ ul {
 	}
 }
 
-.field-error {
-	color: var(--hard-black, #111);
-	font-size: 0.9em;
-	display: block;
-	margin-top: 4px;
+/* Address section card ------------------------------- */
+.address-section {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
+.address-hint {
+	margin: 0;
+	font-size: 0.875rem;
+	color: var(--gray, #555);
+}
+
+/* Inline field validation errors --------------------- */
+.field-error {
+	display: block;
+	margin-top: 4px;
+	font-size: 0.8rem;
+	color: #c0392b;
+}
+
+/* Find Business card --------------------------------- */
 .find-business {
-	margin-bottom: 1rem;
+	.question {
+		font-weight: 600;
+		display: block;
+		margin-bottom: 4px;
+	}
 
 	.find-business-hint {
-		font-size: 0.95em;
-		margin: 0.25rem 0 0.5rem;
-		color: var(--hard-black, #111);
+		font-size: 0.875rem;
+		margin: 0 0 8px;
+		color: var(--gray, #555);
 	}
+
 	.find-business-input-wrap {
 		position: relative;
-		max-width: 400px;
+		max-width: 420px;
 	}
+
 	.find-business-input {
+		box-sizing: border-box;
 		width: 100%;
 		padding: 8px 12px;
 		border: 1px solid var(--hard-black, #111);
@@ -81,82 +98,95 @@ ul {
 			box-shadow: 0 0 0 2px rgba(0, 128, 128, 0.2);
 		}
 	}
+
 	.find-business-loading {
 		position: absolute;
-		right: 12px;
+		right: 10px;
 		top: 50%;
 		transform: translateY(-50%);
-		font-size: 0.85em;
+		font-size: 0.8rem;
 		color: #666;
+		pointer-events: none;
 	}
+
 	.place-suggestions {
 		position: absolute;
 		top: 100%;
 		left: 0;
 		right: 0;
-		margin: 0;
+		margin: 4px 0 0;
 		padding: 0;
 		list-style: none;
-		border: 1px solid var(--hard-black, #111);
+		border: 1px solid #ccc;
 		border-radius: var(--corners-round, 4px);
 		background: #fff;
 		max-height: 240px;
 		overflow-y: auto;
-		z-index: 10;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		z-index: 100;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 	}
+
 	.place-suggestion {
-		padding: 10px 12px;
+		padding: 9px 12px;
 		cursor: pointer;
-		border-bottom: 1px solid #eee;
+		font-size: 0.9rem;
+		border-bottom: 1px solid #f0f0f0;
+
 		&:last-child {
 			border-bottom: none;
 		}
+
 		&:hover,
 		&:focus {
 			background: var(--mint-green, #e8f5e9);
 		}
 	}
+
 	.find-business-attribution {
-		font-size: 0.75em;
-		color: #666;
-		margin: 0.25rem 0 0;
+		font-size: 0.72rem;
+		color: #888;
+		margin: 4px 0 0;
 	}
 }
 
+/* Prefill confirmation notice ------------------------ */
 .review-edit-copy {
-	margin: 0 0 1rem;
-	font-size: 0.95em;
+	margin: -4px 0 0;
+	font-size: 0.875rem;
+	color: var(--dark-turq, #006);
+	font-style: italic;
 }
 
-.address-hint {
-	margin: 0 0 4px;
-	font-size: 0.9em;
-	color: var(--gray, #555);
-}
-
+/* Tips / Notes collapsible --------------------------- */
 .notes-collapsible {
-	margin-top: 1rem;
+	margin-top: 4px;
 }
 
 .notes-toggle {
 	background: none;
 	border: none;
 	padding: 0;
-	font-size: 0.95em;
+	font-size: 0.875rem;
 	color: var(--turq);
 	cursor: pointer;
 	text-decoration: underline;
-	&:hover {
+
+	&:hover,
+	&:focus {
 		color: var(--dark-turq);
 	}
 }
 
 .notes {
-	margin-top: 0.5rem;
-	padding-top: 0.5rem;
+	margin-top: 8px;
+	padding: 12px 16px;
+	background: #f9f9f9;
+	border-radius: var(--corners-round, 4px);
+	font-size: 0.9rem;
 
 	h2 {
-		margin-top: 0px;
+		margin: 0 0 8px;
+		font-size: 0.95rem;
+		color: var(--dark-turq);
 	}
 }

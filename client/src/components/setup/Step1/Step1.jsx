@@ -174,10 +174,10 @@ function Step1({ formData, updateFormData, validationErrors = {}, setValidationE
 				name='setUpStep1Form'
 				className='step1-form'
 			>
-				<div className="onboarding-card business-info">
-					<span className='question'>
-						Please enter your business name and website URL (if applicable):
-					</span>
+			<div className="onboarding-card business-info">
+				<span className='question'>
+					Business name &amp; website
+				</span>
 
 					<div className='name-website-container'>
 						<div>
@@ -217,10 +217,10 @@ function Step1({ formData, updateFormData, validationErrors = {}, setValidationE
 					</div>
 				</div>
 
-				<div className="onboarding-card address-section">
-					<span className='question'>
-						Please enter your business's address:
-					</span>
+			<div className="onboarding-card address-section">
+				<span className='question'>
+					Business address
+				</span>
 					<p className="address-hint">All address fields are required.</p>
 
 					<AddressFields

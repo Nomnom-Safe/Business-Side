@@ -2,98 +2,203 @@
 
 @import '../../../styles/mixins.scss';
 
-.edit-business-info {
-	align-items: end;
-	flex: 1 1 auto;
+/* Loading state ------------------------------------ */
+.ebi-loading {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 60px 24px;
+}
 
-	&-form-fields {
-		display: grid;
-		gap: 20px;
+/* Page container ----------------------------------- */
+.ebi-container {
+	max-width: 720px;
+	width: 100%;
 
-		@include respond-to(mobile) {
-			grid-template-columns: 1fr;
-			grid-template-areas:
-				'logo'
-				'business'
-				'dietary';
-		}
-
-		@include respond-to(tablet) {
-			grid-template-columns: 1fr 1fr;
-			grid-template-areas:
-				'logo logo'
-				'business dietary';
-		}
-
-		@include respond-to(desktop) {
-			grid-template-columns: 1fr 2fr 2fr;
-			grid-template-areas: 'logo business dietary';
-			gap: 80px;
-		}
-	}
-
-	&-container {
-		width: 100%;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		row-gap: 15px;
-
-		h1 {
-			text-align: center;
-			margin: 0;
-		}
+	@include respond-to(mobile) {
+		padding: 0 8px;
 	}
 }
 
-.logo-upload {
-	flex: 0 0 15%;
-	margin: auto 0;
-	cursor: not-allowed;
-	grid-area: logo;
+/* Header ------------------------------------------- */
+.ebi-header {
+	margin-bottom: 1.5rem;
 }
 
-.upload-box {
-	border: 2px dashed gray;
-	padding: 10px;
-	text-align: center;
-	height: 100px;
-	font-size: 14px;
-	color: #666;
-	border-radius: var(--corners-round);
+.ebi-title {
+	margin: 0 0 4px;
+	font-size: 1.6rem;
+	color: var(--dark-turq);
+
+	@include respond-to(mobile) {
+		font-size: 1.3rem;
+	}
 }
 
-.form-column {
+.ebi-subtitle {
+	margin: 0;
+	font-size: 0.875rem;
+	color: var(--gray, #666);
+}
+
+/* Form --------------------------------------------- */
+.ebi-form {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+/* Section cards ------------------------------------ */
+.ebi-section {
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: var(--corners-round, 5px);
+	padding: 1.1rem 1.25rem 1.25rem;
+
+	@include respond-to(mobile) {
+		padding: 0.85rem 0.9rem 1rem;
+	}
+}
+
+.ebi-section-title {
+	margin: 0 0 6px;
+	font-size: 1rem;
+	font-weight: 700;
+	color: var(--dark-turq);
+}
+
+.ebi-section-hint {
+	margin: 0 0 12px;
+	font-size: 0.85rem;
+	color: var(--gray, #666);
+	line-height: 1.5;
+}
+
+/* Name + Website row (side by side on wider screens) */
+.ebi-field-row {
 	display: grid;
-	gap: 20px;
-	flex: 1 1 auto;
+	grid-template-columns: 1fr 1fr;
+	gap: 14px;
 
-	&.business-col {
-		grid-area: business;
-	}
-
-	&.dietary-col {
-		grid-area: dietary;
+	@include respond-to(mobile) {
+		grid-template-columns: 1fr;
 	}
 }
 
-.save {
-	&-section {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-end;
-		justify-content: flex-end;
+/* Individual form field ----------------------------- */
+.ebi-field {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+
+	label {
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: var(--hard-black, #111);
 	}
 
-	&-note {
-		font-size: 12px;
-		color: #777;
-		margin-bottom: 10px;
+	input[type='text'] {
+		box-sizing: border-box;
+		width: 100%;
+		padding: 8px 12px;
+		border: 1px solid #ccc;
+		border-radius: var(--corners-round, 5px);
+		font-size: 0.9rem;
+		height: auto;
 
-		&-container {
-			padding: 0 10px;
-			line-height: 1;
-			text-align: right;
+		&:focus {
+			outline: none;
+			border-color: var(--turq);
+			box-shadow: 0 0 0 2px rgba(0, 128, 128, 0.18);
 		}
 	}
+}
+
+/* Allergen / Diet checkbox grids ------------------- */
+.ebi-checkbox-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+	gap: 6px;
+
+	@include respond-to(mobile) {
+		grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+	}
+
+	.allergen-label,
+	.diet-label {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 7px 10px;
+		border: 1px solid #e0e0e0;
+		border-radius: var(--corners-round, 5px);
+		cursor: pointer;
+		font-size: 0.875rem;
+		background: #fafafa;
+		transition: background 0.15s, border-color 0.15s;
+		user-select: none;
+
+		&:hover {
+			background: #f0fafa;
+			border-color: var(--turq);
+		}
+
+		input[type='checkbox'] {
+			flex-shrink: 0;
+			width: 16px;
+			height: 16px;
+			min-width: 16px;
+			min-height: 16px;
+			accent-color: var(--turq);
+			cursor: pointer;
+		}
+	}
+}
+
+// Diets have fewer options — don't need as wide a grid
+.ebi-checkbox-grid--diets {
+	grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+	max-width: 560px;
+}
+
+/* Save error message -------------------------------- */
+.ebi-save-error {
+	margin: 0;
+	padding: 10px 14px;
+	background: #fff0f0;
+	border: 1px solid #f5c2c2;
+	border-radius: var(--corners-round, 5px);
+	color: #c0392b;
+	font-size: 0.875rem;
+}
+
+/* Actions row -------------------------------------- */
+.ebi-actions {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	flex-wrap: wrap;
+	gap: 12px;
+	padding-top: 4px;
+
+	@include respond-to(mobile) {
+		flex-direction: column;
+		align-items: stretch;
+	}
+}
+
+.ebi-actions-right {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 6px;
+
+	@include respond-to(mobile) {
+		align-items: stretch;
+	}
+}
+
+.ebi-save-note {
+	font-size: 0.78rem;
+	color: var(--gray, #666);
 }

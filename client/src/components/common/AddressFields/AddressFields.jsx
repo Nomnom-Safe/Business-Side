@@ -28,7 +28,8 @@ function AddressFields({ addressData, onAddressChange, validationErrors = {} }) 
 				)}
 			</div>
 
-			<div className='city-state-zip'>
+		<div className='city-state-zip'>
+			<div className='addr-field-group addr-field-city'>
 				<input
 					type='text'
 					name='city'
@@ -44,11 +45,13 @@ function AddressFields({ addressData, onAddressChange, validationErrors = {} }) 
 				{validationErrors.city && (
 					<span id='city-error' className='field-error' role='alert'>{validationErrors.city}</span>
 				)}
+			</div>
 
+			<div className='addr-field-group addr-field-state'>
 				<input
 					type='text'
 					name='state'
-					placeholder='State*'
+					placeholder='ST*'
 					maxLength={2}
 					className='state'
 					value={addressData.state}
@@ -60,7 +63,9 @@ function AddressFields({ addressData, onAddressChange, validationErrors = {} }) 
 				{validationErrors.state && (
 					<span id='state-error' className='field-error' role='alert'>{validationErrors.state}</span>
 				)}
+			</div>
 
+			<div className='addr-field-group addr-field-zip'>
 				<input
 					type='text'
 					name='zipCode'
@@ -76,6 +81,7 @@ function AddressFields({ addressData, onAddressChange, validationErrors = {} }) 
 					<span id='zipCode-error' className='field-error' role='alert'>{validationErrors.zipCode}</span>
 				)}
 			</div>
+		</div>
 		</div>
 	);
 }

@@ -1,16 +1,19 @@
 // client/src/components/common/AddressFields/AddressFields.scss
 
-.address {
-	&-container {
-		display: grid;
-		gap: 15px;
-	}
+.address-container {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
 }
 
-.street-address,
-.city,
-.state,
-.zip {
+// Street input — full width
+.street-address {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 8px 12px;
+	border: 1px solid var(--hard-black, #111);
+	border-radius: var(--corners-round, 4px);
+
 	&:focus {
 		outline: none;
 		border-color: var(--turq);
@@ -18,39 +21,43 @@
 	}
 }
 
-.street-address {
-	flex: 1 0 200px;
-	padding: 8px 12px;
-	border: 1px solid var(--hard-black, #111);
-	border-radius: var(--corners-round, 4px);
+// City / State / ZIP row — flex-wrap means it naturally collapses on small screens
+.city-state-zip {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	align-items: flex-start;
 }
 
-.city {
-	flex: 1 0 100px;
+// Each field+error pair is a flex column so the error sits below its input
+.addr-field-group {
+	display: flex;
+	flex-direction: column;
+	min-width: 0; // prevents flex children from overflowing
+}
+
+.addr-field-city  { flex: 1 1 100px; }
+.addr-field-state { flex: 0 0 64px; }
+.addr-field-zip   { flex: 0 0 94px; }
+
+.city,
+.state,
+.zip {
+	box-sizing: border-box;
+	width: 100%;
 	padding: 8px 12px;
 	border: 1px solid var(--hard-black, #111);
 	border-radius: var(--corners-round, 4px);
 
-	&-state-zip {
-		display: flex;
-		column-gap: 15px;
-		width: 100%;
+	&:focus {
+		outline: none;
+		border-color: var(--turq);
+		box-shadow: 0 0 0 2px rgba(0, 128, 128, 0.2);
 	}
 }
 
-.state {
-	flex: 0 0 60px;
-	padding: 8px 12px;
-	border: 1px solid var(--hard-black, #111);
-	border-radius: var(--corners-round, 4px);
-}
-
+// Remove browser spin buttons on number-type zip (if ever used)
 .zip {
-	flex: 0 0 80px;
-	padding: 8px 12px;
-	border: 1px solid var(--hard-black, #111);
-	border-radius: var(--corners-round, 4px);
-
 	&::-webkit-inner-spin-button,
 	&::-webkit-outer-spin-button {
 		-webkit-appearance: none;
