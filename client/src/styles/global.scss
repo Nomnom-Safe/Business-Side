@@ -1,29 +1,22 @@
-/* Import Josefin Sans font family from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap');
+/* Import variables and mixins first */
+@import './variables';
+@import './mixins';
 
-/* vars for easier down the road management */
-:root {
-	--turq: #008080;
-	--check-turq: #007074;
-	--dark-turq: #034c53;
-	--mint-green: #3eb489;
-	--salmon: #fa8072;
-	--light-salmon: #ffb6ae;
-	--delete-red: #dc3545;
-	--light-pink: #ffe5e5;
-	--gray: #7e7d7d;
-	--gray-hover: #666666;
-	--table-row-hover: #e3e3e3;
-	--hard-black: #000000;
-	--hard-white: #ffffff;
-	--font-family: 'Josefin Sans', sans-serif;
-	--corners-round: 5px;
-	--border: 1px solid rgba(0, 0, 0, 0.25);
-	--border-dashed: 1px dashed rgba(0, 0, 0, 0.25);
+/* Global resets / base styles */
+html {
+	/* 16px base on mobile */
+	font-size: 100%;
+	line-height: 1.5;
+	font-family: var(--font-family);
 }
 
+body {
+	margin: 0;
+	color: var(--hard-black);
+}
+
+/* Ensure all text inherits cleanly */
 * {
-	font-family: var(--font-family);
 	box-sizing: border-box;
 }
 
@@ -31,42 +24,117 @@ body {
 	margin: 0px;
 }
 
+h1 {
+	font-weight: bold;
+	color: var(--dark-turq);
+	text-align: center;
+
+	/* Mobile */
+	font-size: 1.25rem; // ~20px
+
+	@include respond-to(tablet) {
+		font-size: 1.5rem; // ~24px
+	}
+
+	@include respond-to(desktop) {
+		font-size: 1.75rem; // ~28px
+	}
+}
+
+h2 {
+	font-weight: bold;
+	color: var(--dark-turq);
+
+	font-size: 1.125rem; // ~18px
+
+	@include respond-to(tablet) {
+		font-size: 1.375rem; // ~22px
+	}
+
+	@include respond-to(desktop) {
+		font-size: 1.5rem; // ~24px
+	}
+}
+
+h3 {
+	font-weight: bold;
+
+	font-size: 1rem; // ~16px
+
+	@include respond-to(tablet) {
+		font-size: 1.125rem; // ~18px
+	}
+
+	@include respond-to(desktop) {
+		font-size: 1.25rem; // ~20px
+	}
+}
+
+/* Base body text */
+p,
+li,
+.text {
+	font-size: 0.95rem; // ~15px
+
+	@include respond-to(tablet) {
+		font-size: 1rem; // 16px
+	}
+
+	@include respond-to(desktop) {
+		font-size: 1.0625rem; // ~17px
+	}
+}
+
+label {
+	font-size: 0.9rem; // ~14.4px
+
+	@include respond-to(tablet) {
+		font-size: 0.95rem; // ~15px
+	}
+
+	@include respond-to(desktop) {
+		font-size: 1rem; // 16px
+	}
+}
+
+textarea,
+input[type='text'],
+input[type='number'],
+input[type='email'] {
+	border: 1px solid #ccc;
+	border-radius: var(--corners-round);
+	padding: 10px;
+	font-size: 0.85rem; // ~14px
+
+	@include respond-to(tablet) {
+		font-size: 0.875rem; // ~14px
+	}
+
+	@include respond-to(desktop) {
+		font-size: 0.875rem; // ~14px
+	}
+}
+
+/* Default: images scale to container, maintain aspect ratio */
+img,
+svg {
+	max-width: 100%;
+	height: auto;
+	display: block; /* removes bottom gap */
+}
+
+/* Old styles*/
+
 input {
 	height: 30px;
 	flex: 1 1 auto;
 	border: 0px;
 
-	&[type='text']:not(.password),
-	&[type='number'],
-	&[type='email'] {
-		padding: 10px;
-		border: 1px solid #ccc;
-		border-radius: var(--corners-round);
-		font-size: 14px;
-	}
-
 	&[type='checkbox'].checkbox:checked {
 		background-color: var(--check-turq);
-		border-radius: var(--corners-round);
+
 		border: 1px solid black;
 	}
-
-	&[type='email'] {
-		&.email {
-			width: 100% !important;
-		}
-	}
-}
-
-label {
-	font-size: 15px;
-}
-
-textarea {
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: var(--corners-round);
-	font-size: 14px;
 }
 
 #root {
@@ -94,14 +162,6 @@ textarea {
 	font-family: var(--font-family);
 }
 
-.dash-title {
-	color: var(--dark-turq);
-	text-align: center;
-	font-size: 30px;
-	font-weight: bold;
-	font-family: var(--font-family);
-}
-
 .required {
 	color: red;
 }
@@ -109,18 +169,9 @@ textarea {
 /* BUTTONS */
 /* general button */
 .button {
-	background-color: var(--mint-green);
-	border: none;
-	border-radius: var(--corners-round);
-	padding: 10px 32px;
+	@include button-responsive(var(--mint-green));
 	margin: 5px;
-	color: var(--hard-white);
-	font-family: var(--font-family);
-	text-align: center;
-	text-decoration: none;
 	display: inline-block;
-	font-size: 16px;
-	cursor: pointer;
 }
 
 .btn {
@@ -135,15 +186,10 @@ textarea {
 	display: flex;
 	gap: 5px;
 	align-items: center;
-	font-size: 16px;
+	// font-size: 16px;
 	cursor: pointer;
 	position: absolute;
 	left: 25px;
-
-	img {
-		width: 20px;
-		height: 20px;
-	}
 }
 
 .gray-btn {
@@ -202,35 +248,21 @@ textarea {
 	border: 1px solid black;
 }
 
-/* CARDS */
-.card {
-	width: 250px;
-	margin: 10px;
-	text-align: center;
-
-	&-title {
-		text-align: center;
-		font-size: 20px;
-		text-decoration-line: underline;
-	}
-
-	&-text {
-		font-size: 14px;
-	}
-}
-
 /* MENU */
 .menu {
 	box-shadow:
 		0 10px 20px 0 rgba(0, 0, 0, 0.2),
 		0 10px 20px 0 rgba(0, 0, 0, 0.19);
 
-	&-text {
-		font-size: 30px;
-		color: var(--hard-black);
+	&-item {
+		&-card {
+			display: flex;
+			flex-direction: column;
+		}
 	}
 
-	&-items-container {
+	/* ARCHIVED NON-MVP STYLES (menu item swap)
+  &-items-container {
 		padding: 30px;
 	}
 
@@ -260,98 +292,17 @@ textarea {
 		}
 	}
 
-	&-search {
-		width: 40%;
-		padding: 10px;
-		border: 1px solid #ccc;
-		border-radius: var(--corners-round);
-
-		&-wrapper {
-			display: flex;
-			justify-content: center;
-			margin-bottom: 20px;
-		}
+	&-wrapper {
+		display: flex;
+		justify-content: center;
+		margin-bottom: 20px;
 	}
-
-	&-item {
-		&-list {
-			text-align: center;
-
-			h2 {
-				font-size: 24px;
-				color: #034c53;
-				margin-bottom: 20px;
-			}
-		}
-
-		&-card {
-			display: flex;
-			flex-direction: column;
-		}
-
-		&-panel {
-			width: 100%;
-
-			.panel-header span {
-				color: var(--gray);
-				font-size: 1rem;
-				flex: 1;
-				text-align: left;
-			}
-
-			.panel-actions {
-				display: flex;
-				gap: 10px;
-				justify-content: flex-end;
-				align-items: center;
-
-				.fa {
-					&-trash {
-						color: var(--delete-red);
-						cursor: pointer;
-					}
-
-					&-pencil-alt {
-						color: var(--hard-black);
-						cursor: pointer;
-					}
-				}
-			}
-		}
-	}
+	*/
 }
 
 /* ALLERGEN */
 .allergen {
 	background-color: var(--salmon);
-
-	&-add {
-		border-style: solid;
-		border-color: black;
-		border-width: 1px;
-		border-radius: 5px;
-		padding: 10px;
-	}
-
-	&-tag {
-		padding: 6px 12px;
-		background-color: var(--salmon);
-		color: var(--hard-white);
-		border-radius: var(--corners-round);
-		font-size: 14px;
-		display: inline-flex;
-		align-items: center;
-		font-weight: bold;
-	}
-
-	&-tags-container {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 8px;
-		margin: 10px 0;
-		min-height: 40px;
-		align-items: center;
-	}
 
 	&-label {
 		padding: 6px 12px;
@@ -362,86 +313,7 @@ textarea {
 	}
 }
 
-.left-side {
-	float: left;
-	padding: 15px;
-}
-
-.displayAllergens {
-	align-items: center;
-	height: 20px;
-	width: 50%;
-	margin: 5px;
-	border-style: solid;
-	border-color: #d9d9d9;
-	border-width: 1px;
-	border-radius: 5px;
-}
-
-.right-side {
-	float: right;
-	padding: 15px;
-}
-
-/* Panels */
-.panel {
-	&-header {
-		cursor: pointer;
-		padding: 10px;
-		font-weight: bold;
-
-		.angle-icon {
-			margin-right: 10px;
-			font-size: 1.2rem;
-			color: var(--gray);
-		}
-
-		.header-title {
-			flex: 1;
-			text-align: left;
-			font-size: 1rem;
-		}
-	}
-
-	&-body {
-		display: flex;
-		padding: 10px;
-	}
-
-	&-footer {
-		padding: 10px;
-		display: flex;
-		justify-content: space-between;
-	}
-}
-
-.collapsible-panel {
-	border: 1px solid #aeaeae;
-	margin: 10px 0;
-	border-radius: 4px;
-
-	&-add {
-		display: flex;
-		flex-direction: column;
-		border: 1px solid #aeaeae;
-		margin: 10px 0;
-		border-radius: 4px;
-		flex-shrink: 0;
-		overflow: hidden;
-		height: auto;
-		max-height: none;
-
-		.panel-header {
-			align-items: center;
-			cursor: pointer;
-			padding: 10px;
-			font-weight: bold;
-			background-color: var(--hard-white);
-			border-bottom: 1px solid #d3d3d3;
-		}
-	}
-}
-
+/* ARCHIVED NON-MVP STYLES (menu item swap)
 .center {
 	width: 100vw;
 	display: flex;
@@ -450,13 +322,6 @@ textarea {
 }
 
 .add {
-	&-header-row {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 20px;
-	}
-
 	&-center-flex {
 		flex-direction: column;
 		align-items: center;
@@ -469,6 +334,7 @@ textarea {
 	justify-content: center;
 	margin-bottom: 20px;
 }
+*/
 
 ul {
 	list-style-type: none; /* Removes the bullet points */

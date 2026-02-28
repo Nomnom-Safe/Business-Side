@@ -1,0 +1,29 @@
+/* _variables.scss */
+
+/* Import Josefin Sans font family from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap');
+
+/* Design tokens */
+:root {
+	--turq: #008080;
+	--check-turq: #007074;
+	--dark-turq: #034c53;
+	--mint-green: #3eb489;
+	--salmon: #fa8072;
+	--light-salmon: #ffb6ae;
+	--delete-red: #dc3545;
+	--light-pink: #ffe5e5;
+	--gray: #7e7d7d;
+	--gray-hover: #666666;
+	--table-row-hover: #e3e3e3;
+	--hard-black: #000000;
+	--hard-white: #ffffff;
+	--font-family: 'Josefin Sans', sans-serif;
+	--corners-round: 5px;
+	--border: 1px solid rgba(0, 0, 0, 0.25);
+	--border-dashed: 1px dashed rgba(0, 0, 0, 0.25);
+}
+
+/* SCSS variables (optional helpers for breakpoints, etc.) */
+$breakpoint-mobile: 640px;
+$breakpoint-tablet: 1024px;
