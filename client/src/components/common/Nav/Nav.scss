@@ -54,11 +54,11 @@
 @media (max-width: 600px) {
 	.breadcrumbs {
 		padding: 8px 12px;
-	}
 
-	.breadcrumbs__link,
-	.breadcrumbs__label {
-		padding: 6px 8px;
-		font-size: 14px;
+		&__link,
+		&__label {
+			padding: 6px 8px;
+			font-size: 14px;
+		}
 	}
 }

@@ -1,12 +1,6 @@
-/* src/scss/MenuDashboard.scss */
+/* client/src/components/menu/MenuDashboard/MenuDashboard.scss */
 
 .dashboard {
-	&-container {
-		max-width: 960px;
-		margin: 0 auto;
-		padding: 2rem;
-	}
-
 	&-header {
 		display: flex;
 		justify-content: space-between;
@@ -19,6 +13,7 @@
 		color: #034c53;
 		font-size: 1.8rem;
 		font-weight: 600;
+		margin: 0;
 	}
 }
 

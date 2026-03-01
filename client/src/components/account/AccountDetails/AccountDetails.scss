@@ -4,13 +4,12 @@
 	width: 100%;
 	max-width: 900px;
 	margin: 0 auto;
-	padding: 20px;
 
 	&__header {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
-		margin-bottom: 16px;
+		justify-content: center;
+		margin: 0;
 	}
 
 	&__card {
@@ -18,16 +17,16 @@
 		border: 1px solid #eee;
 		border-radius: var(--corners-round);
 		padding: 16px;
-		display: flex;
-		flex-direction: column;
 		gap: 12px;
+		display: grid;
+		grid-template-columns: 1fr auto;
 	}
 
 	&__edit-btn {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		padding: 8px 10px;
+		padding: 0;
 		background: none;
 		border: none;
 		cursor: pointer;
@@ -37,4 +36,10 @@
 			height: 24px;
 		}
 	}
+}
+
+.detail-rows-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }

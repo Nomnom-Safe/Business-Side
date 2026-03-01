@@ -52,7 +52,7 @@ function EditAccount() {
 			<h1>Edit Account</h1>
 
 			<EditSection
-				title='Name'
+				title='Change Name'
 				error={
 					nameError && (
 						<ErrorMessage

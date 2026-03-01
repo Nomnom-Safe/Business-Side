@@ -1,18 +1,18 @@
 // client/src/components/account/AccountDetails/DetailRow/DetailRow.scss
 
 .detail-row {
-	display: flex;
 	align-items: center;
-	margin-bottom: 0.75rem; // consistent vertical rhythm
-	gap: 12px;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 15px;
 
 	&__label {
 		font-weight: 600;
 		color: var(--gray);
-		min-width: 120px; // keeps rows aligned
+		min-width: 100px; // keeps rows aligned
 		display: inline-block;
-		margin-right: 1rem;
 		font-size: 0.95rem;
+		white-space: nowrap;
 	}
 
 	&__value {

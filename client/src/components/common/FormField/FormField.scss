@@ -1,8 +1,16 @@
 // client/src/components/common/FormField/FormField.scss
 
+@import '../../../styles/variables.scss';
+
 .form-field-container {
 	display: grid;
 	gap: 5px;
+	width: 100%;
+
+	input {
+		width: 100%;
+		font-family: var(--font-family);
+	}
 }
 
 .required {

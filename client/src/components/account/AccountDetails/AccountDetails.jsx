@@ -23,32 +23,36 @@ function AccountDetails() {
 			{isLoading ? <LoadingSpinner text='Loading account...' /> : null}
 			<div className='account-details__header'>
 				<h1>Account Details</h1>
-
-				<button
-					className='account-details__edit-btn'
-					title='Edit account'
-					onClick={() => navigate('/account/edit')}
-				>
-					<img
-						src={editIcon}
-						alt='Edit Business'
-					/>
-				</button>
 			</div>
 
 			<div className='account-details__card'>
-				<DetailRow
-					label='First Name'
-					value={firstName}
-				/>
-				<DetailRow
-					label='Last Name'
-					value={lastName}
-				/>
-				<DetailRow
-					label='Email'
-					value={email}
-				/>
+				<div className='detail-rows-container'>
+					<DetailRow
+						label='First Name'
+						value={firstName}
+					/>
+					<DetailRow
+						label='Last Name'
+						value={lastName}
+					/>
+					<DetailRow
+						label='Email'
+						value={email}
+					/>
+				</div>
+
+				<div>
+					<button
+						className='account-details__edit-btn'
+						title='Edit account'
+						onClick={() => navigate('/account/edit')}
+					>
+						<img
+							src={editIcon}
+							alt='Edit Business'
+						/>
+					</button>
+				</div>
 			</div>
 		</div>
 	);

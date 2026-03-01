@@ -83,18 +83,18 @@ export default function MenuCard({
 	const canEdit = Boolean(menuId);
 
 	return (
-		<div className="menu-card">
-			<div className="menu-card__title-row">
+		<div className='menu-card'>
+			<div className='menu-card__title-row'>
 				{isEditingTitle ? (
 					<input
 						ref={inputRef}
-						type="text"
-						className="menu-title-input"
+						type='text'
+						className='menu-title-input'
 						value={editValue}
 						onChange={(e) => setEditValue(e.target.value)}
 						onBlur={handleSaveTitle}
 						onKeyDown={handleKeyDown}
-						aria-label="Menu name"
+						aria-label='Menu name'
 					/>
 				) : (
 					<>
@@ -105,27 +105,31 @@ export default function MenuCard({
 							{displayTitle}
 						</h3>
 						{canEdit && (
+							// <div>
 							<button
-								type="button"
-								className="menu-card__edit-btn"
+								type='button'
+								className='menu-card__edit-btn'
 								onClick={(e) => {
 									e.stopPropagation();
 									handleStartEdit();
 								}}
-								aria-label="Edit menu name"
+								aria-label='Edit menu name'
 							>
 								<FaPencilAlt size={14} />
 							</button>
+							// </div>
 						)}
 					</>
 				)}
 			</div>
 
-			{description ? (
-				<p className="menu-description">{description}</p>
-			) : null}
+			{description ? <p className='menu-description'>{description}</p> : null}
 
-			<button type="button" onClick={toMenu} className="view-menu-button">
+			<button
+				type='button'
+				onClick={toMenu}
+				className='view-menu-button button'
+			>
 				{buttonLabel}
 			</button>
 		</div>

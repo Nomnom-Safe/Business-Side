@@ -1,7 +1,7 @@
 /* src/scss/MenuCard.scss */
 
 .menu-card {
-	width: 200px;
+	width: 225px;
 	height: 180px;
 	padding: 2rem;
 	border: 1px solid #ccc;
@@ -9,13 +9,16 @@
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 	text-align: center;
 	background-color: white;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 12px;
 
 	&__title-row {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		gap: 8px;
-		margin-bottom: 0.5rem;
 		min-height: 32px;
 		min-width: 0;
 	}
@@ -33,7 +36,9 @@
 		color: var(--gray, #7e7d7d);
 		cursor: pointer;
 		border-radius: 4px;
-		transition: color 0.2s, background 0.2s;
+		transition:
+			color 0.2s,
+			background 0.2s;
 
 		&:hover {
 			color: var(--turq, #008080);
@@ -46,7 +51,6 @@
 	text-decoration: underline;
 	font-weight: bold;
 	margin: 0;
-	font-size: 1.1rem;
 	line-height: 1.3;
 	min-width: 0;
 	flex: 1;
@@ -69,7 +73,6 @@
 }
 
 .menu-title-input {
-	font-size: 1.1rem;
 	font-weight: bold;
 	border: 1px solid #ccc;
 	outline: none;
@@ -94,14 +97,6 @@
 }
 
 .view-menu-button {
-	background-color: #3eb489;
-	color: white;
-	border: none;
-	padding: 0.5rem 1rem;
-	border-radius: 6px;
-	cursor: pointer;
-	font-size: 0.9rem;
-
 	&:hover {
 		background-color: #35a07b;
 	}

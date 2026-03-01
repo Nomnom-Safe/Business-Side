@@ -190,7 +190,7 @@ const EditBusinessInfo = () => {
 					</div>
 				</div>
 
-				<div className='form-column'>
+				<div className='form-column business-col'>
 					<div className='form-field-container'>
 						<label>Business Name</label>
 						<input
@@ -218,7 +218,7 @@ const EditBusinessInfo = () => {
 					</div>
 				</div>
 
-				<div className='form-column'>
+				<div className='form-column dietary-col'>
 					<div className='form-field-container'>
 						<label>Business Disclaimer</label>
 						<input
@@ -254,6 +254,12 @@ const EditBusinessInfo = () => {
 				</div>
 			</div>
 
+			<div className='save-note-container'>
+				<span className='save-note'>
+					* This information will be displayed to users of the app
+				</span>
+			</div>
+
 			<div className='buttons edit-business-info'>
 				<div>
 					<button
@@ -266,10 +272,6 @@ const EditBusinessInfo = () => {
 				</div>
 
 				<div className='save-section'>
-					<span className='save-note'>
-						* This information will be displayed to users of the app
-					</span>
-
 					<button
 						type='submit'
 						onClick={save}

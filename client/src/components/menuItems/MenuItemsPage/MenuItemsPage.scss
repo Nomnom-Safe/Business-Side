@@ -2,7 +2,6 @@
 	width: 100%;
 	display: flex;
 	justify-content: center;
-	padding: 20px;
 
 	&__container {
 		width: 100%;
@@ -34,7 +33,9 @@
 			cursor: pointer;
 			padding: 4px 12px;
 			border-radius: var(--corners-round);
-			transition: background-color 0.2s, outline 0.2s;
+			transition:
+				background-color 0.2s,
+				outline 0.2s;
 
 			&:hover {
 				background-color: rgba(0, 128, 128, 0.08);
@@ -65,7 +66,9 @@
 		color: var(--gray);
 		cursor: pointer;
 		border-radius: var(--corners-round);
-		transition: color 0.2s, background 0.2s;
+		transition:
+			color 0.2s,
+			background 0.2s;
 
 		&:hover {
 			color: var(--turq);
@@ -114,7 +117,9 @@
 		border: 1px solid #ccc;
 		border-radius: var(--corners-round);
 		background: var(--hard-white);
-		transition: border-color 0.2s, box-shadow 0.2s;
+		transition:
+			border-color 0.2s,
+			box-shadow 0.2s;
 
 		&:focus-within {
 			border-color: var(--turq);
@@ -381,7 +386,9 @@
 		font-family: var(--font-family);
 		color: var(--hard-black);
 		cursor: pointer;
-		transition: border-color 0.2s, box-shadow 0.2s;
+		transition:
+			border-color 0.2s,
+			box-shadow 0.2s;
 
 		&:focus {
 			outline: none;

@@ -3,13 +3,12 @@
 .address {
 	&-container {
 		display: grid;
-		gap: 30px;
+		gap: 15px;
 	}
 }
 
 .street-address {
-	width: 100%;
-	max-width: 400px;
+	flex: 1 0 200px;
 }
 
 .city {
@@ -18,7 +17,6 @@
 	&-state-zip {
 		display: flex;
 		column-gap: 15px;
-		max-width: 400px;
 		width: 100%;
 	}
 }

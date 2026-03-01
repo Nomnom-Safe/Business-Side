@@ -27,3 +27,7 @@
 /* SCSS variables (optional helpers for breakpoints, etc.) */
 $breakpoint-mobile: 640px;
 $breakpoint-tablet: 1024px;
+
+$header-height-desktop: 4rem; /* 64px → rem */
+$header-height-tablet: 3.75rem; /* 60px → rem */
+$header-height-mobile: 3.5rem; /* 56px - tighter on mobile */
