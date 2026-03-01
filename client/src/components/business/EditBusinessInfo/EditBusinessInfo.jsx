@@ -160,128 +160,131 @@ const EditBusinessInfo = () => {
 
 	return (
 		<form className='edit-business-info-container'>
-			{isLoading ? (
-				<>
-					<div style={{ padding: 24 }}>
-						<LoadingSpinner text='Loading business info...' />
-					</div>
-				</>
-			) : null}
-			{showConfirmation ? (
+			{showConfirmation && (
 				<GetConfirmationMessage
 					message='Business information changed successfully.'
 					destination='/dashboard'
 				/>
-			) : (
-				<></>
 			)}
 
 			<h1>Edit Business Information</h1>
 
-			<div className='edit-business-info-form-fields'>
-				<div className='logo-upload'>
-					<div className='upload-box'>
-						↑<br />
-						Upload
-						<br />
-						Business
-						<br />
-						Logo
-					</div>
+			{isLoading ? (
+				<div style={{ padding: 24 }}>
+					<LoadingSpinner text='Loading business info...' />
 				</div>
+			) : (
+				<>
+					<div className='edit-business-info-form-fields'>
+						<div className='logo-upload'>
+							<div className='upload-box'>
+								↑<br />
+								Upload
+								<br />
+								Business
+								<br />
+								Logo
+							</div>
+						</div>
 
-				<div className='form-column business-col'>
-					<div className='form-field-container'>
-						<label>Business Name</label>
-						<input
-							type='text'
-							value={businessInfo.name}
-							onChange={(e) => handleBusinessChange('name', e.target.value)}
-						/>
+						<div className='form-column business-col'>
+							<div className='form-field-container'>
+								<label>Business Name</label>
+								<input
+									type='text'
+									value={businessInfo.name}
+									onChange={(e) => handleBusinessChange('name', e.target.value)}
+								/>
+							</div>
+
+							<div className='form-field-container'>
+								<label>Website URL</label>
+								<input
+									type='text'
+									value={businessInfo.website}
+									onChange={(e) =>
+										handleBusinessChange('website', e.target.value)
+									}
+								/>
+							</div>
+
+							<div className='form-field-container'>
+								<label>Address</label>
+								<AddressFields
+									addressData={addressInfo}
+									onAddressChange={handleAddressChange}
+								/>
+							</div>
+						</div>
+
+						<div className='form-column dietary-col'>
+							<div className='form-field-container'>
+								<label>Business Disclaimer</label>
+								<input
+									type='text'
+									placeholder='(Ignored for now)'
+									disabled
+								/>
+							</div>
+
+							<div className='form-field-container'>
+								<label>Unavoidable Allergies</label>
+								<input
+									type='text'
+									placeholder='example: Tree Nuts'
+									value={businessInfo.allergens}
+									onChange={(e) =>
+										handleBusinessChange('allergens', e.target.value)
+									}
+									disabled
+								/>
+							</div>
+
+							<div className='form-field-container'>
+								<label>Special Preparations</label>
+								<input
+									type='text'
+									placeholder='example: Kosher'
+									value={businessInfo.diets}
+									onChange={(e) =>
+										handleBusinessChange('diets', e.target.value)
+									}
+									disabled
+								/>
+							</div>
+						</div>
 					</div>
 
-					<div className='form-field-container'>
-						<label>Website URL</label>
-						<input
-							type='text'
-							value={businessInfo.website}
-							onChange={(e) => handleBusinessChange('website', e.target.value)}
-						/>
+					<div className='save-note-container'>
+						<span className='save-note'>
+							* This information will be displayed to users of the app
+						</span>
 					</div>
 
-					<div className='form-field-container'>
-						<label>Address</label>
-						<AddressFields
-							addressData={addressInfo}
-							onAddressChange={handleAddressChange}
-						/>
+					<div className='buttons edit-business-info'>
+						<div>
+							<button
+								type='button'
+								onClick={cancel}
+								className='button gray-btn cancel-btn'
+							>
+								Cancel
+							</button>
+						</div>
+
+						<div className='save-section'>
+							<button
+								type='submit'
+								onClick={save}
+								className='button'
+								disabled={isSaving}
+							>
+								{isSaving ? <LoadingSpinner size={18} /> : 'Save'}
+							</button>
+						</div>
 					</div>
-				</div>
-
-				<div className='form-column dietary-col'>
-					<div className='form-field-container'>
-						<label>Business Disclaimer</label>
-						<input
-							type='text'
-							placeholder='(Ignored for now)'
-							disabled
-						/>
-					</div>
-
-					<div className='form-field-container'>
-						<label>Unavoidable Allergies</label>
-						<input
-							type='text'
-							placeholder='example: Tree Nuts'
-							value={businessInfo.allergens}
-							onChange={(e) =>
-								handleBusinessChange('allergens', e.target.value)
-							}
-							disabled
-						/>
-					</div>
-
-					<div className='form-field-container'>
-						<label>Special Preparations</label>
-						<input
-							type='text'
-							placeholder='example: Kosher'
-							value={businessInfo.diets}
-							onChange={(e) => handleBusinessChange('diets', e.target.value)}
-							disabled
-						/>
-					</div>
-				</div>
-			</div>
-
-			<div className='save-note-container'>
-				<span className='save-note'>
-					* This information will be displayed to users of the app
-				</span>
-			</div>
-
-			<div className='buttons edit-business-info'>
-				<div>
-					<button
-						type='button'
-						onClick={cancel}
-						className='button gray-btn cancel-btn'
-					>
-						Cancel
-					</button>
-				</div>
-
-				<div className='save-section'>
-					<button
-						type='submit'
-						onClick={save}
-						className='button'
-						disabled={isSaving}
-					>
-						{isSaving ? <LoadingSpinner size={18} /> : 'Save'}
-					</button>
-				</div>
-			</div>
+				</>
+			)}
 		</form>
 	);
 };

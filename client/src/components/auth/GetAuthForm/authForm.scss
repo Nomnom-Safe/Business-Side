@@ -12,9 +12,15 @@
 		gap: 20px;
 
 		&-title {
-			margin-top: 0px;
+			margin: 0px;
 			text-align: center;
 			color: var(--dark-turq);
 		}
+	}
+}
+
+.swap {
+	&-btn {
+		font-family: var(--font-family);
 	}
 }
