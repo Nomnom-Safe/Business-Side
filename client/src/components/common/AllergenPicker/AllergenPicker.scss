@@ -48,7 +48,7 @@
 
 	&__grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
 		gap: 8px;
 		padding: 12px;
 		border: 1px solid #ddd;
@@ -99,19 +99,95 @@
 	}
 
 	&__checkbox {
+		flex: 0 0 16px;
+
+		// Hide native checkbox completely
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
 		flex-shrink: 0;
-		width: 16px;
-		height: 16px;
-		min-width: 16px;
-		min-height: 16px;
+		width: 1.25rem; // 20px
+		height: 1.25rem;
+		min-width: 1.25rem;
+		min-height: 1.25rem;
+		border: 2px solid #ddd;
+		border-radius: var(--corners-round);
+		background: var(--hard-white);
 		cursor: pointer;
-		accent-color: var(--salmon);
+		position: relative;
+		margin: 0;
+		transition: all 0.2s ease;
+		color: var(--hard-black);
+
+		&::before {
+			content: '✔';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			font-size: 0.75rem;
+			font-weight: bold;
+			color: var(--hard-black); // BLACK/GRAY CHECK MARK when NOT selected
+			opacity: 0; // check mark hidden when unchecked
+			transition: all 0.2s ease;
+		}
+
+		// Custom check mark
+		&::after {
+			content: '✔';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			font-size: 0.75rem;
+			font-weight: bold;
+			color: var(--hard-white); // check mark color
+			opacity: 0;
+			transition: opacity 0.2s ease;
+		}
+
+		// Checked state
+		&:checked {
+			background-color: var(--salmon);
+			border-color: var(--salmon);
+
+			&::after {
+				opacity: 1;
+			}
+		}
+
+		// Hover state
+		&:hover:not(:disabled) {
+			background-color: #d95f50;
+			border-color: #d95f50;
+		}
+
+		/* UNCHECKED hover: salmon border/background preview */
+		&:not(:checked):hover {
+			border-color: var(--salmon);
+			background-color: rgba(250, 128, 114, 0.2); /* light tint */
+
+			&::before {
+				opacity: 0.5; /* brighten preview check mark */
+			}
+		}
+
+		// Focus state (accessibility)
+		&:focus {
+			outline: 2px solid var(--salmon);
+			outline-offset: 2px;
+		}
+
+		// Disabled state
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
 	}
 
 	&__option-label {
 		flex: 1;
 		min-width: 0;
-		font-size: 14px;
 		color: var(--hard-black);
 		white-space: nowrap;
 		overflow: hidden;

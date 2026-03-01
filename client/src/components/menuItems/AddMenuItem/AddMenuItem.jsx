@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { FaChevronDown, FaChevronRight } from 'react-icons/fa';
 import '../../../styles/global.scss';
 import './AddMenuItem.scss';
+import Checkbox from '../../common/Checkbox/Checkbox';
 import AllergenPicker from '../../common/AllergenPicker';
 import ManageCategoriesModal from '../../common/ManageCategoriesModal';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -501,17 +502,17 @@ const AddMenuItemForm = () => {
 										</div>
 										<div className='add-menu-item__field'>
 											<label className='add-menu-item__toggle-label'>
-												<input
-													type='checkbox'
-													name='is_available'
-													checked={formData.is_available}
+												<Checkbox
+													label='' // Empty - handled by option-label
+													isSelected={formData.is_available}
 													onChange={(e) =>
 														setFormData((prev) => ({
 															...prev,
 															is_available: e.target.checked,
 														}))
 													}
-													className='add-menu-item__toggle-checkbox'
+													theme='mint'
+													size='medium'
 												/>
 												<span className='add-menu-item__toggle-text'>
 													{formData.is_available ? 'Available' : 'Unavailable'}

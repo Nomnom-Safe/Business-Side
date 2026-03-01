@@ -1,0 +1,13 @@
+// client/src/components/menuItems/Checkbox/Checkbox.scss
+
+.form-check {
+	display: flex;
+	align-items: center;
+	gap: 8px; // Add spacing between the checkbox and label
+
+	&-input {
+		width: 16px;
+		height: 16px;
+		cursor: pointer;
+	}
+}

@@ -291,11 +291,13 @@
 		}
 
 		&--small {
-			width: 140px;
-			flex-shrink: 0;
-
 			@media (max-width: 600px) {
 				width: 100%;
+			}
+
+			input {
+				max-width: 100px;
+				height: auto;
 			}
 		}
 
@@ -316,7 +318,7 @@
 			font-family: var(--font-family);
 			transition: border-color 0.2s;
 
-			&:focus {
+			&:not([type='checkbox']):focus {
 				outline: none;
 				border-color: var(--turq);
 			}
@@ -373,5 +375,13 @@
 			font-size: 14px;
 			color: var(--hard-black);
 		}
+	}
+}
+
+.available-field {
+	align-self: end;
+
+	@media (max-width: 600px) {
+		align-self: start;
 	}
 }

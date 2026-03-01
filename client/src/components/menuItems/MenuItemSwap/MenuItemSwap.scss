@@ -12,112 +12,99 @@ $padding: 15px;
 
 // General container for the picklist
 .flex-container {
-    display: flex;
-    justify-content: center; 
-    align-items: flex-start; 
-    gap: $gap; 
-    padding: $gap; 
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	gap: $gap;
+	padding: $gap;
 }
 
 // Styling for each menu wrapper
 .menu-wrapper {
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-    width: 40%; // Set the width to 40% of the screen
-    max-width: 600px; // Add a max width for larger screens
-    min-width: 300px; //  Add a min width for smaller screens
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 40%; // Set the width to 40% of the screen
+	max-width: 600px; // Add a max width for larger screens
+	min-width: 300px; //  Add a min width for smaller screens
 }
 
 // Styling for each menu tree container
 .menu-tree-container {
-    border: 1px solid $border-color; // Add a 1px border
-    border-radius: 8px; 
-    padding: $padding; 
-    background-color: $background-color; 
-    width: 100%; 
-    box-shadow: $box-shadow; 
-    display: flex;
-    flex-direction: column;
-    height: 400px; 
+	border: 1px solid $border-color; // Add a 1px border
+	border-radius: 8px;
+	padding: $padding;
+	background-color: $background-color;
+	width: 100%;
+	box-shadow: $box-shadow;
+	display: flex;
+	flex-direction: column;
+	height: 400px;
 
-    .menu-header-row {
-        font-family: $font-family; 
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 10px;
-        text-align: center; 
-        color: $text-color; 
-    }
+	.menu-header-row {
+		font-family: $font-family;
+		font-size: 18px;
+		font-weight: bold;
+		margin-bottom: 10px;
+		text-align: center;
+		color: $text-color;
+	}
 
-    ul {
-        list-style-type: none; 
-        padding-left: 20px; // Add padding to indent the menu items
-        margin: 0; 
+	ul {
+		list-style-type: none;
+		padding-left: 20px; // Add padding to indent the menu items
+		margin: 0;
 
-        li {
-            margin-bottom: 8px; // Add spacing between items
-            font-family: $font-family; 
-            font-size: 14px;
-            color: $text-color; // Optional: Use a variable for text color
+		li {
+			margin-bottom: 8px; // Add spacing between items
+			font-family: $font-family;
+			font-size: 14px;
+			color: $text-color; // Optional: Use a variable for text color
 
-            &:hover {
-                background-color: $hover-background-color; // Highlight the item on hover
-                border-radius: 4px; // Add rounded corners to the highlight
-                padding: 2px 4px; // Add padding for better spacing
-            }
-        }
-    }
+			&:hover {
+				background-color: $hover-background-color; // Highlight the item on hover
+				border-radius: 4px; // Add rounded corners to the highlight
+				padding: 2px 4px; // Add padding for better spacing
+			}
+		}
+	}
 }
 
 // Styling for the buttons container
 .menu-buttons-container {
-    display: flex;
-    flex-direction: column; // Stack buttons vertically
-    justify-content: center; // Center buttons vertically
-    align-items: center; // Center buttons horizontally
-    gap: 15px; // Add spacing between the buttons
-    height: 100%; // Make the container take the full height of the menu blocks
+	display: flex;
+	flex-direction: column; // Stack buttons vertically
+	justify-content: center; // Center buttons vertically
+	align-items: center; // Center buttons horizontally
+	gap: 15px; // Add spacing between the buttons
+	height: 100%; // Make the container take the full height of the menu blocks
 
-    .menu-button {
-        background-color: $button-color; // Use a variable for the button color
-        color: #ffffff; // White text for contrast
-        border: none;
-        border-radius: 5px; // Rounded corners
-        padding: 10px 15px; // Add padding for a larger clickable area
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); // Add a subtle shadow
-        transition: background-color 0.3s ease; // Smooth hover effect
+	.menu-button {
+		background-color: $button-color; // Use a variable for the button color
+		color: #ffffff; // White text for contrast
+		border: none;
+		border-radius: 5px; // Rounded corners
+		padding: 10px 15px; // Add padding for a larger clickable area
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); // Add a subtle shadow
+		transition: background-color 0.3s ease; // Smooth hover effect
 
-        &:hover {
-            background-color: $button-hover-color; // Darken the button on hover
-        }
-    }
-}
-
-// Styling for the checkbox container
-.form-check {
-    display: flex;
-    align-items: center;
-    gap: 8px; // Add spacing between the checkbox and label
-
-    .form-check-input {
-        width: 16px;
-        height: 16px;
-        cursor: pointer;
-    }
+		&:hover {
+			background-color: $button-hover-color; // Darken the button on hover
+		}
+	}
 }
 
 // Styling for the search bar
 .menu-search-bar {
-    width: 90%; // Adjust width to fit nicely within the container
-    padding: 8px;
-    margin: 10px 0; // Add spacing above and below the search bar
-    border: 1px solid $border-color;
-    border-radius: 4px;
-    font-size: 14px;
-    font-family: $font-family;
+	width: 90%; // Adjust width to fit nicely within the container
+	padding: 8px;
+	margin: 10px 0; // Add spacing above and below the search bar
+	border: 1px solid $border-color;
+	border-radius: 4px;
+	font-size: 14px;
+	font-family: $font-family;
 }

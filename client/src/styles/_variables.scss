@@ -9,8 +9,13 @@
 	--check-turq: #007074;
 	--dark-turq: #034c53;
 	--mint-green: #3eb489;
+	--mint-green-dark: #2e9f78;
+	--mint-green-light: #d4f0e8;
+	--mint-green-tint: rgba(62, 180, 137, 0.3);
 	--salmon: #fa8072;
-	--light-salmon: #ffb6ae;
+	--salmon-dark: #d95f50;
+	--salmon-light: #ffb6ae;
+	--salmon-tint: rgba(250, 128, 114, 0.2);
 	--delete-red: #dc3545;
 	--light-pink: #ffe5e5;
 	--gray: #7e7d7d;
@@ -31,3 +36,13 @@ $breakpoint-tablet: 1024px;
 $header-height-desktop: 4rem; /* 64px → rem */
 $header-height-tablet: 3.75rem; /* 60px → rem */
 $header-height-mobile: 3.5rem; /* 56px - tighter on mobile */
+
+$salmon-base: var(--salmon);
+$salmon-dark: var(--salmon-dark);
+$salmon-light: var(--salmon-light);
+$salmon-tint: var(--salmon-tint);
+
+$mint-green-base: var(--mint-green);
+$mint-green-dark: var(--mint-green-dark);
+$mint-green-light: var(--mint-green-light);
+$mint-green-tint: var(--mint-green-tint);

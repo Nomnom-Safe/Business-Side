@@ -1,0 +1,155 @@
+// client/src/components/common/Checkbox/Checkbox.scss
+
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
+// Define theme colors
+$themes: (
+	salmon: (
+		base: $salmon-base,
+		dark: $salmon-dark,
+		light: $salmon-light,
+		tint: $salmon-tint,
+	),
+	mint: (
+		base: $mint-green-base,
+		dark: $mint-green-dark,
+		light: $mint-green-light,
+		tint: $mint-green-tint,
+	),
+	turq: (
+		base: var(--turq),
+		dark: var(--dark-turq),
+		light: rgba(0, 128, 128, 0.2),
+	),
+);
+
+// Size map
+$sizes: (
+	small: 1rem,
+	medium: 1.25rem,
+	large: 1.5rem,
+);
+
+// Checkbox base mixin
+@mixin checkbox-base($size: 'medium') {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	flex-shrink: 0;
+	width: map-get($sizes, $size);
+	height: map-get($sizes, $size);
+	border: 2px solid #ddd;
+	border-radius: 3px !important;
+	background: var(--hard-white);
+	cursor: pointer;
+	position: relative;
+	margin: 0;
+	transition: all 0.2s ease;
+
+	// Preview checkmark (unchecked hover)
+	&::before {
+		content: '✔';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		font-weight: bold;
+		color: var(--gray);
+		opacity: 0;
+		transition: all 0.2s ease;
+	}
+
+	// Selected checkmark
+	&::after {
+		content: '✔';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		font-weight: bold;
+		color: var(--hard-white);
+		opacity: 0;
+		transition: opacity 0.2s ease;
+		z-index: 1;
+	}
+}
+
+// Theme mixin
+@mixin checkbox-theme($theme-name) {
+	$theme: map-get($themes, $theme-name);
+	$base-color: map-get($theme, base);
+	$dark-color: map-get($theme, dark);
+	$light-color: map-get($theme, light);
+
+	&:checked {
+		background-color: $base-color;
+		border-color: $base-color;
+
+		&::after {
+			opacity: 1;
+		}
+	}
+
+	&:not(:checked):hover {
+		border-color: $base-color;
+		background-color: $light-color;
+
+		&::before {
+			opacity: 0.5;
+		}
+	}
+
+	&:checked:hover {
+		background-color: $dark-color;
+		border-color: $dark-color;
+		transform: scale(1.05);
+	}
+
+	&:focus {
+		border-color: $base-color;
+	}
+}
+
+// Apply base + theme styles
+.checkbox-input {
+	@include checkbox-base();
+}
+
+.checkbox-input--salmon {
+	@include checkbox-theme(salmon);
+}
+.checkbox-input--mint {
+	@include checkbox-theme(mint);
+}
+.checkbox-input--turq {
+	@include checkbox-theme(turq);
+}
+
+.checkbox-input--small {
+	@include checkbox-base(small);
+}
+.checkbox-input--medium {
+	@include checkbox-base(medium);
+}
+.checkbox-input--large {
+	@include checkbox-base(large);
+}
+
+// Wrapper and label
+.checkbox-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	cursor: pointer;
+}
+
+.checkbox-label {
+	cursor: pointer;
+	user-select: none;
+}
+
+input[type='checkbox']:disabled + .checkbox-label {
+	opacity: 0.5;
+	cursor: not-allowed;
+}

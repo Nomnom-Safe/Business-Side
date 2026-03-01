@@ -1,10 +1,19 @@
 import { useState, useEffect } from 'react';
-import { FaPencilAlt, FaTrash, FaEye, FaEyeSlash, FaTimes, FaCheck, FaCopy } from 'react-icons/fa';
+import {
+	FaPencilAlt,
+	FaTrash,
+	FaEye,
+	FaEyeSlash,
+	FaTimes,
+	FaCheck,
+	FaCopy,
+} from 'react-icons/fa';
 import '../../../styles/global.scss';
 import './MenuItemPanel.scss';
 import { getAllergenLabels } from '../../../utils/allergenCache';
 import api from '../../../api';
 import AllergenPicker from '../../common/AllergenPicker';
+import Checkbox from '../../common/Checkbox/Checkbox';
 import { useToast } from '../../../context/ToastContext';
 
 const ITEM_TYPES = [
@@ -15,7 +24,15 @@ const ITEM_TYPES = [
 	{ value: 'drink', label: 'Drink' },
 ];
 
-const MenuItemPanel = ({ item, menuID, menuTitle, categoryOptions = [], onSave, onDelete, onDuplicate }) => {
+const MenuItemPanel = ({
+	item,
+	menuID,
+	menuTitle,
+	categoryOptions = [],
+	onSave,
+	onDelete,
+	onDuplicate,
+}) => {
 	const { showSuccess, showError: showToastError } = useToast();
 	const [isEditing, setIsEditing] = useState(false);
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -29,7 +46,7 @@ const MenuItemPanel = ({ item, menuID, menuTitle, categoryOptions = [], onSave, 
 			try {
 				if (item?.allergens?.length > 0) {
 					const ids = item.allergens.map((a) =>
-						typeof a === 'string' ? a.toLowerCase() : a.id
+						typeof a === 'string' ? a.toLowerCase() : a.id,
 					);
 					const labels = await getAllergenLabels(ids);
 					if (mounted) setAllergenLabels(labels);
@@ -41,17 +58,22 @@ const MenuItemPanel = ({ item, menuID, menuTitle, categoryOptions = [], onSave, 
 			}
 		};
 		loadAllergenLabels();
-		return () => { mounted = false; };
+		return () => {
+			mounted = false;
+		};
 	}, [item]);
 
 	const enterEditMode = () => {
-		const types = item.item_types || (item.item_type != null ? [item.item_type] : ['entree']);
+		const types =
+			item.item_types ||
+			(item.item_type != null ? [item.item_type] : ['entree']);
 		setFormData({
 			...item,
 			item_type: types[0],
 			item_types: types,
 		});
-		const ids = item.allergens?.map((a) => (typeof a === 'string' ? a : a.id)) || [];
+		const ids =
+			item.allergens?.map((a) => (typeof a === 'string' ? a : a.id)) || [];
 		setSelectedAllergenIds(ids);
 		setIsEditing(true);
 	};
@@ -71,12 +93,17 @@ const MenuItemPanel = ({ item, menuID, menuTitle, categoryOptions = [], onSave, 
 			showToastError('Please enter a name for the menu item.');
 			return;
 		}
-		
-		const priceValue = formData.price !== '' && formData.price !== null && formData.price !== undefined
-			? parseFloat(formData.price)
-			: null;
 
-		const itemTypes = formData.item_types || (formData.item_type != null ? [formData.item_type] : ['entree']);
+		const priceValue =
+			formData.price !== '' &&
+			formData.price !== null &&
+			formData.price !== undefined
+				? parseFloat(formData.price)
+				: null;
+
+		const itemTypes =
+			formData.item_types ||
+			(formData.item_type != null ? [formData.item_type] : ['entree']);
 		const updated = {
 			...formData,
 			item_type: itemTypes[0],
@@ -124,87 +151,124 @@ const MenuItemPanel = ({ item, menuID, menuTitle, categoryOptions = [], onSave, 
 		return custom ? custom.label : itemType;
 	};
 
-	const itemTypes = item.item_types || (item.item_type != null ? [item.item_type] : []);
-	const categoryLabel = itemTypes.map((id) => getCategoryLabel(id)).filter(Boolean).join(', ') || '—';
+	const itemTypes =
+		item.item_types || (item.item_type != null ? [item.item_type] : []);
+	const categoryLabel =
+		itemTypes
+			.map((id) => getCategoryLabel(id))
+			.filter(Boolean)
+			.join(', ') || '—';
 
 	const isUnavailable = item.is_available === false;
 
 	if (isEditing) {
 		return (
-			<div className="menu-item-card menu-item-card--editing">
-				<div className="menu-item-card__edit-header">
+			<div className='menu-item-card menu-item-card--editing'>
+				<div className='menu-item-card__edit-header'>
 					<h3>Edit Item</h3>
-					<div className="menu-item-card__edit-actions">
-						<button className="menu-item-card__btn menu-item-card__btn--cancel" onClick={cancelEdit}>
+					<div className='menu-item-card__edit-actions'>
+						<button
+							className='menu-item-card__btn menu-item-card__btn--cancel'
+							onClick={cancelEdit}
+						>
 							<FaTimes /> Cancel
 						</button>
-						<button className="menu-item-card__btn menu-item-card__btn--save" onClick={handleSave}>
+						<button
+							className='menu-item-card__btn menu-item-card__btn--save'
+							onClick={handleSave}
+						>
 							<FaCheck /> Save
 						</button>
 					</div>
 				</div>
 
-				<div className="menu-item-card__edit-form">
-					<div className="menu-item-card__edit-row">
-						<div className="menu-item-card__edit-field menu-item-card__edit-field--flex">
+				<div className='menu-item-card__edit-form'>
+					<div className='menu-item-card__edit-row'>
+						<div className='menu-item-card__edit-field menu-item-card__edit-field--flex'>
 							<label>Name *</label>
 							<input
-								type="text"
-								name="name"
+								type='text'
+								name='name'
 								value={formData.name || ''}
 								onChange={handleChange}
-								placeholder="Item name"
+								placeholder='Item name'
 							/>
 						</div>
-						<div className="menu-item-card__edit-field menu-item-card__edit-field--small">
-							<label>Price</label>
-							<div className="menu-item-card__price-input">
-								<span>$</span>
-								<input
-									type="number"
-									name="price"
-									value={formData.price || ''}
-									onChange={handleChange}
-									placeholder="0.00"
-									step="0.01"
-									min="0"
-								/>
-							</div>
-						</div>
-						<div className="menu-item-card__edit-field menu-item-card__edit-field--small">
+						<div className='menu-item-card__edit-field menu-item-card__edit-field--small'>
 							<label>Category</label>
-							<select name="item_type" value={formData.item_type || 'entree'} onChange={handleChange}>
-								{(categoryOptions.length ? categoryOptions : ITEM_TYPES.map((t) => ({ id: t.value, label: t.label }))).map((opt) => (
-									<option key={opt.id} value={opt.id}>{opt.label}</option>
+							<select
+								name='item_type'
+								value={formData.item_type || 'entree'}
+								onChange={handleChange}
+							>
+								{(categoryOptions.length
+									? categoryOptions
+									: ITEM_TYPES.map((t) => ({ id: t.value, label: t.label }))
+								).map((opt) => (
+									<option
+										key={opt.id}
+										value={opt.id}
+									>
+										{opt.label}
+									</option>
 								))}
 							</select>
 						</div>
 					</div>
 
-					<div className="menu-item-card__edit-field">
+					<div className='menu-item-card__edit-row'>
+						<div className='menu-item-card__edit-field menu-item-card__edit-field--small'>
+							<label>Price</label>
+							<div className='menu-item-card__price-input'>
+								<span>$</span>
+								<input
+									type='number'
+									name='price'
+									value={formData.price || ''}
+									onChange={handleChange}
+									placeholder='0.00'
+									step='0.01'
+									min='0'
+								/>
+							</div>
+						</div>
+
+						<div className='menu-item-card__edit-field menu-item-card__edit-field--medium'>
+							<label>Price Note</label>
+							<input
+								type='text'
+								name='price_description'
+								value={formData.price_description || ''}
+								onChange={handleChange}
+								placeholder='e.g., Market Price'
+							/>
+						</div>
+					</div>
+
+					<div className='menu-item-card__edit-field'>
 						<label>Description</label>
 						<textarea
-							name="description"
+							name='description'
 							value={formData.description || ''}
 							onChange={handleChange}
-							placeholder="Brief description of the item"
-							rows="2"
+							placeholder='Brief description of the item'
+							rows='2'
 						/>
 					</div>
 
-					<div className="menu-item-card__edit-field">
+					<div className='menu-item-card__edit-field'>
 						<label>Ingredients</label>
 						<textarea
-							name="ingredients"
+							name='ingredients'
 							value={formData.ingredients || ''}
 							onChange={handleChange}
-							placeholder="List the ingredients"
-							rows="2"
+							placeholder='List the ingredients'
+							rows='2'
 						/>
 					</div>
 
-					<div className="menu-item-card__edit-row">
-						<div className="menu-item-card__edit-field menu-item-card__edit-field--flex">
+					<div className='menu-item-card__edit-row'>
+						<div className='menu-item-card__edit-field menu-item-card__edit-field--flex'>
 							<label>Allergens</label>
 							<AllergenPicker
 								selectedAllergens={selectedAllergenIds}
@@ -215,23 +279,20 @@ const MenuItemPanel = ({ item, menuID, menuTitle, categoryOptions = [], onSave, 
 						</div>
 					</div>
 
-					<div className="menu-item-card__edit-row">
-						<div className="menu-item-card__edit-field menu-item-card__edit-field--small">
-							<label>Price Note</label>
-							<input
-								type="text"
-								name="price_description"
-								value={formData.price_description || ''}
-								onChange={handleChange}
-								placeholder="e.g., Market Price"
-							/>
-						</div>
-						<div className="menu-item-card__edit-field">
-							<label className="menu-item-card__toggle-label">
-								<input
-									type="checkbox"
-									checked={formData.is_available !== false}
-									onChange={(e) => setFormData((prev) => ({ ...prev, is_available: e.target.checked }))}
+					<div className='menu-item-card__edit-row'>
+						<div className='menu-item-card__edit-field available-field'>
+							<label className='menu-item-card__toggle-label'>
+								<Checkbox
+									label='' // Empty - handled by option-label
+									isSelected={formData.is_available !== false}
+									onChange={(e) =>
+										setFormData((prev) => ({
+											...prev,
+											is_available: e.target.checked,
+										}))
+									}
+									theme='mint'
+									size='medium'
 								/>
 								<span>Available on menu</span>
 							</label>
@@ -243,87 +304,107 @@ const MenuItemPanel = ({ item, menuID, menuTitle, categoryOptions = [], onSave, 
 	}
 
 	return (
-		<div className={`menu-item-card ${isUnavailable ? 'menu-item-card--unavailable' : ''}`}>
-			<div className="menu-item-card__main">
-				<div className="menu-item-card__info">
-					<div className="menu-item-card__header">
-						<h3 className="menu-item-card__name">{item.name}</h3>
+		<div
+			className={`menu-item-card ${isUnavailable ? 'menu-item-card--unavailable' : ''}`}
+		>
+			<div className='menu-item-card__main'>
+				<div className='menu-item-card__info'>
+					<div className='menu-item-card__header'>
+						<h3 className='menu-item-card__name'>{item.name}</h3>
 						{item.price && (
-							<span className="menu-item-card__price">{formatPrice(item.price)}</span>
+							<span className='menu-item-card__price'>
+								{formatPrice(item.price)}
+							</span>
 						)}
 					</div>
 
 					{item.price_description && (
-						<span className="menu-item-card__price-note">{item.price_description}</span>
+						<span className='menu-item-card__price-note'>
+							{item.price_description}
+						</span>
 					)}
 
 					{item.description && (
-						<p className="menu-item-card__description">{item.description}</p>
+						<p className='menu-item-card__description'>{item.description}</p>
 					)}
 
-					<div className="menu-item-card__meta">
-						<span className="menu-item-card__category">{categoryLabel}</span>
+					<div className='menu-item-card__meta'>
+						<span className='menu-item-card__category'>{categoryLabel}</span>
 						{isUnavailable && (
-							<span className="menu-item-card__unavailable-badge">Unavailable</span>
+							<span className='menu-item-card__unavailable-badge'>
+								Unavailable
+							</span>
 						)}
 					</div>
 				</div>
 
-				<div className="menu-item-card__allergens">
+				<div className='menu-item-card__allergens'>
 					{allergenLabels.length > 0 ? (
-						<div className="menu-item-card__allergen-tags">
+						<div className='menu-item-card__allergen-tags'>
 							{allergenLabels.map((label, idx) => (
-								<span key={idx} className="menu-item-card__allergen-tag" title={label}>{label}</span>
+								<span
+									key={idx}
+									className='menu-item-card__allergen-tag'
+									title={label}
+								>
+									{label}
+								</span>
 							))}
 						</div>
 					) : (
-						<span className="menu-item-card__no-allergens">No allergens</span>
+						<span className='menu-item-card__no-allergens'>No allergens</span>
 					)}
 				</div>
 			</div>
 
-			<div className="menu-item-card__actions">
+			<div className='menu-item-card__actions'>
 				{onDuplicate && (
 					<button
-						className="menu-item-card__action-btn"
+						className='menu-item-card__action-btn'
 						onClick={() => onDuplicate(item)}
-						title="Duplicate item"
-						aria-label="Duplicate item"
+						title='Duplicate item'
+						aria-label='Duplicate item'
 					>
 						<FaCopy />
 					</button>
 				)}
 				<button
-					className="menu-item-card__action-btn"
+					className='menu-item-card__action-btn'
 					onClick={handleToggleAvailability}
 					title={isUnavailable ? 'Mark as available' : 'Mark as unavailable'}
 				>
 					{isUnavailable ? <FaEye /> : <FaEyeSlash />}
 				</button>
 				<button
-					className="menu-item-card__action-btn"
+					className='menu-item-card__action-btn'
 					onClick={enterEditMode}
-					title="Edit item"
+					title='Edit item'
 				>
 					<FaPencilAlt />
 				</button>
 				<button
-					className="menu-item-card__action-btn menu-item-card__action-btn--delete"
+					className='menu-item-card__action-btn menu-item-card__action-btn--delete'
 					onClick={() => setShowDeleteConfirm(true)}
-					title="Delete item"
+					title='Delete item'
 				>
 					<FaTrash />
 				</button>
 			</div>
 
 			{showDeleteConfirm && (
-				<div className="menu-item-card__delete-confirm">
+				<div className='menu-item-card__delete-confirm'>
 					<p>Delete "{item.name}"?</p>
-					<div className="menu-item-card__delete-actions">
-						<button className="button gray-btn" onClick={() => setShowDeleteConfirm(false)}>
+					<div className='menu-item-card__delete-actions'>
+						<button
+							className='button gray-btn'
+							onClick={() => setShowDeleteConfirm(false)}
+						>
 							Cancel
 						</button>
-						<button className="button menu-item-card__btn--danger" onClick={handleDelete}>
+						<button
+							className='button menu-item-card__btn--danger'
+							onClick={handleDelete}
+						>
 							Delete
 						</button>
 					</div>

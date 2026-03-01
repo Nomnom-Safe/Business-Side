@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FaTimes } from 'react-icons/fa';
 import { useAllergens } from '../../../hooks/useAllergens';
+import Checkbox from '../Checkbox/Checkbox';
 import { getAllergenLabels } from '../../../utils/allergenCache';
 import './AllergenPicker.scss';
 
@@ -45,17 +46,23 @@ function AllergenPicker({
 	};
 
 	return (
-		<div className={`allergen-picker ${compact ? 'allergen-picker--compact' : ''}`}>
+		<div
+			className={`allergen-picker ${compact ? 'allergen-picker--compact' : ''}`}
+		>
 			{showSelectedTags && selectedAllergens.length > 0 && (
-				<div className="allergen-picker__selected">
-					<span className="allergen-picker__selected-label">Selected:</span>
-					<div className="allergen-picker__tags">
+				<div className='allergen-picker__selected'>
+					<span className='allergen-picker__selected-label'>Selected:</span>
+					<div className='allergen-picker__tags'>
 						{selectedAllergens.map((id) => (
-							<span key={id} className="allergen-picker__tag" title={labels[id] || id}>
+							<span
+								key={id}
+								className='allergen-picker__tag'
+								title={labels[id] || id}
+							>
 								{labels[id] || id}
 								<button
-									type="button"
-									className="allergen-picker__tag-remove"
+									type='button'
+									className='allergen-picker__tag-remove'
 									onClick={() => handleRemoveTag(id)}
 									aria-label={`Remove ${labels[id] || id}`}
 								>
@@ -67,7 +74,7 @@ function AllergenPicker({
 				</div>
 			)}
 
-			<div className="allergen-picker__grid">
+			<div className='allergen-picker__grid'>
 				{allergens.map((allergen) => {
 					const isChecked = selectedAllergens.includes(allergen.id);
 					const isHovered = hoveredId === allergen.id;
@@ -79,17 +86,21 @@ function AllergenPicker({
 							onMouseLeave={() => setHoveredId(null)}
 						>
 							{isHovered && (
-								<span className="allergen-picker__tooltip" role="tooltip">
+								<span
+									className='allergen-picker__tooltip'
+									role='tooltip'
+								>
 									{allergen.label}
 								</span>
 							)}
-							<input
-								type="checkbox"
-								checked={isChecked}
+							<Checkbox
+								label='' // Empty - handled by option-label
+								isSelected={isChecked}
 								onChange={() => handleToggle(allergen.id)}
-								className="allergen-picker__checkbox"
+								theme='salmon'
+								size='medium'
 							/>
-							<span className="allergen-picker__option-label">
+							<span className='allergen-picker__option-label'>
 								{allergen.label}
 							</span>
 						</label>
@@ -98,7 +109,7 @@ function AllergenPicker({
 			</div>
 
 			{selectedAllergens.length === 0 && showSelectedTags && (
-				<p className="allergen-picker__empty">No allergens selected</p>
+				<p className='allergen-picker__empty'>No allergens selected</p>
 			)}
 		</div>
 	);

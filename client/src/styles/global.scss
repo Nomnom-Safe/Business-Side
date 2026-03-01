@@ -115,6 +115,12 @@ input[type='email'] {
 	}
 }
 
+select,
+button,
+input {
+	font-family: var(--font-family);
+}
+
 /* Default: images scale to container, maintain aspect ratio */
 img,
 svg {
