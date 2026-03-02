@@ -1,5 +1,7 @@
 // client/src/App.jsx
 
+import { useState } from 'react';
+import SplashScreen from './components/common/SplashScreen/SplashScreen.jsx';
 import PageLayout from './components/common/PageLayout/PageLayout.jsx';
 import AuthFormSwitcher from './components/auth/AuthFormSwitcher/AuthFormSwitcher.jsx';
 import SetUp from './components/setup/SetUp/SetUp.jsx';
@@ -22,7 +24,11 @@ import { ToastProvider } from './context/ToastContext';
 import Nav from './components/common/Nav/Nav.jsx';
 
 function App() {
+	const [showSplash] = useState(() => !sessionStorage.getItem('splashSeen'));
+
 	return (
+		<>
+		{showSplash && <SplashScreen />}
 		<Router>
 			<ToastProvider>
 				<PageLayout nav={Nav}>
@@ -119,6 +125,7 @@ function App() {
 				</PageLayout>
 			</ToastProvider>
 		</Router>
+		</>
 	);
 }
 
