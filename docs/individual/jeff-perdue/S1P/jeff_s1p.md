@@ -154,6 +154,45 @@ This is the business-side foundation. Everything built in Sprint 2 sits on top o
 
 ---
 
+# Learning with AI: Ontology Groundwork
+
+### What I've been building in parallel
+
+Before Sprint 2 begins, I've been working through the **allergen reasoning problem** from the research side.
+**Phase 0 work completed:**
+
+- Pulled real menus/menu items from restaurants
+- Documented 3 allergen ambiguity scenarios: entity identification, hidden risks, assumptions made, and open questions
+- Framed a **problem context**: minimalist menus communicate through *absence*, not presence — which is exactly where AI reasoning breaks down
+
+---
+
+### What the scenarios revealed
+
+Each scenario exposed a **structural assumption** that an AI would likely inherit uncritically:
+
+| Scenario | Hidden Risk | Unsafe Assumption |
+|----------|-------------|-------------------|
+| Chicken liver mousse + pistachio | Cross-contact, preparation form unknown | Listing an allergen = communicating risk |
+| Blistered shishito peppers | Cooking oil, shared fryer | No allergen listed = lower risk |
+| Sesame crusted tuna + global disclaimer | Sesame scope, crust removability | A general disclaimer = item-level clarity |
+
+These are not edge cases — they are how most menus are written.
+
+---
+
+### Why this matters before writing code
+
+The ontology research roadmap is designed to make AI reasoning **structurally honest**:
+
+- Requires **positive evidence** before inferring safety
+- Explicitly represents uncertainty — no collapsing "unknown" into "safe"
+- Produces four exposure states: **ConfirmedPresent · PotentiallyPresent · ConfirmedAbsent · Unknown**
+
+In Phase 0 we're exploring what the model must prevent, so that in Phase 1 (Sprint 2) we build the model that prevents it.
+
+---
+
 # Sprint 2: Three Tracks
 
 ### What comes next
