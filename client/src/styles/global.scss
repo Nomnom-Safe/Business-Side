@@ -415,11 +415,19 @@ ul {
 
 .set-up {
 	&-container {
-		padding: 0px 50px;
+		padding: 0 1rem;
 		display: flex;
 		flex-direction: column;
 		flex: 1 1 auto;
 		row-gap: 20px;
+
+		@include respond-to(tablet) {
+			padding: 0 1.5rem;
+		}
+
+		@include respond-to(desktop) {
+			padding: 0 2rem;
+		}
 	}
 }
 
@@ -443,7 +451,7 @@ ul {
 .step2,
 .step3 {
 	&-form {
-		margin: 0px 30px;
+		margin: 0;
 		padding: 20px;
 		border: var(--border);
 		border-radius: var(--corners-round);
@@ -454,9 +462,16 @@ ul {
 .step1,
 .step2 {
 	&-form {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		column-gap: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+
+		@include respond-to(tablet) {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			column-gap: 20px;
+			align-items: start;
+		}
 	}
 }
 

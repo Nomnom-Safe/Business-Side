@@ -36,9 +36,9 @@
 	min-width: 0; // prevents flex children from overflowing
 }
 
-.addr-field-city  { flex: 1 1 100px; }
-.addr-field-state { flex: 0 0 64px; }
-.addr-field-zip   { flex: 0 0 94px; }
+.addr-field-city  { flex: 1 1 80px; min-width: 80px; }
+.addr-field-state { flex: 0 0 52px; }
+.addr-field-zip   { flex: 0 0 76px; }
 
 .city,
 .state,

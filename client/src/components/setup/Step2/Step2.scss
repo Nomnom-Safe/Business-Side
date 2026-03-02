@@ -1,3 +1,8 @@
+// client/src/components/setup/Step2/Step2.scss
+
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+
 h1 {
 	color: var(--dark-turq);
 	margin-top: 5px;
@@ -23,17 +28,22 @@ h1 {
 .diets {
 	display: flex;
 	flex-direction: column;
-	row-gap: 20px;
+	row-gap: 16px;
+
+	.question {
+		white-space: normal;
+		word-break: break-word;
+	}
 }
 
 .allergen-list {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
+	gap: 10px 8px;
 }
 
 .diet-list {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	column-gap: 20px;
-	max-width: 350px;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 10px 8px;
 }

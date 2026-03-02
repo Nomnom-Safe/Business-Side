@@ -230,7 +230,7 @@ function SetUp() {
 			);
 		}
 		return (
-			<>
+			<div className="buttons-right">
 				<button
 					type="button"
 					onClick={completeSetUp}
@@ -246,7 +246,7 @@ function SetUp() {
 				>
 					Continue to dashboard
 				</button>
-			</>
+			</div>
 		);
 	};
 
