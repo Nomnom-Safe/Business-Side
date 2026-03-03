@@ -141,17 +141,25 @@ Each feature was driven by actor–goal requirements documented before work bega
 
 # Sprint 1 Metrics
 
-### Sprint 1 is complete.
+| Metric              | Result           | Notes                                                                             |
+| ------------------- | ---------------- | --------------------------------------------------------------------------------- |
+| Features completed  | **4 / 4**        |                                                                                   |
+| Requirements met    | **41 / 41**      |                                                                                   |
+| Burndown rate       | **100%**         |                                                                                   |
+| Codebase LoC        | **12,389 lines** | includes all .js, .jsx, .html, & .scss files in `server/` & `client/` directories |
+| Codebase file count | **172 files**    | includes all .js, .jsx, .html, & .scss files in `server/` & `client/` directories |
 
-| Metric             | Result      |
-| ------------------ | ----------- |
-| Features completed | **4 / 4**   |
-| Requirements met   | **41 / 41** |
-| Burndown rate      | **100%**    |
-| LoC                | \*\*\*\*    |
-| File count         | \*\*\*\*    |
+---
 
-All Sprint 1 features and requirements were completed on time according to the defined milestones.
+## What Went Wrong
+
+- Severely underestimated the size of my features
+
+---
+
+## What Went Well
+
+- All features & requirements were completed on time according to the defined milestones.
 
 ---
 
