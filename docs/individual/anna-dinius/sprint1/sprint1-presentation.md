@@ -191,9 +191,9 @@ The foundation is stable and ready for Sprint 2: user testing, MVP revisions, an
 
 ## Sprint 2 Goals
 
-- **Features:** 4
-- **Requirements:** 41
-- **Focus:** test and revise the MVP
+- **Goals:** 3
+- **Requirements:** 22
+- **Focus:** test, revise, and refine the MVP
 
 ---
 

@@ -2,8 +2,8 @@
 
 This document lists the requirements for each Sprint 2 goal.
 
-- **Total goals:** 2
-- **Total requirements:** 16
+- **Total goals:** 3
+- **Total requirements:** 22
 
 ## Goals
 
