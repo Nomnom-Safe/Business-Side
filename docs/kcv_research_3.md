@@ -1,15 +1,13 @@
 # Research #3 — Work Distribution Plan
 
 ## Team Member Assignment Pools
+.
 
-Some team members have not yet chosen specific sections.  
-They are currently assigned to **option pools (c, d, e)**.
-
-- **Gaurab:** c
-- **Anna:** b  
-- **Marc:** e  
-- **Soorya:** d 
-- **Jeff (Team Lead):** a
+- **Gaurab:** 
+- **Anna:**  
+- **Marc:**  
+- **Soorya (Team Lead):** 
+- **Jeff (Team Lead):** 
 
 ---
 
@@ -17,23 +15,23 @@ They are currently assigned to **option pools (c, d, e)**.
 
 *(Slide numbers refer to the current deck.)*
 
-| Slide | Topic | Assignment |
-|------|------|------|
-| 1 | Title | a |
-| 2 | Concept Recap | d |
-| — | System Architecture *(new slide to be added)* | a |
-| 3 | Lean Canvas | d |
-| 4–8 | P-Diagram | b |
-| 9 | Failure Modes | b |
-| 10 | Fishbone Diagram | c |
-| 11 | 5 Whys | c |
-| 12 | Problem Assessment Matrix | e |
-| 13 | Technology Readiness Level | a |
-| 14 | Problem Resolution Plan | a |
-| 15 | Platform Expansion Opportunities | e |
-| 16 | Technology Readiness Path | a |
-| — | Aesthetics / Cohesion | e |
-| last | Summary | a |
+| Slide | Topic | Assigned Team Member |
+|-------|-------|----------------------|
+| 1 | Title | Jeff |
+| 2 | Concept Recap | Soorya |
+| — | System Architecture *(new slide to be added)* | Jeff |
+| 3 | Lean Canvas | Soorya |
+| 4–8 | P-Diagram | Anna |
+| 9 | Failure Modes | Anna |
+| 10 | Fishbone Diagram | Gaurab |
+| 11 | 5 Whys | Gaurab |
+| 12 | Problem Assessment Matrix | Marc |
+| 13 | Technology Readiness Level | Jeff |
+| 14 | Problem Resolution Plan | Jeff |
+| 15 | Platform Expansion Opportunities | Marc |
+| 16 | Technology Readiness Path | Jeff |
+| — | Aesthetics / Cohesion | Marc |
+| last | Summary | Jeff |
 
 ---
 
@@ -98,21 +96,15 @@ They also drive much of the rest of the analysis.
 
 # Remaining Analysis Sections
 
-These will be chosen from the **c, d, and e pools** by:
-
-- Gaurab
-- Marc
-- Soorya
-
-### Pool C
+### Pool C (Gaurab)
 - Fishbone Diagram
 - 5 Whys
 
-### Pool D
+### Pool D (Soorya)
 - Concept Recap
 - Lean Canvas
 
-### Pool E
+### Pool E (Marc)
 - Problem Assessment Matrix
 - Platform Expansion Opportunities
 - Aesthetics / Cohesion of the slide deck
