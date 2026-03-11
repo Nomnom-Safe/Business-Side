@@ -5,10 +5,10 @@
 Some team members have not yet chosen specific sections.  
 They are currently assigned to **option pools (c, d, e)**.
 
-- **Gaurab:** c, d, e  
+- **Gaurab:** c
 - **Anna:** b  
-- **Marc:** c, d, e  
-- **Soorya:** c, d, e  
+- **Marc:** e  
+- **Soorya:** d 
 - **Jeff (Team Lead):** a
 
 ---
