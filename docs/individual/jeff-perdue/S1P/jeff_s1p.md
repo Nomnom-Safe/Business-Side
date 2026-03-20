@@ -150,7 +150,13 @@ Each feature was driven by actor–goal requirements documented before work bega
 - Items can be **searched, filtered by allergen, and sorted** across a full menu
 - The app is **stable, functional, and ready for Sprint 2 feature work**
 
-This is the business-side foundation. Everything built in Sprint 2 sits on top of it.
+---
+
+# Demo
+
+### Quick overview of current functionality
+
+[![Demo Video](https://img.youtube.com/vi/oy9nKw-ioY0/0.jpg)](https://youtu.be/oy9nKw-ioY0)
 
 ---
 
@@ -164,6 +170,7 @@ Before Sprint 2 begins, I've been working through the **allergen reasoning probl
 - Pulled real menus/menu items from restaurants
 - Documented 3 allergen ambiguity scenarios: entity identification, hidden risks, assumptions made, and open questions
 - Framed a **problem context**: minimalist menus communicate through *absence*, not presence — which is exactly where AI reasoning breaks down
+
 
 ---
 
