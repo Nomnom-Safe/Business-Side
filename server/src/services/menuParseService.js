@@ -1,7 +1,5 @@
 const { GoogleGenAI } = require('@google/genai');
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
 const SYSTEM_PROMPT = `You are a menu data extraction assistant. 
 Your job is to parse raw text from restaurant menus and return structured JSON.
 
@@ -24,6 +22,8 @@ async function parseMenuText(extractedText) {
   if (!extractedText || extractedText.trim().length === 0) {
     throw new Error('No text content provided for parsing');
   }
+
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
   const response = await ai.models.generateContent({
     model: 'gemini-2.5-flash',

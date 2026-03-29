@@ -36,6 +36,9 @@ app.use('/api/menus', menuRoutes);
 const menuItemRoutes = require('./src/routes/menuItemRoutes');
 app.use('/api/menuitems', menuItemRoutes);
 
+const menuImportRoutes = require('./src/routes/menuImportRoutes');
+app.use('/api/menu/import', menuImportRoutes);
+
 const auth = require('./src/routes/businessUserRoutes');
 app.use('/api/auth', auth);
 

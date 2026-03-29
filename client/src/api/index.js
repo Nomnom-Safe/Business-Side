@@ -1,4 +1,5 @@
 import jsonRequest from './client';
+import { API_BASE_URL } from './config';
 
 export const authApi = {
 	signUp: async (payload) =>
@@ -187,6 +188,40 @@ export const placesApi = {
 		}),
 };
 
+export const menuImportApi = {
+	importFile: async (file) => {
+		const formData = new FormData();
+		formData.append('file', file);
+		let response;
+		let data = null;
+		try {
+			response = await fetch(`${API_BASE_URL}/api/menu/import/file`, {
+				method: 'POST',
+				body: formData,
+				// Do NOT set Content-Type — browser sets it with the multipart boundary automatically
+			});
+			try {
+				data = await response.json();
+			} catch (e) {
+				// ignore JSON parse errors
+			}
+		} catch (networkError) {
+			return {
+				ok: false,
+				status: 0,
+				data: null,
+				message: networkError.message || 'Network error',
+			};
+		}
+		return {
+			ok: response.ok,
+			status: response.status,
+			data,
+			message: data?.message,
+		};
+	},
+};
+
 const api = {
 	auth: authApi,
 	businesses: businessesApi,
@@ -196,6 +231,7 @@ const api = {
 	categories: categoriesApi,
 	addresses: addressesApi,
 	places: placesApi,
+	menuImport: menuImportApi,
 };
 
 export default api;
