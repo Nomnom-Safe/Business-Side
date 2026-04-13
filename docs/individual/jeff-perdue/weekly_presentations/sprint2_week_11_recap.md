@@ -53,6 +53,8 @@ All four installed alongside existing dependencies via `npm install`.
 - Passes extracted text to `menuParseService.parseMenuText()`  
 - Returns structured items array to client  
 
+---
+
 ### Supported Types
 
 `application/pdf` → `pdf-parse`  
@@ -181,6 +183,8 @@ Phase 0 data collection is underway. A working document has been created at:
 - 20–30 allergen-related prompts written across four failure categories  
 - LLM responses being recorded from **Gemini 2.5 Flash** and **ChatGPT**  
 - Failures being categorized into the taxonomy  
+
+---
 
 ### Four Failure Categories
 
