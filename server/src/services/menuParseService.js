@@ -26,7 +26,6 @@ CRITICAL RULES:
 - If allergen information is absent or ambiguous, return an empty array [].
 - Do NOT guess allergens based on ingredients.`;
 
-const MODEL_TIMEOUT_MS = 20000;
 const MAX_RETRIES = 1;
 const RETRY_DELAY_MS = 400;
 
@@ -46,18 +45,6 @@ function isTransientProviderError(err) {
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function withTimeout(promise, ms) {
-  let timer;
-  const timeoutPromise = new Promise((_, reject) => {
-    timer = setTimeout(() => reject(new Error(`LLM timeout after ${ms}ms`)), ms);
-  });
-  try {
-    return await Promise.race([promise, timeoutPromise]);
-  } finally {
-    clearTimeout(timer);
-  }
 }
 
 async function parseMenuText(extractedText, options = {}) {
@@ -80,7 +67,7 @@ async function parseMenuText(extractedText, options = {}) {
   try {
     for (let attempt = 0; attempt <= MAX_RETRIES; attempt += 1) {
       try {
-        response = await withTimeout(ai.models.generateContent({
+        response = await ai.models.generateContent({
           model: 'gemini-2.5-flash',
           contents: [
             {
@@ -94,7 +81,7 @@ async function parseMenuText(extractedText, options = {}) {
             systemInstruction: SYSTEM_PROMPT,
             temperature: 0.1,
           },
-        }), MODEL_TIMEOUT_MS);
+        });
         break;
       } catch (err) {
         lastErr = err;
