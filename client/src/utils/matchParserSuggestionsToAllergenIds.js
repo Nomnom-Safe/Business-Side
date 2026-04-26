@@ -7,6 +7,27 @@
  * @param {{ id: string, label: string }[]} allergens
  * @returns {string[]}
  */
+const ALLERGEN_EQUIVALENTS = {
+	milk: ['milk', 'dairy'],
+	dairy: ['dairy', 'milk'],
+	egg: ['egg', 'eggs'],
+	eggs: ['eggs', 'egg'],
+	soy: ['soy', 'soya'],
+	soya: ['soya', 'soy'],
+};
+
+function expandSuggestionTerms(suggestions) {
+	const expanded = new Set();
+	for (const s of suggestions) {
+		expanded.add(s);
+		const aliases = ALLERGEN_EQUIVALENTS[s];
+		if (Array.isArray(aliases)) {
+			aliases.forEach((a) => expanded.add(a));
+		}
+	}
+	return [...expanded];
+}
+
 export function matchParserSuggestionsToAllergenIds(suggestions, allergens) {
 	const sug = (Array.isArray(suggestions) ? suggestions : [])
 		.map((s) => String(s).toLowerCase().trim())
@@ -15,7 +36,7 @@ export function matchParserSuggestionsToAllergenIds(suggestions, allergens) {
 		return [];
 	}
 
-	const blob = sug.join(', ');
+	const blob = expandSuggestionTerms(sug).join(', ');
 	const matched = new Set();
 
 	for (const a of allergens) {

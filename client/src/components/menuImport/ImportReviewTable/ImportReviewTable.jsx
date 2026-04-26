@@ -23,14 +23,12 @@ function statusClass(status) {
  * @param {function} props.onToggleSelect
  * @param {function} props.onFieldChange
  * @param {function} props.onAllergenIdsChange
- * @param {function} props.onAllergenAckChange
  */
 function ImportReviewTable({
 	rows,
 	onToggleSelect,
 	onFieldChange,
 	onAllergenIdsChange,
-	onAllergenAckChange,
 }) {
 	const allergens = useAllergens();
 	const rowsWithSuggestions = rows.filter(
@@ -67,7 +65,6 @@ function ImportReviewTable({
 			</div>
 			{rows.map((row) => {
 				const sug = row.item.possible_allergens || [];
-				const needsAck = sug.length > 0;
 				const canPrefill = sug.length > 0;
 
 				const applySuggestionMatches = () => {
@@ -223,21 +220,6 @@ function ImportReviewTable({
 									compact
 								/>
 							</div>
-							{needsAck && (
-								<div className="import-review__ack">
-									<Checkbox
-										label="I have reviewed allergen information for this item (required before save when the parser suggested allergens)"
-										isSelected={row.allergenAcknowledged}
-										onChange={() =>
-											onAllergenAckChange(
-												row.clientKey,
-												!row.allergenAcknowledged,
-											)
-										}
-										size="small"
-									/>
-								</div>
-							)}
 						</section>
 					</article>
 				);
@@ -251,7 +233,6 @@ ImportReviewTable.propTypes = {
 	onToggleSelect: PropTypes.func.isRequired,
 	onFieldChange: PropTypes.func.isRequired,
 	onAllergenIdsChange: PropTypes.func.isRequired,
-	onAllergenAckChange: PropTypes.func.isRequired,
 };
 
 export default ImportReviewTable;

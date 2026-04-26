@@ -17,14 +17,31 @@ Each item must have exactly these fields:
   "ingredients": ["array of strings — each ingredient as a separate string. Use empty array [] if not found."],
   "price": "number or null (numeric value only, no currency symbols)",
   "category": "string (infer from context, e.g. 'Appetizers', 'Entrees', 'Desserts', 'Drinks'. Use 'Uncategorized' if unknown.)",
-  "possible_allergens": ["array of strings — ONLY list allergens explicitly mentioned in the text. Never infer or assume."]
+  "possible_allergens": ["array of strings — allergen hints detected from explicit allergen statements OR clear ingredient terms in the same item text."]
 }
 
 CRITICAL RULES:
 - ingredients MUST be a JSON array of strings, never a single string.
-- possible_allergens MUST only include allergens explicitly stated in the source text.
-- If allergen information is absent or ambiguous, return an empty array [].
-- Do NOT guess allergens based on ingredients.`;
+- possible_allergens should be conservative but useful:
+  1) Include allergens explicitly stated in the source text (e.g., "contains milk").
+  2) Also include allergens inferred from clear ingredient keywords in the same item text.
+- Use only this controlled ingredient-to-allergen mapping:
+  - milk, buttermilk, butter, cream, cheese, yogurt, whey, casein, ghee -> milk
+  - wheat, flour, bread, pasta, noodle, semolina, durum, breadcrumbs -> gluten
+  - egg, eggs, mayonnaise, aioli -> egg
+  - peanut, peanuts, peanut butter -> peanuts
+  - almond, walnut, pecan, pistachio, cashew, hazelnut, macadamia -> tree nuts
+  - soy, soya, soybean, tofu, edamame, miso, tempeh -> soy
+  - fish, salmon, tuna, cod, anchovy, sardine -> fish
+  - shrimp, prawn, crab, lobster, crayfish, clam, mussel, oyster, scallop -> shellfish
+  - sesame, tahini -> sesame
+  - mustard -> mustard
+  - celery -> celery
+  - lupin -> lupin
+  - sulfite, sulphite, sulfites, sulphites -> sulfites
+- Never infer allergens beyond the mapping above.
+- If allergen information is absent, ambiguous, or uncertain, return an empty array [] for that allergen.
+- Return normalized allergen labels only (e.g., "milk", "gluten", "egg", "peanuts", "tree nuts", "soy", "fish", "shellfish", "sesame", "mustard", "celery", "lupin", "sulfites").`;
 
 const MAX_RETRIES = 1;
 const RETRY_DELAY_MS = 400;
