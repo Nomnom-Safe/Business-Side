@@ -68,12 +68,11 @@ ASE 485 Capstone
 
 ### Demonstration Link
 
-- Video: **[Insert demo video URL here]**
+- Video: https://youtu.be/MfqT1rB7Udw
 
 ### What the demo shows
 
 - Successful import from clean source.
-- Graceful fallback when import cannot proceed.
 - Human-confirmed allergen decisions before save.
 
 ---

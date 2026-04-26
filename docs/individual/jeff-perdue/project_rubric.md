@@ -137,7 +137,7 @@ Track B — AI as research context: The ontology for Track B formalizes how AI-g
 
 - (V) I created a demonstration video clip showing my project results.
 - (V) The video is accessible to my managers and the class.
-- The link to my demonstration video: ?
+- The link to my demonstration video: (https://youtu.be/MfqT1rB7Udw)
 
 **Grading Scale:**
 - 90–100%: I am confident that my demonstration video clearly shows working project results and is easily accessible to anyone.
