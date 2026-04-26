@@ -18,6 +18,12 @@ async function signIn({ email, password, idToken }) {
 
 	const foundUser = await userService.getUserByEmail(email);
 	if (!foundUser) {
+		if (process.env.DEV_DEMO_MODE === 'true') {
+			throw new AuthError(
+				'INVALID_EMAIL',
+				'User not found in demo mode. If the server was restarted, sign up once to recreate the account.',
+			);
+		}
 		throw new AuthError('Invalid email');
 	}
 

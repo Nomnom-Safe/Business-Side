@@ -11,6 +11,7 @@ import AccountDetails from './components/account/AccountDetails/AccountDetails.j
 import EditAccount from './components/account/EditAccount/EditAccount.jsx';
 import AddMenuItem from './components/menuItems/AddMenuItem/AddMenuItem.jsx';
 import MenuItemsPage from './components/menuItems/MenuItemsPage/MenuItemsPage.jsx';
+import ImportMenuFlow from './components/menuImport/ImportMenuFlow/ImportMenuFlow.jsx';
 // ARCHIVED: Menu Item Swapping - Not part of MVP (single menu)
 // import MenuItemPicklist from './components/menuItems/MenuItemSwap/MenuItemSwap.jsx';
 // import FilterPanel from './components/menu/FilterPanel';
@@ -120,6 +121,11 @@ function App() {
 						<Route
 							path='/menuitems'
 							element={<ProtectedRoute component={<MenuItemsPage />} />}
+						/>
+
+						<Route
+							path='/menuitems/import'
+							element={<ProtectedRoute component={<ImportMenuFlow />} />}
 						/>
 					</Routes>
 				</PageLayout>

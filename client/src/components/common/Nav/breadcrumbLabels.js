@@ -4,6 +4,7 @@ export const LABEL_OVERRIDES = {
 	dashboard: 'Dashboard',
 	menuitems: 'Menu Items',
 	'add-menu-item': 'Add Item',
+	import: 'Import',
 	'edit-business-info': 'Business Info',
 	'edit-login-info': 'Account',
 	'choose-business': 'Choose Business',

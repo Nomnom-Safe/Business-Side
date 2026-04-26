@@ -1,14 +1,22 @@
-const { db } = require('./firestoreInit');
 const {
 	MenuItemSchema,
 	CreateMenuItemSchema,
 	UpdateMenuItemSchema,
 	createMenuItemSchemaWithAllergens,
 } = require('../schemas/MenuItem');
+const { store, nextId, persistStore } = require('./devDemoStore');
 
-const menuItemsCollection = db.collection('menu_items');
-const menusCollection = db.collection('menus');
-const allergensCollection = db.collection('allergens');
+const IS_DEV_DEMO_MODE = process.env.DEV_DEMO_MODE === 'true';
+
+let menuItemsCollection = null;
+let menusCollection = null;
+let allergensCollection = null;
+if (!IS_DEV_DEMO_MODE) {
+	const { db } = require('./firestoreInit');
+	menuItemsCollection = db.collection('menu_items');
+	menusCollection = db.collection('menus');
+	allergensCollection = db.collection('allergens');
+}
 
 function normalizeMenuItemDoc(id, data) {
 	const itemTypes = Array.isArray(data.item_types)
@@ -26,6 +34,13 @@ function normalizeMenuItemDoc(id, data) {
 }
 
 async function listMenuItems(filter = {}) {
+	if (IS_DEV_DEMO_MODE) {
+		const list = filter.menu_id
+			? store.menuItems.filter((i) => i.menu_id === filter.menu_id)
+			: store.menuItems;
+		return list.map((i) => normalizeMenuItemDoc(i.id, i));
+	}
+
 	if (filter.menu_id) {
 		const snap = await menuItemsCollection
 			.where('menu_id', '==', filter.menu_id)
@@ -38,6 +53,12 @@ async function listMenuItems(filter = {}) {
 }
 
 async function getMenuItemById(id) {
+	if (IS_DEV_DEMO_MODE) {
+		const item = store.menuItems.find((i) => i.id === id);
+		if (!item) return null;
+		return normalizeMenuItemDoc(item.id, item);
+	}
+
 	const doc = await menuItemsCollection.doc(id).get();
 	if (!doc.exists) return null;
 	return normalizeMenuItemDoc(doc.id, doc.data());
@@ -57,6 +78,24 @@ async function createMenuItem(itemObj) {
 		item_types: itemTypes,
 	};
 	const valid = CreateMenuItemSchema.parse(toValidate);
+
+	if (IS_DEV_DEMO_MODE) {
+		const menuExists = store.menus.some((m) => m.id === valid.menu_id);
+		if (!menuExists) throw new Error('Referenced `menu_id` does not exist');
+
+		if (valid.allergens?.length > 0) {
+			const validIds = store.allergens.map((a) => a.id);
+			const strictSchema = createMenuItemSchemaWithAllergens(validIds).omit({
+				id: true,
+			});
+			strictSchema.parse({ ...valid, item_types: valid.item_types });
+		}
+
+		const saved = { id: nextId('mi_demo'), ...valid };
+		store.menuItems.push(saved);
+		persistStore();
+		return normalizeMenuItemDoc(saved.id, saved);
+	}
 
 	// Verify menu exists
 	const menuRef = menusCollection.doc(valid.menu_id);
@@ -79,6 +118,44 @@ async function createMenuItem(itemObj) {
 }
 
 async function updateMenuItem(id, updateObj) {
+	if (IS_DEV_DEMO_MODE) {
+		const idx = store.menuItems.findIndex((i) => i.id === id);
+		if (idx === -1) return null;
+		const current = store.menuItems[idx];
+		let patch = { ...updateObj };
+		if (patch.item_types !== undefined || patch.item_type !== undefined) {
+			const itemTypes = Array.isArray(patch.item_types)
+				? patch.item_types.filter(Boolean)
+				: patch.item_type != null
+					? [patch.item_type]
+					: [current.item_type || current.item_types?.[0] || 'entree'];
+			patch = {
+				...patch,
+				item_type: itemTypes[0] || 'entree',
+				item_types: itemTypes,
+			};
+		}
+		const merged = { id, ...current, ...patch };
+		UpdateMenuItemSchema.parse(merged);
+
+		if (patch.menu_id) {
+			const menuExists = store.menus.some((m) => m.id === patch.menu_id);
+			if (!menuExists) throw new Error('Referenced `menu_id` does not exist');
+		}
+
+		if (Array.isArray(patch.allergens)) {
+			const validIds = store.allergens.map((a) => a.id);
+			const strictSchema = createMenuItemSchemaWithAllergens(validIds).omit({
+				id: true,
+			});
+			strictSchema.parse(merged);
+		}
+
+		store.menuItems[idx] = merged;
+		persistStore();
+		return normalizeMenuItemDoc(id, merged);
+	}
+
 	const docRef = menuItemsCollection.doc(id);
 	const snap = await docRef.get();
 	if (!snap.exists) return null;
@@ -118,6 +195,14 @@ async function updateMenuItem(id, updateObj) {
 }
 
 async function deleteMenuItem(id) {
+	if (IS_DEV_DEMO_MODE) {
+		const idx = store.menuItems.findIndex((i) => i.id === id);
+		if (idx === -1) return null;
+		store.menuItems.splice(idx, 1);
+		persistStore();
+		return true;
+	}
+
 	const docRef = menuItemsCollection.doc(id);
 	const snap = await docRef.get();
 	if (!snap.exists) return null;

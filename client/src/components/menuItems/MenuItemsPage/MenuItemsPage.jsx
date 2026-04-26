@@ -78,6 +78,8 @@ const MenuItemsPage = () => {
 	const fetchMenu = async () => {
 		try {
 			const businessId = localStorage.getItem('businessId');
+			const menuIdFromState = location.state?.menuID;
+			const currentMenuId = localStorage.getItem('currentMenuId');
 			let result = await api.menuItems.getMenuForBusiness(businessId);
 
 			// If no menu exists, ensure one is created then refetch so title is always editable
@@ -97,6 +99,13 @@ const MenuItemsPage = () => {
 				if (menu.id) {
 					localStorage.setItem('currentMenuId', menu.id);
 				}
+			} else if (menuIdFromState || currentMenuId) {
+				const fallbackId = menuIdFromState || currentMenuId;
+				setFetchedMenu({
+					id: fallbackId,
+					title: location.state?.menuTitle || 'Your Menu',
+				});
+				localStorage.setItem('currentMenuId', fallbackId);
 			} else {
 				const syntheticMenuId = `menu_${businessId}`;
 				localStorage.setItem('currentMenuId', syntheticMenuId);
@@ -369,12 +378,32 @@ const MenuItemsPage = () => {
 			<div className='menu-items-page__container'>
 				{/* Header */}
 				<div className='menu-items-page__header'>
-					<button
-						className='button'
-						onClick={toAddItem}
-					>
-						+ Add Item
-					</button>
+					<div className='menu-items-page__header-actions'>
+						<button
+							type='button'
+							className='button gray-btn'
+							onClick={() => {
+								if (fetchedMenu?.id) {
+									navigate('/menuitems/import', {
+										state: {
+											menuID: fetchedMenu.id,
+											menuTitle: fetchedMenu?.title || displayTitle,
+										},
+									});
+								} else {
+									showError('Open your menu first, then use Import.');
+								}
+							}}
+						>
+							Import
+						</button>
+						<button
+							className='button'
+							onClick={toAddItem}
+						>
+							+ Add Item
+						</button>
+					</div>
 					<div className='menu-items-page__title-wrap'>
 						{isEditingTitle ? (
 							<input

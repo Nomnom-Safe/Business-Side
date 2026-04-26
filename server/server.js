@@ -77,4 +77,7 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
+	if (process.env.DEV_DEMO_MODE === 'true') {
+		console.warn('*** DEV_DEMO_MODE ENABLED: Using in-memory auth/data services (Firebase bypass) ***');
+	}
 });

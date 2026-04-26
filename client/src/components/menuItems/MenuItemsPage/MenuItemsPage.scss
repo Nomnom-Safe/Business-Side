@@ -21,6 +21,13 @@ input[type='text'].menu-items-page__search {
 		margin-bottom: 24px;
 	}
 
+	&__header-actions {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		flex-shrink: 0;
+	}
+
 	&__title-wrap {
 		flex: 1;
 		display: flex;

@@ -138,3 +138,6 @@ dist
 
 # package-lock
 package-lock.json
+
+# Demo-mode persisted local state (do not commit)
+server/.dev-demo-store.json

@@ -1,13 +1,28 @@
-const { db } = require('./firestoreInit');
 const bcrypt = require('bcrypt');
 const {
 	CreateBusinessUserSchema,
 	UpdateBusinessUserSchema,
 } = require('../schemas/BusinessUser.js');
+const { store, nextId, persistStore } = require('./devDemoStore');
 
-const usersCollection = db.collection('business_users');
+const IS_DEV_DEMO_MODE = process.env.DEV_DEMO_MODE === 'true';
+
+let usersCollection = null;
+if (!IS_DEV_DEMO_MODE) {
+	const { db } = require('./firestoreInit');
+	usersCollection = db.collection('business_users');
+}
 
 async function getUserByEmail(email) {
+	if (IS_DEV_DEMO_MODE) {
+		const found = store.users.find((u) => u.email === email) || null;
+		if (!found) return null;
+		return {
+			...found,
+			getFullName: () => `${found.first_name} ${found.last_name}`,
+		};
+	}
+
 	const q = await usersCollection.where('email', '==', email).limit(1).get();
 	if (q.empty) return null;
 
@@ -28,6 +43,19 @@ async function createUser(userObj) {
 
 	const toSave = { ...valid, password: hashed };
 
+	if (IS_DEV_DEMO_MODE) {
+		const saved = {
+			id: nextId('user_demo'),
+			...toSave,
+		};
+		store.users.push(saved);
+		persistStore();
+		return {
+			...saved,
+			getFullName: () => `${saved.first_name} ${saved.last_name}`,
+		};
+	}
+
 	const ref = await usersCollection.add(toSave);
 	const snap = await ref.get();
 
@@ -38,6 +66,27 @@ async function createUser(userObj) {
 }
 
 async function updateUserByEmail(email, updateObj) {
+	if (IS_DEV_DEMO_MODE) {
+		const idx = store.users.findIndex((u) => u.email === email);
+		if (idx === -1) return null;
+		const current = store.users[idx];
+		const valid = UpdateBusinessUserSchema.parse({
+			id: current.id,
+			...updateObj,
+		});
+		if (valid.password) {
+			const salt = await bcrypt.genSalt(12);
+			valid.password = await bcrypt.hash(valid.password, salt);
+		}
+		const updated = { ...current, ...valid };
+		store.users[idx] = updated;
+		persistStore();
+		return {
+			...updated,
+			getFullName: () => `${updated.first_name} ${updated.last_name}`,
+		};
+	}
+
 	const q = await usersCollection.where('email', '==', email).limit(1).get();
 	if (q.empty) return null;
 

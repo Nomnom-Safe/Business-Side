@@ -220,6 +220,24 @@ export const menuImportApi = {
 			message: data?.message,
 		};
 	},
+
+	importUrl: async (url) =>
+		jsonRequest('/api/menu/import/url', {
+			method: 'POST',
+			body: { url },
+		}),
+
+	saveImportedItems: async (payload, idempotencyKey) => {
+		const headers = {};
+		if (idempotencyKey) {
+			headers['Idempotency-Key'] = idempotencyKey;
+		}
+		return jsonRequest('/api/menu/import/save', {
+			method: 'POST',
+			body: payload,
+			headers,
+		});
+	},
 };
 
 const api = {
