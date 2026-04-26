@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../../../api';
 import { useToast } from '../../../context/ToastContext';
+import Checkbox from '../../common/Checkbox/Checkbox';
 import ImportReviewTable from '../ImportReviewTable/ImportReviewTable';
 import './ImportMenuFlow.scss';
 
@@ -37,16 +38,15 @@ function buildReviewRowsFromParseItems(items) {
 					: [],
 			},
 			selectedAllergenIds: [],
-			allergenAcknowledged: false,
 		};
 	});
 }
 
-function canSaveRow(row) {
+function canSaveRow(row, allergenReviewAcknowledged) {
 	if (!row.selected) return true;
 	if (!row.item.name || !String(row.item.name).trim()) return false;
 	const sug = row.item.possible_allergens || [];
-	if (sug.length > 0 && !row.allergenAcknowledged) return false;
+	if (sug.length > 0 && !allergenReviewAcknowledged) return false;
 	return true;
 }
 
@@ -94,6 +94,7 @@ function ImportMenuFlow({ menuImport: importApiProp } = {}) {
 	const [ingestError, setIngestError] = useState(null);
 	const [parseInfo, setParseInfo] = useState(null);
 	const [rows, setRows] = useState([]);
+	const [allergenReviewAcknowledged, setAllergenReviewAcknowledged] = useState(false);
 
 	const [saveLoading, setSaveLoading] = useState(false);
 	const [saveResult, setSaveResult] = useState(null);
@@ -223,6 +224,7 @@ function ImportMenuFlow({ menuImport: importApiProp } = {}) {
 			quality: result.data.quality || null,
 		});
 		setRows(nextRows);
+		setAllergenReviewAcknowledged(false);
 		setStep('review');
 	};
 
@@ -274,6 +276,7 @@ function ImportMenuFlow({ menuImport: importApiProp } = {}) {
 			quality: result.data.quality || null,
 		});
 		setRows(nextRows);
+		setAllergenReviewAcknowledged(false);
 		setStep('review');
 	};
 
@@ -324,22 +327,20 @@ function ImportMenuFlow({ menuImport: importApiProp } = {}) {
 		);
 	}, []);
 
-	const onAllergenAck = useCallback((clientKey, next) => {
-		setRows((prev) =>
-			prev.map((r) =>
-				r.clientKey === clientKey
-					? { ...r, allergenAcknowledged: next }
-					: r,
+	const requiresAllergenAck = useMemo(
+		() =>
+			rows.some(
+				(r) => r.selected && (r.item.possible_allergens || []).length > 0,
 			),
-		);
-	}, []);
+		[rows],
+	);
 
 	const canSubmitSave = useMemo(() => {
 		if (!effectiveMenuId) return false;
 		const selected = rows.filter((r) => r.selected);
 		if (selected.length === 0) return false;
-		return selected.every((r) => canSaveRow(r));
-	}, [rows, effectiveMenuId]);
+		return selected.every((r) => canSaveRow(r, allergenReviewAcknowledged));
+	}, [rows, effectiveMenuId, allergenReviewAcknowledged]);
 
 	const handleSave = async () => {
 		if (!canSubmitSave) return;
@@ -365,7 +366,7 @@ function ImportMenuFlow({ menuImport: importApiProp } = {}) {
 				suggested_allergens: suggested,
 				allergens: r.selectedAllergenIds,
 				allergen_import_acknowledged:
-					suggested.length === 0 || r.allergenAcknowledged,
+					suggested.length === 0 || allergenReviewAcknowledged,
 			};
 		});
 
@@ -404,6 +405,7 @@ function ImportMenuFlow({ menuImport: importApiProp } = {}) {
 		setSaveResult(null);
 		setIngestError(null);
 		setIngestStage('');
+		setAllergenReviewAcknowledged(false);
 	};
 
 	if (step === 'result' && saveResult) {
@@ -491,8 +493,19 @@ function ImportMenuFlow({ menuImport: importApiProp } = {}) {
 						onToggleSelect={toggleSelect}
 						onFieldChange={onFieldChange}
 						onAllergenIdsChange={onAllergenIds}
-						onAllergenAckChange={onAllergenAck}
 					/>
+					{requiresAllergenAck && (
+						<div className="import-flow__allergen-ack">
+							<Checkbox
+								label="I have reviewed allergen information for selected items (required before save when parser suggested allergens)"
+								isSelected={allergenReviewAcknowledged}
+								onChange={() =>
+									setAllergenReviewAcknowledged((prev) => !prev)
+								}
+								size="small"
+							/>
+						</div>
+					)}
 
 					<div className="import-flow__actions">
 						<button
