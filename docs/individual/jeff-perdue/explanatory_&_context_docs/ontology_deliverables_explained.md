@@ -1,7 +1,5 @@
 # Ontology Research Deliverables — Guide for Non-Technical Presentations
 
-**Purpose:** This document is a **briefing pack** for another AI agent (or a human presenter) building a presentation for a **non-technical audience**—for example stakeholders, classmates, or product partners who care about *outcomes and safety ideas*, not software or formal logic.
-
 **What it covers:** What each **semester ontology deliverable** (R3.1–R3.5) *means in plain language*, what is *inside each artifact*, and *why each step matters* for food-allergen ontology research and for safer AI-assisted decisions in apps like NomNomSafe.
 
 **Where the files live:** The canonical copies of the five deliverable write-ups are under  
