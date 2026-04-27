@@ -63,7 +63,72 @@ ASE 485 Capstone
 - Validation completed via weekly checkpoints, regression checks, and demo readiness checklist.
 
 ---
+<style scoped>section { font-size: 160%; }</style>
+# The System Prompt
+const SYSTEM_PROMPT = `You are a menu data extraction assistant.
+Your job is to parse raw text from restaurant menus and return structured JSON.
 
+Return ONLY a valid JSON array. No markdown, no backticks, no explanation.
+Each item must have exactly these fields:
+{
+  "name": "string (required — item name)",
+  "description": "string (use empty string if not found)",
+  "ingredients": ["array of strings — each ingredient as a separate string. Use empty array [] if not found."],
+  "price": "number or null (numeric value only, no currency symbols)",
+  "category": "string (infer from context, e.g. 'Appetizers', 'Entrees', 'Desserts', 'Drinks'. Use 'Uncategorized' if unknown.)",
+  "possible_allergens": ["array of strings — allergen hints detected from explicit allergen statements OR clear ingredient terms in the same item text."]
+}
+
+---
+<style scoped>section { font-size: 120%; }</style>
+
+CRITICAL RULES:
+- ingredients MUST be a JSON array of strings, never a single string.
+- possible_allergens should be conservative but useful:
+  1) Include allergens explicitly stated in the source text (e.g., "contains milk").
+  2) Also include allergens inferred from clear ingredient keywords in the same item text.
+- Use only this controlled ingredient-to-allergen mapping:
+  - milk, buttermilk, butter, cream, cheese, yogurt, whey, casein, ghee -> milk
+  - wheat, flour, bread, pasta, noodle, semolina, durum, breadcrumbs -> gluten
+  - egg, eggs, mayonnaise, aioli -> egg
+  - peanut, peanuts, peanut butter -> peanuts
+  - almond, walnut, pecan, pistachio, cashew, hazelnut, macadamia -> tree nuts
+  - soy, soya, soybean, tofu, edamame, miso, tempeh -> soy
+  - fish, salmon, tuna, cod, anchovy, sardine -> fish
+  - shrimp, prawn, crab, lobster, crayfish, clam, mussel, oyster, scallop -> shellfish
+  - sesame, tahini -> sesame
+  - mustard -> mustard
+  - celery -> celery
+  - lupin -> lupin
+  - sulfite, sulphite, sulfites, sulphites -> sulfites
+- Never infer allergens beyond the mapping above.
+- If allergen information is absent, ambiguous, or uncertain, return an empty array [] for that allergen.
+- Return normalized allergen labels only (e.g., "milk", "gluten", "egg", "peanuts", "tree nuts", "soy", "fish", "shellfish", "sesame", "mustard", "celery", "lupin", "sulfites").`;
+
+---
+<style scoped>section { font-size: 105%; }</style>
+# How the System Double-Checks AI Imports
+
+### Safe files, safe links, steady behavior
+- You can import from **supported file types** (such as PDF, Word, or spreadsheet) up to a **reasonable file size**—not unlimited uploads.
+- **Web links** are opened carefully: blocked risky hosts, timeouts, and rate limits help prevent abuse and long hangs.
+- If a file or page has **no readable text** (for example a blank export or a scan with no text), you get a **clear message** instead of a mystery result.
+
+### Cleaning up each suggested dish
+- Every row must have a **dish name**; rows without a name are dropped.
+- **Same name, same section twice?** Flagged as a duplicate so your list does not fill with clones.
+- Long text is **trimmed** to sensible limits; messy ingredient lines are split into a **simple list** where possible.
+- **Prices** like “$12.99” are turned into numbers when the system can read them; if it cannot, the price stays **empty**—the system does not guess a number.
+- **Allergen hints** are lined up with **standard names** when they clearly match (for example “eggs” becomes egg).
+
+### When to pause and review
+- If **nothing usable** is left after cleanup, import **stops** and suggests another source or manual entry—**no empty shell pretending to be a menu**.
+- If many dishes look **thin or vague** (missing details), you see a **low-confidence** heads-up so you know to read the list carefully.
+
+### Nothing saved without your OK on allergens
+- If the import suggested **possible allergens** for an item, you must **tick that you reviewed them** before that item can be saved. **Allergen data is never written without that step.**
+
+---
 # Demo (Live or Video)
 
 ### Demonstration Link
