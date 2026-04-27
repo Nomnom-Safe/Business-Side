@@ -77,6 +77,38 @@ ASE 485 Capstone
 
 ---
 
+![bg fit](../nomnomurlimport/add_business_1.png)
+
+---
+
+![bg fit](../nomnomurlimport/menu_page_2.png)
+
+---
+
+![bg fit](../nomnomurlimport/url_import_3.png)
+
+---
+
+![bg fit](../nomnomurlimport/import_wating_4.png)
+
+---
+
+![bg fit](../nomnomurlimport/import_review_5.png)
+
+---
+
+![bg fit](../nomnomurlimport/import_review_6.png)
+
+---
+
+![bg fit](../nomnomurlimport/import_review_7.png)
+
+---
+
+![bg fit](../nomnomurlimport/after_import_8.png)
+
+---
+
 # Learning with AI - Topic 1
 ## AI-Assisted Structured Data Extraction
 
@@ -90,12 +122,42 @@ ASE 485 Capstone
 ---
 
 # Learning with AI - Topic 2
-## Ontological Modeling for Safety-Critical Inference
+<style scoped>section { font-size: 115%; }</style>
+## Ontology Research Deliverables (Why They Matter)
 
-- I learned allergen safety is an evidence problem, not a yes/no guess.
-- The ontology defines when evidence is enough to infer safety.
-- Key outcome: unresolved evidence must remain **unknown**, not auto-labeled safe.
-- This made AI assistance safer and more explainable.
+### The real question
+
+- "Can this dish be called safe for an allergen?"
+
+### Why this needed research
+
+- Menu wording is often incomplete.
+- Staff language can be inconsistent.
+- AI can sound confident even when evidence is missing.
+
+### What the deliverables do
+
+- Turn vague language into a clear evidence process.
+- Separate "what we know" from "what we are guessing."
+- Require proof before any safety claim is allowed.
+
+---
+
+# Learning with AI - Topic 2
+<style scoped>section { font-size: 115%; }</style>
+## Documents Explained
+
+| Deliverable | Plain-language outcome |
+|---|---|
+| **R3.1 - Failure Taxonomy** | Identified common unsafe reasoning patterns (for example, treating "not listed" as "safe"). |
+| **R3.2 - Evidence Requirements** | Defined the minimum evidence needed before a conclusion can be trusted. |
+| **R3.3 - Core Exposure Model** | Built a simple state model (including **Unknown**) with a strict rule for when "safe" is allowed. |
+| **R3.4 - Scenario Test Suite** | Validated the model on 18 realistic food-service scenarios to confirm behavior under ambiguity. |
+| **R3.5 - Communication Layer** | Mapped real menu/staff/disclaimer language into structured evidence without changing the core safety rule. |
+
+### Bottom line
+
+- The research produced a reusable safety framework that supports AI assistance while protecting against false confidence.
 
 ---
 
